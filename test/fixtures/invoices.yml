@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  doctor: one
+  sub_total: 
+  sub_total: 
+  total: 
+  total: 
+  iva: 
+  iva: 
+
+two:
+  client: two
+  doctor: two
+  sub_total: 
+  sub_total: 
+  total: 
+  total: 
+  iva: 
+  iva: 
