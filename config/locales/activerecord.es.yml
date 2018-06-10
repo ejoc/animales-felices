@@ -1,0 +1,51 @@
+person_attributes: &person_attributes
+  name: 'Nombre'
+  address: 'Direccion'
+  phone: 'Telefono'
+  gender: 'Genero'
+item_attributes: &item_attributes
+  name: 'Nombre'
+  description: 'Descripcion'
+  price: 'Precio'
+es:
+  activerecord:
+    models:
+      client:
+        one: 'Cliente'
+        other: 'Clientes'
+      doctor:
+        one: 'Doctor'
+        other: 'Doctores'
+      supplier:
+        one: 'Proveedor'
+        other: 'Proveedores'
+      company:
+        one: 'Empresa'
+        other: 'Empresas'
+      product:
+        one: 'Product'
+        other: 'Productos'
+      service:
+        one: 'Servicio'
+        other: 'Servicios'
+    attributes:
+      client:
+        <<: *person_attributes
+      doctor:
+        <<: *person_attributes
+      supplier:
+        <<: *person_attributes
+        company: 'Empresa'
+        company_role: 'Rol'
+      product:
+        <<: *item_attributes
+        unit_type: 'Tipo de Unidad'
+      service:
+        <<: *item_attributes
+        duration_min: 'Duracion (min)'
+      company:
+        bin: 'Ruc'
+        name: 'Nombre'
+        address: 'Direccion'
+        phone: 'Telefono'
+        website: 'Sitio web'
