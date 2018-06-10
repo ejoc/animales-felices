@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
 
   create_table "invoice_details", force: :cascade do |t|
     t.bigint "invoice_id"
-    t.string "item_type"
     t.bigint "item_id"
     t.decimal "cantidad"
     t.decimal "price_unit", precision: 5, scale: 2
@@ -58,7 +57,7 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invoice_id"], name: "index_invoice_details_on_invoice_id"
-    t.index ["item_type", "item_id"], name: "index_invoice_details_on_item_type_and_item_id"
+    t.index ["item_id"], name: "index_invoice_details_on_item_id"
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -73,6 +72,14 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
     t.index ["doctor_id"], name: "index_invoices_on_doctor_id"
   end
 
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.decimal "price", precision: 5, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 # Could not dump table "people" because of following StandardError
 #   Unknown type 'gender' for column 'gender'
 
@@ -83,22 +90,13 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.string "name"
     t.string "unit_type"
-    t.string "description"
-    t.decimal "price", precision: 5, scale: 2
     t.bigint "product_category_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["product_category_id"], name: "index_products_on_product_category_id"
   end
 
   create_table "services", force: :cascade do |t|
-    t.string "name"
     t.integer "duration_min"
-    t.decimal "price", precision: 5, scale: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -129,6 +127,7 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
   add_foreign_key "appointments", "services"
   add_foreign_key "doctors", "users"
   add_foreign_key "invoice_details", "invoices"
+  add_foreign_key "invoice_details", "items"
   add_foreign_key "invoices", "clients"
   add_foreign_key "invoices", "doctors"
   add_foreign_key "products", "product_categories"
