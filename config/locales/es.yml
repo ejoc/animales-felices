@@ -8,45 +8,27 @@ item_attributes: &item_attributes
   name: Nombre
   description: Descripcion
   price: Precio
+
 es:
-  activerecord:
-    models:
-      client:
-        one: Cliente
-        other: Clientes
-      doctor:
-        one: Doctor
-        other: Doctores
-      supplier:
-        one: Proveedor
-        other: Proveedores
-      company:
-        one: Empresa
-        other: Empresas
-      product:
-        one: Producto
-        other: Productos
-      service:
-        one: Servicio
-        other: Servicios
-    attributes:
+  helpers:
+    label:
       client:
         <<: *person_attributes
-      client/genders:
-        female: "Hombre"
-        male: "Mujer"
+        client/gender:
+          female: "Hombre"
+          male: "Mujer"
       doctor:
         <<: *person_attributes
-      doctor/genders:
-        female: "Hombre"
-        male: "Mujer"
+        doctor/gender:
+          female: "Hombre"
+          male: "Mujer"
       supplier:
         <<: *person_attributes
         company: Empresa
         company_role: Rol
-      supplier/genders:
-        female: "Hombre"
-        male: "Mujer"
+        supplier/gender:
+          female: "Hombre"
+          male: "Mujer"
       product:
         <<: *item_attributes
         unit_type: Tipo de Unidad

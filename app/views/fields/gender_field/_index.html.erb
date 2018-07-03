@@ -1,0 +1,4 @@
+<%# field.to_s %>
+
+<%# I18n.t("activerecord.attributes.#{field.resource.class.name.underscore}.#{field.attribute.to_s.pluralize}.#{field.data}", default: field.to_s) %>
+<%= field.resource.class.human_attribute_name("#{field.attribute.to_s.pluralize}.#{field.data}") %>

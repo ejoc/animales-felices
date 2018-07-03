@@ -14,7 +14,7 @@ class SupplierDashboard < Administrate::BaseDashboard
     name: Field::String,
     address: Field::String,
     phone: Field::String,
-    gender: Field::String,
+    gender: GenderField,
     company: Field::BelongsTo,
     company_role: Field::String,
   }.freeze
@@ -66,7 +66,8 @@ class SupplierDashboard < Administrate::BaseDashboard
   # Overwrite this method to customize how suppliers are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(supplier)
-  #   "Supplier ##{supplier.id}"
-  # end
+  def display_resource(supplier)
+    # "Supplier ##{supplier.id}"
+    supplier.name
+  end
 end

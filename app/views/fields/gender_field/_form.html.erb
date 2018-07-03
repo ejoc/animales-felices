@@ -1,0 +1,16 @@
+<div class="field-unit__label">
+  <%= f.label field.attribute %>
+</div>
+<div class="field-unit__field">
+  <%# f.text_field field.attribute %>
+
+  <%= f.select(
+    field.attribute,
+    options_for_select(
+      f.object.class.public_send(field.attribute.to_s.pluralize).map do |k, v|
+        [field.resource.class.human_attribute_name("#{field.attribute.to_s.pluralize}.#{k}"), k]
+      end,
+      f.object.public_send(field.attribute.to_s)
+    ),
+    include_blank: false) %>
+</div>

@@ -14,7 +14,7 @@ class DoctorDashboard < Administrate::BaseDashboard
     name: Field::String,
     address: Field::String,
     phone: Field::String,
-    gender: Field::String,
+    gender: GenderField,
     # user: Field::BelongsTo,
   }.freeze
 
@@ -63,7 +63,7 @@ class DoctorDashboard < Administrate::BaseDashboard
   # Overwrite this method to customize how doctors are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(doctor)
-  #   "Doctor ##{doctor.id}"
-  # end
+  def display_resource(doctor)
+    doctor.name
+  end
 end
