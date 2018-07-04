@@ -24,6 +24,9 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_link_to (1.0.5)
+      actionpack
+      addressable
     active_record-acts_as (3.0.1)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
@@ -127,7 +130,6 @@ GEM
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
     libv8 (6.3.292.48.1)
-    libv8 (6.3.292.48.1-x86_64-linux)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -260,6 +262,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_link_to
   active_record-acts_as (~> 3.0, >= 3.0.1)
   administrate (~> 0.10.0)
   bootsnap (>= 1.1.0)
