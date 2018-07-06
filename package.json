@@ -4,8 +4,10 @@
   "dependencies": {
     "@rails/webpacker": "3.5",
     "babel-preset-react": "^6.24.1",
+    "moment": "^2.22.2",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
+    "react-big-calendar": "^0.19.2",
     "react-dom": "^16.4.0",
     "react-on-rails": "11.0.7",
     "react-redux": "^5.0.7",
