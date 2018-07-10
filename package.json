@@ -3,17 +3,23 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "3.5",
+    "antd": "^3.6.6",
     "babel-preset-react": "^6.24.1",
     "moment": "^2.22.2",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
     "react-big-calendar": "^0.19.2",
+    "react-dnd": "2.6.0",
+    "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "^16.4.0",
     "react-on-rails": "11.0.7",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0"
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.8.0",
+    "less": "2.7.3",
+    "less-loader": "4.0.5",
     "webpack-dev-server": "2.11.2"
   }
 }
