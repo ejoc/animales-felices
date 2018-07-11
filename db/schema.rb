@@ -16,16 +16,16 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
   enable_extension "plpgsql"
 
   create_table "appointments", force: :cascade do |t|
-    t.bigint "client_id"
     t.bigint "service_id"
     t.bigint "specialist_id"
-    t.date "date"
-    t.time "start_time"
-    t.time "end_time"
+    t.string "client_name"
+    t.string "client_phone"
+    t.string "client_email"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_appointments_on_client_id"
     t.index ["service_id"], name: "index_appointments_on_service_id"
     t.index ["specialist_id"], name: "index_appointments_on_specialist_id"
   end
@@ -135,7 +135,6 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "appointments", "clients"
   add_foreign_key "appointments", "services"
   add_foreign_key "appointments", "specialists"
   add_foreign_key "invoice_details", "invoices"

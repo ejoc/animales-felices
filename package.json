@@ -7,9 +7,11 @@
     "@fortawesome/react-fontawesome": "^0.1.0-11",
     "@rails/webpacker": "3.5",
     "antd": "^3.6.6",
+    "axios": "^0.18.0",
     "babel-preset-react": "^6.24.1",
     "moment": "^2.22.2",
     "prop-types": "^15.6.1",
+    "querystring": "^0.2.0",
     "react": "^16.4.0",
     "react-big-calendar": "^0.19.2",
     "react-dnd": "2.6.0",
@@ -17,7 +19,8 @@
     "react-dom": "^16.4.0",
     "react-on-rails": "11.0.7",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "snakecase-keys": "^1.2.0"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",

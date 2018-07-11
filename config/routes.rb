@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :services, only: [:index]
 
   get 'agenda', to: 'agenda#index'
+  post 'booking_appoiment', to: 'agenda#appointment'
   devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "agenda#index"

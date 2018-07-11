@@ -6,14 +6,16 @@ class AgendaController < ApplicationController
       .joins(specialist: :person)
       .select('people.id AS id, people.name, service_id')
       .where(active: true).load
+    
+    @events = Appointment.joins(service: :item).select('appointments.id, items.name as title, start_time as start, end_time as end').load
   end
 
   def appointment
     @appointment = Appointment.new(appointment_params)
-    if @contact.save
-      render json: :show, status: :created, location: @contact
+    if @appointment.save
+      render json: "Reservación creada de manera exitosa!", status: :created #, location: @appointment
     else
-      render json: @contact.errors, status: :unprocessable_entity
+      render json: @appointment.errors, status: :unprocessable_entity
     end
   end
 
@@ -21,9 +23,11 @@ class AgendaController < ApplicationController
     def appointment_params
       params.require(:appointment).permit(
         :service_id,
-        :client_id,
         :specialist_id,
-        :date,
+        :client_name,
+        :client_email,
+        :client_phone,
+        # :date,
         :start_time,
         :end_time,
       )

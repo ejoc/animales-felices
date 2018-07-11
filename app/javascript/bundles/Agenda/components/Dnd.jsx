@@ -1,17 +1,19 @@
 import React from 'react'
-import events from '../events'
+// import events from '../events'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { DragDropContext } from 'react-dnd'
 import BigCalendar from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import { Modal } from 'antd'
+import { Modal, notification } from 'antd'
 import moment from 'moment'
 
 import WorkWeek from './WorkWeek'
 import BookingForm from './BookingForm'
+import { bookingAppoiment } from '../api'
 
 // import '~react-big-calendar/lib/addons/dragAndDrop/styles.css'
 
+// const events = []
 const messages = {
   month: 'Mes',
   work_week: 'Semana',
@@ -33,12 +35,20 @@ const DragAndDropCalendar = withDragAndDrop(BigCalendar)
 class Agenda extends React.Component {
   constructor(props) {
     super(props)
+    const events = this.props.events.map(event => ({ ...event, start: new Date(event.start), end: new Date(event.end) }))
+    console.log(events)
     this.state = {
-      events: events,
+      events,
       bookingFormVisible: false,
+      submitting: false,
       fields: {
         service: { value: '', duration_min: '' },
         specialist: { value: '' },
+        clientFields: {
+          name: '',
+          email: '',
+          phone: '',
+        }
       }
     }
 
@@ -100,8 +110,62 @@ class Agenda extends React.Component {
   }
 
   handleOk = (e) => {
-    this.setState({
-      bookingFormVisible: false,
+    // bookingAppoiment
+    e.preventDefault();
+    const form = this.formRef.props.form
+    const { currentSlots } = this.state
+    form.validateFields((err, values) => {
+      if (!err) {
+        this.setState({ submitting: true })
+        const fields = {
+          serviceId: values.service,
+          specialistId: values.specialist,
+          clientName: values.clientFields.name,
+          clientEmail: values.clientFields.email,
+          clientPhone: values.clientFields.phone,
+          // date: currentSlots[0],
+          startTime: currentSlots[0],
+          endTime: currentSlots[1],
+
+        }
+        bookingAppoiment(fields).then(
+          (response) => {
+            form.resetFields()
+            notification.success({
+              message: 'Reservación creada exitosamente!',
+              description: response.data,
+            })
+            this.setState({ submitting: false, bookingFormVisible: false })
+          },
+          (errors) => {
+            // console.log('error al cambiar la contraseña', errors.response.data)
+            form.resetFields()
+            const errorsData = errors.response.data
+            let fieldErrors;
+            if(errorsData instanceof Array) {
+              fieldErrors = errorsData.map(error => {
+                fieldError = Object.keys(error)[0]
+                return {
+                  [fieldError]: {
+                    value: values[fieldError],
+                    errors: error[fieldError].map(e => new Error(e))
+                  }
+                }
+              })
+            } else {
+              const fieldError = Object.keys(errorsData)[0]
+              fieldErrors = {
+                [fieldError]: {
+                  value: values[fieldError],
+                  errors: errorsData[fieldError].map(e => new Error(e))
+                }
+              }
+            }
+            form.setFields(fieldErrors)
+            this.setState({ submitting: false })
+          }
+        )
+      }
     })
   }
 
@@ -139,6 +203,7 @@ class Agenda extends React.Component {
           // onSelectEvent={event => alert(event.title)}
           onSelectSlot={this.createBooking}
         />
+        <span>{JSON.stringify(this.state.events)}</span>
         { bookingFormVisible &&
           <Modal
             title={`Crear reservación ${moment(currentSlots[0]).format('MMMM d, h:mm a')}`}

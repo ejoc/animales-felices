@@ -3,6 +3,8 @@ import { Modal, Button, Form, Input, Select } from 'antd'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserMd, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 
+import ClientInput from './ClientInput'
+
 const FormItem = Form.Item
 
 const { Option } = Select
@@ -68,10 +70,14 @@ class FormModal extends React.Component {
             </Select>
           )}
         </FormItem>
-        <span>Nombre</span>
-        <span>Telefono (opcional)</span>
-        <span>Email (opcional)</span>
-        <span>Comentario</span>
+
+        <FormItem label={<span>Cliente <FontAwesomeIcon icon={faUserMd}/></span>} {...formItemLayout}>
+          {getFieldDecorator('clientFields', {
+            rules: [{ required: true, message: 'Por favor digite el nombre del cliente' }],
+          })(
+            <ClientInput placeholder="input search text" />
+          )}
+        </FormItem>
       </Form>
     )
   }
@@ -95,6 +101,10 @@ export default Form.create({
       specialist: Form.createFormField({
         ...props.specialist,
         value: props.specialist.value,
+      }),
+      clientFields: Form.createFormField({
+        ...props.clientFields,
+        value: props.clientFields.value,
       }),
     };
   },
