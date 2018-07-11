@@ -2,7 +2,7 @@
 
 one:
   client: one
-  doctor: one
+  specialist: one
   sub_total: 
   sub_total: 
   total: 
@@ -12,7 +12,7 @@ one:
 
 two:
   client: two
-  doctor: two
+  specialist: two
   sub_total: 
   sub_total: 
   total: 

@@ -161,11 +161,15 @@ es:
         client/gender:
           female: "Hombre"
           male: "Mujer"
-      doctor:
+      specialist:
         <<: *person_attributes
-        doctor/gender:
+        specialist/gender:
           female: "Hombre"
           male: "Mujer"
+      specialist_service:
+        service: Servicio
+        specialist: Especialista
+        active: Activo
       supplier:
         <<: *person_attributes
         company: Empresa

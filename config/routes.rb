@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :clients
-    resources :doctors
+    resources :specialists
     resources :suppliers
     resources :companies
     resources :products
     resources :services
-    resources :users
+    resources :specialist_services
+    # resources :users
+
     # resources :appointments
     # resources :people
     # resources :invoices
@@ -16,7 +18,7 @@ Rails.application.routes.draw do
     root to: "clients#index"
   end
 
-  resources :doctors, only: [:index]
+  resources :specialists, only: [:index]
   resources :clients, only: [:index]
   resources :services, only: [:index]
 

@@ -5,6 +5,7 @@ import { DragDropContext } from 'react-dnd'
 import BigCalendar from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { Modal } from 'antd'
+import moment from 'moment'
 
 import WorkWeek from './WorkWeek'
 import BookingForm from './BookingForm'
@@ -35,21 +36,13 @@ class Agenda extends React.Component {
     this.state = {
       events: events,
       bookingFormVisible: false,
+      fields: {
+        service: { value: '', duration_min: '' },
+        specialist: { value: '' },
+      }
     }
 
     this.moveEvent = this.moveEvent.bind(this)
-  }
-
-  handleOk = (e) => {
-    this.setState({
-      bookingFormVisible: false,
-    })
-  }
-
-  handleCancel = (e) => {
-    this.setState({
-      bookingFormVisible: false,
-    })
   }
 
   moveEvent({ event, start, end }) {
@@ -100,8 +93,32 @@ class Agenda extends React.Component {
     })
   }
 
+  handleFormChange = (changedFields) => {
+    this.setState(({ fields }) => ({
+      fields: { ...fields, ...changedFields },
+    }));
+  }
+
+  handleOk = (e) => {
+    this.setState({
+      bookingFormVisible: false,
+    })
+  }
+
+  handleCancel = (e) => {
+    const form = this.formRef.props.form
+    this.setState({
+      bookingFormVisible: false,
+    })
+    form.resetFields()
+  }
+
+  saveFormRef = (formRef) => {
+    this.formRef = formRef;
+  }
+
   render() {
-    const { bookingFormVisible, currentSlots } = this.state
+    const { bookingFormVisible, currentSlots, fields } = this.state
     return (
       <React.Fragment>
         <DragAndDropCalendar
@@ -122,12 +139,26 @@ class Agenda extends React.Component {
           // onSelectEvent={event => alert(event.title)}
           onSelectSlot={this.createBooking}
         />
-        { bookingFormVisible && <BookingForm
-          slots={currentSlots}
-          visible={bookingFormVisible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        />}
+        { bookingFormVisible &&
+          <Modal
+            title={`Crear reservación ${moment(currentSlots[0]).format('MMMM d, h:mm a')}`}
+            // title="Crear reservacion"
+            visible={bookingFormVisible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <BookingForm
+              wrappedComponentRef={this.saveFormRef}
+              {...fields}
+              onChange={this.handleFormChange}
+              // slots={currentSlots}
+              // visible={bookingFormVisible}
+              // onOk={this.handleOk}
+              // onCancel={this.handleCancel}
+              {...this.props}
+            />
+          </Modal>
+        }
       </React.Fragment>
     )
   }

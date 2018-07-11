@@ -5,6 +5,7 @@ class CreateItems < ActiveRecord::Migration[5.2]
       t.string :description
       t.decimal :price, precision: 5, scale: 2
 
+      t.actable
       t.timestamps
     end
   end

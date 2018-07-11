@@ -17,7 +17,7 @@ Calendar.setLocalizer(Calendar.momentLocalizer(moment))
 // localizer(globalize)
 
 
-export default () =>
+export default (props) =>
   <div style={{ padding: '10px', height: '600px' }}>
-    <Dnd />
+    <Dnd {...props} />
   </div>

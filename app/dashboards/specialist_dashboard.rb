@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class AppointmentDashboard < Administrate::BaseDashboard
+class SpecialistDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -8,16 +8,14 @@ class AppointmentDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    client: Field::BelongsTo,
-    service: Field::BelongsTo,
-    specialist: Field::BelongsTo,
+    # actable: Field::Polymorphic,
+    # person: Field::HasOne,
     id: Field::Number,
-    date: Field::DateTime,
-    start_time: Field::Time,
-    end_time: Field::Time,
-    status: Field::String,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    name: Field::String,
+    address: Field::String,
+    phone: Field::String,
+    gender: GenderField,
+    # user: Field::BelongsTo,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -26,44 +24,46 @@ class AppointmentDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
-    :client,
-    :service,
-    :specialist,
+    # :actable,
+    # :person,
     :id,
+    :name,
+    :address,
+    :phone,
+    :gender,
+    # :user,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = [
-    :client,
-    :service,
-    :specialist,
+    # :actable,
+    # :person,
     :id,
-    :date,
-    :start_time,
-    :end_time,
-    :status,
-    :created_at,
-    :updated_at,
+    :name,
+    :address,
+    :phone,
+    :gender,
+    # :user,
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
-    :client,
-    :service,
-    :specialist,
-    :date,
-    :start_time,
-    :end_time,
-    :status,
+    # :actable,
+    # :person,
+    :name,
+    :address,
+    :phone,
+    :gender,
+    # :user,
   ].freeze
 
-  # Overwrite this method to customize how appointments are displayed
+  # Overwrite this method to customize how specialists are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(appointment)
-  #   "Appointment ##{appointment.id}"
-  # end
+  def display_resource(specialist)
+    specialist.name
+  end
 end

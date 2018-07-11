@@ -1,47 +1,104 @@
 import React from 'react'
-import { Modal, Button, Form, Input, Radio } from 'antd'
-import moment from 'moment'
+import { Modal, Button, Form, Input, Select } from 'antd'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserMd, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 
 const FormItem = Form.Item
 
-class FormModal extends React.Component {
-  render() {
+const { Option } = Select
 
-    const { visible, onOk, onCancel, showModal, form, slots = [null, null] } = this.props
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+  },
+};
+
+class FormModal extends React.Component {
+  handleServiceChange = (value) => {
+    this.props.form.setFieldsValue({
+      specialist: '',
+    })
+  }
+  render() {
+    console.log(this.props)
+    const {
+      visible,
+      onOk,
+      onCancel,
+      showModal,
+      form,
+      specialists,
+      services,
+      slots = [null, null],
+    } = this.props
     const { getFieldDecorator } = form
+    const currentService = services.find(s => s.id === this.props.service.value)
     return (
-      <Modal
-        title={`Crear reservación ${moment(slots[0]).format('MMMM d, h:mm a')}`}
-        // title="Crear reservacion"
-        visible={visible}
-        onOk={onOk}
-        onCancel={onCancel}
-      >
-        <Form layout="vertical">
-          <FormItem label="Title">
-            {getFieldDecorator('title', {
-              rules: [{ required: true, message: 'Please input the title of collection!' }],
-            })(
-              <Input />
-            )}
-          </FormItem>
-          <FormItem label="Description">
-            {getFieldDecorator('description')(<Input type="textarea" />)}
-          </FormItem>
-          <FormItem className="collection-create-form_last-form-item">
-            {getFieldDecorator('modifier', {
-              initialValue: 'public',
-            })(
-              <Radio.Group>
-                <Radio value="public">Public</Radio>
-                <Radio value="private">Private</Radio>
-              </Radio.Group>
-            )}
-          </FormItem>
-        </Form>
-      </Modal>
+      <Form>
+        <FormItem label={<span>Servicio <FontAwesomeIcon icon={faCalendarCheck}/></span>} {...formItemLayout} >
+          {getFieldDecorator('service', {
+            rules: [{ required: true, message: 'Por favor seleccione el servicio!' }],
+          })(
+            <Select onChange={this.handleServiceChange}>
+              {services.map(service => (
+                <Option
+                  key={service.id}
+                  value={service.id}
+                >
+                  {service.name}
+                </Option>  
+              ))}
+            </Select>
+          )}
+          {currentService && <span>Duración del servicio: {currentService.duration_min} minutos</span> }
+        </FormItem>
+        <FormItem label={<span>Especialista <FontAwesomeIcon icon={faUserMd}/></span>} {...formItemLayout}>
+          {getFieldDecorator('specialist', {
+            rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
+          })(
+            <Select>
+              {specialists.filter(specialist => specialist.service_id === this.props.service.value).map(specialist => (
+                <Option key={specialist.id} value={specialist.id}>{specialist.name}</Option>  
+              ))}
+            </Select>
+          )}
+        </FormItem>
+        <span>Nombre</span>
+        <span>Telefono (opcional)</span>
+        <span>Email (opcional)</span>
+        <span>Comentario</span>
+      </Form>
     )
   }
 }
 
-export default Form.create()(FormModal)
+export default Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields);
+  },
+  mapPropsToFields(props) {
+    return {
+      // specialist: Form.createFormField({
+      //   ...props.specialist,
+      //   value: props.specialist.value,
+      // }),
+      service: Form.createFormField({
+        ...props.service,
+        value: props.service.value,
+        duration_min: props.service.duration_min,
+      }),
+      specialist: Form.createFormField({
+        ...props.specialist,
+        value: props.specialist.value,
+      }),
+    };
+  },
+  onValuesChange(_, values) {
+    console.log(values);
+  },
+})(FormModal)

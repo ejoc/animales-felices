@@ -1,4 +1,4 @@
-class Doctor < ApplicationRecord
+class Specialist < ApplicationRecord
   acts_as :person
   belongs_to :user, optional: true
 

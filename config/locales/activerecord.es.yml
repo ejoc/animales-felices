@@ -14,9 +14,9 @@ es:
       client:
         one: Cliente
         other: Clientes
-      doctor:
-        one: Doctor
-        other: Doctores
+      specialist:
+        one: Especialista
+        other: Especialistas
       supplier:
         one: Proveedor
         other: Proveedores
@@ -29,15 +29,18 @@ es:
       service:
         one: Servicio
         other: Servicios
+      specialist_service:
+        one: Servicio de especialista
+        other: Servicio de especialista
     attributes:
+      specialist:
+        <<: *person_attributes
+      specialist/genders:
+        female: "Hombre"
+        male: "Mujer"
       client:
         <<: *person_attributes
       client/genders:
-        female: "Hombre"
-        male: "Mujer"
-      doctor:
-        <<: *person_attributes
-      doctor/genders:
         female: "Hombre"
         male: "Mujer"
       supplier:
@@ -59,3 +62,8 @@ es:
         address: Direccion
         phone: Telefono
         website: Sitio web
+      specialist_service:
+        service_id: Servicio
+        specialist_id: Especialista
+        active: Activo
+      

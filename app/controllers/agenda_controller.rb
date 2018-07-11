@@ -1,6 +1,11 @@
 class AgendaController < ApplicationController
   def index
-
+    # @specialists = Specialist.all
+    @services = Service.all
+    @specialists = SpecialistService
+      .joins(specialist: :person)
+      .select('people.id AS id, people.name, service_id')
+      .where(active: true).load
   end
 
   def appointment
@@ -17,7 +22,7 @@ class AgendaController < ApplicationController
       params.require(:appointment).permit(
         :service_id,
         :client_id,
-        :doctor_id,
+        :specialist_id,
         :date,
         :start_time,
         :end_time,

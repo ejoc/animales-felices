@@ -1,4 +1,4 @@
 class Invoice < ApplicationRecord
   belongs_to :client
-  belongs_to :doctor
+  belongs_to :specialist
 end

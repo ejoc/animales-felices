@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_10_025921) do
+ActiveRecord::Schema.define(version: 2018_07_11_045945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
   create_table "appointments", force: :cascade do |t|
     t.bigint "client_id"
     t.bigint "service_id"
-    t.bigint "doctor_id"
+    t.bigint "specialist_id"
     t.date "date"
     t.time "start_time"
     t.time "end_time"
@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_appointments_on_client_id"
-    t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
     t.index ["service_id"], name: "index_appointments_on_service_id"
+    t.index ["specialist_id"], name: "index_appointments_on_specialist_id"
   end
 
   create_table "clients", force: :cascade do |t|
@@ -41,11 +41,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "doctors", force: :cascade do |t|
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_doctors_on_user_id"
   end
 
   create_table "invoice_details", force: :cascade do |t|
@@ -62,22 +57,25 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
 
   create_table "invoices", force: :cascade do |t|
     t.bigint "client_id"
-    t.bigint "doctor_id"
+    t.bigint "specialist_id"
     t.decimal "sub_total", precision: 5, scale: 2
     t.decimal "total", precision: 5, scale: 2
     t.decimal "iva", precision: 5, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_invoices_on_client_id"
-    t.index ["doctor_id"], name: "index_invoices_on_doctor_id"
+    t.index ["specialist_id"], name: "index_invoices_on_specialist_id"
   end
 
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.decimal "price", precision: 5, scale: 2
+    t.string "actable_type"
+    t.bigint "actable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["actable_type", "actable_id"], name: "index_items_on_actable_type_and_actable_id"
   end
 
 # Could not dump table "people" because of following StandardError
@@ -97,6 +95,21 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
 
   create_table "services", force: :cascade do |t|
     t.integer "duration_min"
+  end
+
+  create_table "specialist_services", force: :cascade do |t|
+    t.bigint "specialist_id"
+    t.bigint "service_id"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_specialist_services_on_service_id"
+    t.index ["specialist_id"], name: "index_specialist_services_on_specialist_id"
+  end
+
+  create_table "specialists", force: :cascade do |t|
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_specialists_on_user_id"
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -123,13 +136,15 @@ ActiveRecord::Schema.define(version: 2018_06_10_025921) do
   end
 
   add_foreign_key "appointments", "clients"
-  add_foreign_key "appointments", "doctors"
   add_foreign_key "appointments", "services"
-  add_foreign_key "doctors", "users"
+  add_foreign_key "appointments", "specialists"
   add_foreign_key "invoice_details", "invoices"
   add_foreign_key "invoice_details", "items"
   add_foreign_key "invoices", "clients"
-  add_foreign_key "invoices", "doctors"
+  add_foreign_key "invoices", "specialists"
   add_foreign_key "products", "product_categories"
+  add_foreign_key "specialist_services", "services"
+  add_foreign_key "specialist_services", "specialists"
+  add_foreign_key "specialists", "users"
   add_foreign_key "suppliers", "companies"
 end

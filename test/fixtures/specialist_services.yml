@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  specialist: one
+  service: one
+  status: false
+
+two:
+  specialist: two
+  service: two
+  status: false
