@@ -1,20 +1,13 @@
+/* eslint react/prefer-stateless-function: 0 */
+// es necesatio que el componente sea fullstate porque se usa el HOC DragDropContext
 import React from 'react'
-import Calendar from 'react-big-calendar'
-import moment from 'moment'
+import PropTypes from 'prop-types'
+import HTML5Backend from 'react-dnd-html5-backend'
+import { DragDropContext } from 'react-dnd'
+import BigCalendar from 'react-big-calendar'
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 
-import Dnd from '../components/Dnd'
-
-import WorkWeek from '../components/WorkWeek'
-import events from './events'
-// import 'react-big-calendar/lib/css/react-big-calendar.css'
-
-// moment.locale('us', {
-//   workingWeekdays: [1,2,3,4,5,6] 
-// })
-
-Calendar.setLocalizer(Calendar.momentLocalizer(moment))
-
-// localizer(globalize)
+import WorkWeek from './WorkWeek'
 
 const messages = {
   month: 'Mes',
@@ -25,45 +18,70 @@ const messages = {
   previous: 'Anterior',
   next: 'Siguiente',
   today: 'Hoy',
-  showMore: (n) => `Ver ${n} mas`,
+  showMore: n => `Ver ${n} mas`,
   allDay: 'Todo el dia',
   // date?: any,
   // time?: any,
   // event?: any,
 }
 
-const Basic = () => (
-  <div style={{ padding: '10px', height: '600px' }}>
-    <Calendar
-      events={events}
-      views={{month: true, week: WorkWeek, day: true, agenda: true }}
-      step={15}
-      timeslots={1}
-      showMultiDayTimes
-      culture="es-Es"
-      min={new Date(2017, 10, 0, 8, 0, 0)}
-      max={new Date(2017, 10, 0, 18, 0, 0)} 
-      defaultDate={new Date(2015, 3, 1)}
-      messages={messages}
-    />
-  </div>
-)
+const DragAndDropCalendar = withDragAndDrop(BigCalendar)
 
-// export default Basic
+class Agenda extends React.Component {
+  render() {
+    return (
+      <DragAndDropCalendar
+        selectable
+        views={{ month: true, week: WorkWeek, day: true }}
+        culture="es-Es"
+        // events={events}
+        resizable
+        defaultView={BigCalendar.Views.WEEK}
+        messages={messages}
+        step={15}
+        timeslots={1}
+        min={new Date(2017, 10, 0, 8, 0, 0)}
+        max={new Date(2017, 10, 0, 18, 0, 0)}
+        {...this.props}
+        // eventPropGetter={this.eventStyleGetter}
+        // onSelectSlot={this.createBooking}
+        // onEventResize={this.resizeEvent}
+        // onEventDrop={this.moveEvent}
+      />
+    )
+  }
+}
 
-// {
-//   allDay?: any,
-//   previous?: any,
-//   next?: any,
-//   today?: any,
-//   month?: any,
-//   week?: any,
-//   day?: any,
-//   agenda?: any,
-//   date?: any,
-//   time?: any,
-//   event?: any,
-//   showMore?: Function
-// }
+Agenda.propTypes = {
+  events: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+}
 
-// {{month: true, week_work: true, day: true, agenda: true }}
+export default DragDropContext(HTML5Backend)(Agenda)
+
+
+// const Agenda = props => (
+//   <DragAndDropCalendar
+//     selectable
+//     views={{ month: true, week: WorkWeek, day: true }}
+//     culture="es-Es"
+//     // events={events}
+//     resizable
+//     defaultView={BigCalendar.Views.WEEK}
+//     messages={messages}
+//     step={15}
+//     timeslots={1}
+//     min={new Date(2017, 10, 0, 8, 0, 0)}
+//     max={new Date(2017, 10, 0, 18, 0, 0)}
+//     {...props}
+//     // eventPropGetter={this.eventStyleGetter}
+//     // onSelectSlot={this.createBooking}
+//     // onEventResize={this.resizeEvent}
+//     // onEventDrop={this.moveEvent}
+
+//     // defaultDate={new Date(2018, 7, 12)}
+//     // onSelectEvent={event => alert(event.title)}
+//     // resources={specialists}
+//     // resourceIdAccessor="id"
+//     // resourceTitleAccessor="name"
+//   />
+// )

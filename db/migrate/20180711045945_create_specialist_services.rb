@@ -7,5 +7,7 @@ class CreateSpecialistServices < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+
+    add_index :specialist_services, [:specialist_id, :service_id], unique: true
   end
 end

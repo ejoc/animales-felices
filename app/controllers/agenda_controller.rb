@@ -7,13 +7,32 @@ class AgendaController < ApplicationController
       .select('people.id AS id, people.name, service_id')
       .where(active: true).load
     
-    @events = Appointment.joins(service: :item).select('appointments.id, items.name as title, start_time as start, end_time as end').load
+    # @events = Appointment.joins(service: :item).select('appointments.id, appointments.client_name as title, items.name as desc, start_time as start, end_time as end').load
+    @events = Appointment.joins(service: :item).select(
+      'appointments.id',
+      # "concat_ws(' - ', appointments.client_name, items.name) AS title",
+      "(appointments.client_name || ' - ' || items.name) AS title",
+      'items.name as desc',
+      'start_time as start',
+      'end_time as end',
+      'appointments.specialist_id as resource_id',
+      'appointments.service_id',
+    ).load
   end
 
   def appointment
     @appointment = Appointment.new(appointment_params)
     if @appointment.save
-      render json: "Reservación creada de manera exitosa!", status: :created #, location: @appointment
+      # render json: "Reservación creada de manera exitosa!", status: :created #, location: @appointment
+      # render :show, status: :created, location: @appointment
+      render json: {
+        id: @appointment.id,
+        title: "#{@appointment.client_name} - #{@appointment.service.name}",
+        start: @appointment.start_time,
+        end: @appointment.end_time,
+        desc: "#{@appointment.client_name} - #{@appointment.service.name}",
+        resourceId: @appointment.specialist_id,
+        }, status: :created
     else
       render json: @appointment.errors, status: :unprocessable_entity
     end

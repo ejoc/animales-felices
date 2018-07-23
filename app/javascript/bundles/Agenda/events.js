@@ -36,8 +36,8 @@ export default [
   {
     id: 5,
     title: "Conference",
-    start: new Date(2015, 3, 11),
-    end: new Date(2015, 3, 13),
+    start: new Date(2018, 7, 22),
+    end: new Date(2018, 7, 22),
     desc: "Big conference for important people"
   },
   {
@@ -93,7 +93,7 @@ export default [
   },
   {
     id: 14,
-    title: "Today",
+    title: "Today sdasdasd",
     start: new Date(new Date().setHours(new Date().getHours() - 3)),
     end: new Date(new Date().setHours(new Date().getHours() + 3))
   }

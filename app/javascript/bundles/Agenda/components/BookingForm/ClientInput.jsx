@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Input } from 'antd'
 import { getClients } from '../../api'
-import ClientSelect from './ClientSelect'
+// import ClientSelect from './ClientSelect'
 import AsyncSelect from '../AsyncSelect'
 
 class ClientInput extends React.Component {
@@ -23,9 +24,15 @@ class ClientInput extends React.Component {
     }
   }
 
+  getValues = (input) => {
+    if (!input || input.length < 3) {
+      return Promise.resolve([])
+    }
+    return getClients(input)
+      .then(response => response.data)
+  }
+
   handleNameChange = (name) => {
-    // console.log(e)
-    // const name = e.target.value
     if (!('value' in this.props)) {
       this.setState({ name })
     }
@@ -54,14 +61,6 @@ class ClientInput extends React.Component {
     if (onChange) {
       onChange(Object.assign({}, this.state, changedValue))
     }
-  }
-
-  getValues = (input) => {
-    if (!input || input.length < 3) {
-      return Promise.resolve([])
-    }
-    return getClients(input)
-      .then(response => response.data)
   }
 
   render() {
@@ -94,6 +93,14 @@ class ClientInput extends React.Component {
       </React.Fragment>
     )
   }
+}
+
+ClientInput.propTypes = {
+  onChange: PropTypes.func,
+}
+
+ClientInput.defaultProps = {
+  onChange: () => {},
 }
 
 export default ClientInput
