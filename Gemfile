@@ -71,3 +71,4 @@ gem 'react_on_rails', '~> 11.0', '>= 11.0.9'
 gem 'mini_racer', platforms: :ruby
 gem 'administrate', '~> 0.10.0'
 gem 'active_link_to'
+gem 'fast_jsonapi'

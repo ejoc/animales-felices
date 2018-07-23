@@ -18,6 +18,8 @@ class AgendaController < ApplicationController
       'appointments.specialist_id as resource_id',
       'appointments.service_id',
     ).load
+
+    # render json: AppointmentSerializer.new(@events).serializable_hash[:data]
   end
 
   def appointment
@@ -48,7 +50,7 @@ class AgendaController < ApplicationController
         :client_phone,
         # :date,
         :start_time,
-        :end_time,
+        # :end_time,
       )
     end
 end

@@ -31,10 +31,11 @@ class AgendaApp extends Component {
     // const resources = specialists
     const allEvents = events
       .map(event => ({
-        ...event,
-        resourceId: event.resource_id,
-        start: new Date(event.start),
-        end: new Date(event.end),
+        id: event.id,
+        ...event.attributes,
+        // resourceId: event.resource_id,
+        start: new Date(event.attributes.start),
+        end: new Date(event.attributes.end),
       }))
     this.state = {
       events: allEvents,
@@ -201,10 +202,12 @@ class AgendaApp extends Component {
     const style = {
       backgroundColor,
       // borderRadius: '0px',
-      opacity: 0.8,
+      // opacity: 0.8,
       // color: 'black',
       border: '0px',
       // display: 'block',
+      left: '0%',
+      width: '100%',
     }
     return {
       style,
@@ -227,6 +230,10 @@ class AgendaApp extends Component {
     console.log(`${event.title} was dropped onto ${event.start}`)
   }
 
+  selectEvent = (event) => {
+    console.log('event', event)
+  }
+
   render() {
     const {
       bookingFormVisible,
@@ -243,11 +250,11 @@ class AgendaApp extends Component {
       : events
 
     showEvents = filtersByService
-      ? showEvents.filter(event => event.service_id == filtersByService)
+      ? showEvents.filter(event => event.serviceId == filtersByService)
       : showEvents
     return (
       <div style={{ padding: '10px', height: '600px' }}>
-        <Row gutter={16}>
+        <Row gutter={8}>
           <Col span={4}>
             <SpecialistFilterPanel
               handleSpecialistClick={this.handleSpecialistClick}
@@ -263,13 +270,14 @@ class AgendaApp extends Component {
               viewAllServices={this.viewAllServices}
             />
           </Col>
-          <Col span={20}>
+          <Col span={20} style={{ height: '600px' }}>
             <Agenda
               events={showEvents}
               onEventDrop={this.moveEvent}
-              onEventResize={this.resizeEvent}
+              // onEventResize={this.resizeEvent}
               eventPropGetter={this.eventStyleGetter}
               onSelectSlot={this.createBooking}
+              onSelectEvent={this.selectEvent}
               // {...this.props}
             />
           </Col>

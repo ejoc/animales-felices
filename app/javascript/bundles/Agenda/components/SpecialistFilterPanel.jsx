@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Menu, Avatar, Button } from 'antd'
+import { Menu, Avatar, Button, Badge } from 'antd'
 
 import getAvatarColor from '../resourceColors'
 
@@ -27,13 +27,21 @@ const SpecialistFilterPanel = ({
     >
       {specialists.map(specialist => (
         <Menu.Item key={specialist.id}>
-          {specialist.name}
-          &nbsp; &nbsp; &nbsp;
-          <Avatar
+          {/* <Avatar
             shape="square"
             size="small"
             style={{ backgroundColor: getAvatarColor(specialist.id) }}
+          /> */}
+          <Badge
+            dot
+            style={{
+              backgroundColor: getAvatarColor(specialist.id),
+              width: '20px',
+              height: '20px',
+              borderRadius: '4px',
+            }}
           />
+          {specialist.name}
         </Menu.Item>
       ))}
     </Menu>

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Select } from 'antd'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserMd, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faUser, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
 
 import ClientInput from './ClientInput'
 
@@ -74,11 +74,13 @@ class FormModal extends React.Component {
             </span>
           )}
         </FormItem>
+
+        {/* {getFieldDecorator('serviceDurationMin', { hidde: true })} */}
         <FormItem
           label={(
             <span>
               Especialista &nbsp;
-              <FontAwesomeIcon icon={faUserMd} />
+              <FontAwesomeIcon icon={faUsers} />
             </span>
           )}
           {...formItemLayout}
@@ -103,7 +105,7 @@ class FormModal extends React.Component {
           label={(
             <span>
               Cliente &nbsp;
-              <FontAwesomeIcon icon={faUserMd} />
+              <FontAwesomeIcon icon={faUser} />
             </span>)}
           {...formItemLayout}
         >

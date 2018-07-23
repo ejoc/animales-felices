@@ -8,6 +8,7 @@ import BigCalendar from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 
 import WorkWeek from './WorkWeek'
+import CustomEvent from './CustomEvent'
 
 const messages = {
   month: 'Mes',
@@ -34,12 +35,16 @@ class Agenda extends React.Component {
         selectable
         views={{ month: true, week: WorkWeek, day: true }}
         culture="es-Es"
+        formats={{ eventTimeRangeFormat: () => null }}
+        components={{
+          event: CustomEvent,
+        }}
         // events={events}
-        resizable
+        // resizable
         defaultView={BigCalendar.Views.WEEK}
         messages={messages}
         step={15}
-        timeslots={1}
+        // timeslots={1}
         min={new Date(2017, 10, 0, 8, 0, 0)}
         max={new Date(2017, 10, 0, 18, 0, 0)}
         {...this.props}
