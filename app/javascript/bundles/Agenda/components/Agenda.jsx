@@ -2,10 +2,10 @@
 // es necesatio que el componente sea fullstate porque se usa el HOC DragDropContext
 import React from 'react'
 import PropTypes from 'prop-types'
-import HTML5Backend from 'react-dnd-html5-backend'
-import { DragDropContext } from 'react-dnd'
+// import HTML5Backend from 'react-dnd-html5-backend'
+// import { DragDropContext } from 'react-dnd'
+// import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import BigCalendar from 'react-big-calendar'
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 
 import WorkWeek from './WorkWeek'
 import CustomEvent from './CustomEvent'
@@ -26,12 +26,12 @@ const messages = {
   // event?: any,
 }
 
-const DragAndDropCalendar = withDragAndDrop(BigCalendar)
+// const DragAndDropCalendar = withDragAndDrop(BigCalendar)
 
 class Agenda extends React.Component {
   render() {
     return (
-      <DragAndDropCalendar
+      <BigCalendar
         selectable
         views={{ month: true, week: WorkWeek, day: true }}
         culture="es-Es"
@@ -61,7 +61,9 @@ Agenda.propTypes = {
   events: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 }
 
-export default DragDropContext(HTML5Backend)(Agenda)
+export default Agenda
+
+// export default DragDropContext(HTML5Backend)(Agenda)
 
 
 // const Agenda = props => (

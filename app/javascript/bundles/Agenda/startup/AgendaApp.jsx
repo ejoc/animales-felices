@@ -204,10 +204,10 @@ class AgendaApp extends Component {
       // borderRadius: '0px',
       // opacity: 0.8,
       // color: 'black',
-      border: '0px',
-      // display: 'block',
-      left: '0%',
-      width: '100%',
+      border: '1px solid #595959',
+      display: 'block',
+      // left: '0%',
+      // width: '100%',
     }
     return {
       style,
@@ -273,8 +273,10 @@ class AgendaApp extends Component {
           <Col span={20} style={{ height: '600px' }}>
             <Agenda
               events={showEvents}
-              onEventDrop={this.moveEvent}
+              // onEventDrop={this.moveEvent}
               // onEventResize={this.resizeEvent}
+              // slotPropGetter={() => {}}
+              // scrollToTime={new Date()}
               eventPropGetter={this.eventStyleGetter}
               onSelectSlot={this.createBooking}
               onSelectEvent={this.selectEvent}
@@ -289,7 +291,6 @@ class AgendaApp extends Component {
           visible={bookingFormVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          okButtonProps={{ disabled: true }}
           footer={[
             <Button key="back" onClick={this.handleCancel}>
               Cancelar

@@ -7,6 +7,7 @@ class Appointment < ApplicationRecord
 
   private
     def set_end_time
+      # self.start_time = self.start_time + 2.second
       self.end_time = self.start_time + self.service.duration_min.minutes
     end
 end

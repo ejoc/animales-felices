@@ -37,7 +37,7 @@ export function getClients(searchParam) {
 
 export function bookingAppoiment(fields) {
   return axios(getFetchInit(
-    '/booking_appoiment',
+    '/appointments',
     'post',
     { appointment: fields },
   ))

@@ -1,4 +1,4 @@
-class AgendaController < ApplicationController
+class AppointmentsController < ApplicationController
   def index
     # @specialists = Specialist.all
     @services = Service.all
@@ -22,22 +22,19 @@ class AgendaController < ApplicationController
     # render json: AppointmentSerializer.new(@events).serializable_hash[:data]
   end
 
-  def show
-    # render json: 
-  end
-
-  def appointment
+  def create
     @appointment = Appointment.new(appointment_params)
     if @appointment.save
       # render json: "Reservación creada de manera exitosa!", status: :created #, location: @appointment
       # render :show, status: :created, location: @appointment
       render json: {
         id: @appointment.id,
-        title: "#{@appointment.client_name} - #{@appointment.service.name}",
+        title: @appointment.client_name,
         start: @appointment.start_time,
         end: @appointment.end_time,
-        desc: "#{@appointment.client_name} - #{@appointment.service.name}",
+        desc: @appointment.service.name,
         resourceId: @appointment.specialist_id,
+        serviceId: @appointment.service_id,
         }, status: :created
     else
       render json: @appointment.errors, status: :unprocessable_entity
