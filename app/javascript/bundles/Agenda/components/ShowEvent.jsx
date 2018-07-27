@@ -1,13 +1,30 @@
 import React, { Component } from 'react'
 import { Modal, Button } from 'antd'
+import PropTypes from 'prop-types'
+
+import { getAppointment } from '../api'
 
 class ShowEvent extends Component {
   state = {
     event: {},
-    loading: true,
+    loading: false,
   }
+
   componentDidMount() {
-    
+    const { appointmentId } = this.props
+    this.setState({ loading: true })
+    getAppointment(appointmentId)
+      .then(
+        ({ data }) => {
+          this.setState({
+            event: data,
+            loading: false,
+          })
+        },
+        (error) => {
+          console.log(error)
+        },
+      )
   }
 
   render() {
@@ -18,7 +35,7 @@ class ShowEvent extends Component {
     } = this.props
     return (
       <Modal
-        title={`Crear reservación ${currentSlots && moment(currentSlots[0]).format('MMMM DD, h:mm a')}`}
+        title="Detalle de reservación"
         // title="Crear reservacion"
         visible={visible}
         onOk={onOk}
@@ -33,20 +50,14 @@ class ShowEvent extends Component {
           </Button>,
         ]}
       >
-        <BookingForm
-          wrappedComponentRef={this.saveFormRef}
-          services={services}
-          specialists={specialists}
-          // {...fields}
-          // onChange={this.handleFormChange}
-          // slots={currentSlots}
-          // visible={bookingFormVisible}
-          // onOk={this.handleOk}
-          // onCancel={this.handleCancel}
-        />
+        {JSON.stringify(this.state)}
       </Modal>
     )
   }
+}
+
+ShowEvent.propTypes = {
+  appointmentId: PropTypes.string.isRequired,
 }
 
 export default ShowEvent

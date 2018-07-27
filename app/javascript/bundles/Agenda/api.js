@@ -35,10 +35,15 @@ export function getClients(searchParam) {
   // return response.data
 }
 
-export function bookingAppoiment(fields) {
+export function bookingAppointment(fields) {
   return axios(getFetchInit(
     '/appointments',
     'post',
     { appointment: fields },
   ))
+}
+
+
+export function getAppointment(id) {
+  return axios(`/appointments/${id}`)
 }

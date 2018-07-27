@@ -1,4 +1,6 @@
 class AppointmentsController < ApplicationController
+  before_action :set_appointment, only: [:show, :edit, :update, :destroy]
+
   def index
     # @specialists = Specialist.all
     @services = Service.all
@@ -22,6 +24,10 @@ class AppointmentsController < ApplicationController
     # render json: AppointmentSerializer.new(@events).serializable_hash[:data]
   end
 
+  def show
+    render json: @appointment
+  end
+
   def create
     @appointment = Appointment.new(appointment_params)
     if @appointment.save
@@ -42,6 +48,10 @@ class AppointmentsController < ApplicationController
   end
 
   private
+    def set_appointment
+      @appointment = Appointment.find(params[:id])
+    end
+
     def appointment_params
       params.require(:appointment).permit(
         :service_id,

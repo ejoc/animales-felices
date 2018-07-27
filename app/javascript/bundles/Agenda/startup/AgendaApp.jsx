@@ -15,8 +15,9 @@ import SpecialistFilterPanel from '../components/SpecialistFilterPanel'
 import ServiceFilterPanel from '../components/ServiceFilterPanel'
 import Agenda from '../components/Agenda'
 import getAvatarColor from '../resourceColors'
-import { bookingAppoiment } from '../api'
+import { bookingAppointment } from '../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
+import ShowEvent from '../components/ShowEvent'
 
 moment.locale('es')
 Calendar.setLocalizer(Calendar.momentLocalizer(moment))
@@ -40,6 +41,7 @@ class AgendaApp extends Component {
     this.state = {
       events: allEvents,
       bookingFormVisible: false,
+      showAppointment: false,
       submitting: false,
       // filtersBySpecialist: null,
       // filtersByService: null,
@@ -54,7 +56,6 @@ class AgendaApp extends Component {
   }
 
   handleOk = (e) => {
-    // bookingAppoiment
     e.preventDefault()
     const { form } = this.formRef.props
     const { currentSlots } = this.state
@@ -72,7 +73,7 @@ class AgendaApp extends Component {
           endTime: currentSlots[1],
 
         }
-        bookingAppoiment(fields).then(
+        bookingAppointment(fields).then(
           ({ data }) => {
             form.resetFields()
             notification.success({
@@ -131,6 +132,12 @@ class AgendaApp extends Component {
     form.resetFields()
   }
 
+  handleShowAppointment = () => {
+    this.setState({
+      showAppointment: false,
+    })
+  }
+
   /*
   * Specialist Filter
   */
@@ -180,21 +187,6 @@ class AgendaApp extends Component {
     })
   }
 
-  resizeEvent = (resizeType, { event, start, end }) => {
-    const { events } = this.state
-
-    const nextEvents = events.map(existingEvent => (existingEvent.id === event.id
-      ? { ...existingEvent, start, end }
-      : existingEvent
-    ))
-
-    this.setState({
-      events: nextEvents,
-    })
-
-    console.log(`${event.title} was resized to ${start}-${end}`)
-  }
-
   // eventStyleGetter = (event, start, end, isSelected) => {
   eventStyleGetter = (event) => {
     // const backgroundColor = '#' + event.resourceId
@@ -214,24 +206,11 @@ class AgendaApp extends Component {
     }
   }
 
-  moveEvent = ({ event, start, end }) => {
-    const { events } = this.state
-
-    const idx = events.indexOf(event)
-    const updatedEvent = { ...event, start, end }
-
-    const nextEvents = [...events]
-    nextEvents.splice(idx, 1, updatedEvent)
-
-    this.setState({
-      events: nextEvents,
-    })
-
-    console.log(`${event.title} was dropped onto ${event.start}`)
-  }
-
   selectEvent = (event) => {
-    console.log('event', event)
+    this.setState({
+      showAppointment: true,
+      appointmentSelected: event.id,
+    })
   }
 
   render() {
@@ -243,17 +222,19 @@ class AgendaApp extends Component {
       submitting,
       filtersBySpecialist,
       filtersByService,
+      showAppointment,
+      appointmentSelected,
     } = this.state
     const { services, specialists } = this.props
     let showEvents = filtersBySpecialist
-      ? events.filter(event => event.resourceId == filtersBySpecialist)
+      ? events.filter(event => event.resourceId === Number(filtersBySpecialist))
       : events
 
     showEvents = filtersByService
-      ? showEvents.filter(event => event.serviceId == filtersByService)
+      ? showEvents.filter(event => event.serviceId === Number(filtersByService))
       : showEvents
     return (
-      <div style={{ padding: '10px', height: '600px' }}>
+      <div style={{ padding: '10px', height: '700px' }}>
         <Row gutter={8}>
           <Col span={4}>
             <SpecialistFilterPanel
@@ -284,6 +265,15 @@ class AgendaApp extends Component {
             />
           </Col>
         </Row>
+
+        {showAppointment && (
+          <ShowEvent
+            visible={showAppointment}
+            appointmentId={appointmentSelected}
+            onOk={this.handleOk}
+            onCancel={this.handleShowAppointment}
+          />
+        )}
 
         <Modal
           title={`Crear reservación ${currentSlots && moment(currentSlots[0]).format('MMMM DD, h:mm a')}`}
@@ -324,3 +314,35 @@ AgendaApp.propTypes = {
 }
 
 export default AgendaApp
+
+
+// resizeEvent = (resizeType, { event, start, end }) => {
+//   const { events } = this.state
+
+//   const nextEvents = events.map(existingEvent => (existingEvent.id === event.id
+//     ? { ...existingEvent, start, end }
+//     : existingEvent
+//   ))
+
+//   this.setState({
+//     events: nextEvents,
+//   })
+
+//   console.log(`${event.title} was resized to ${start}-${end}`)
+// }
+
+// moveEvent = ({ event, start, end }) => {
+//   const { events } = this.state
+
+//   const idx = events.indexOf(event)
+//   const updatedEvent = { ...event, start, end }
+
+//   const nextEvents = [...events]
+//   nextEvents.splice(idx, 1, updatedEvent)
+
+//   this.setState({
+//     events: nextEvents,
+//   })
+
+//   console.log(`${event.title} was dropped onto ${event.start}`)
+// }
