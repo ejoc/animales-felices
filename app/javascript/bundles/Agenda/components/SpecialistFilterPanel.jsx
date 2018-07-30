@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Menu, Avatar, Button, Badge } from 'antd'
+import { Menu, Button, Badge } from 'antd'
 
 import getAvatarColor from '../resourceColors'
 

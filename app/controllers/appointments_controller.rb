@@ -1,13 +1,19 @@
 class AppointmentsController < ApplicationController
-  before_action :set_appointment, only: [:show, :edit, :update, :destroy]
+  before_action :set_appointment, only: [:show, :edit, :update, :destroy, :cancel]
 
   def index
     # @specialists = Specialist.all
     @services = Service.all
-    @specialists = SpecialistService
-      .joins(specialist: :person)
-      .select('people.id AS id, people.name, service_id')
-      .where(active: true).load
+    # @specialists = SpecialistService
+    #   .joins(specialist: :person)
+    #   .select('people.name, service_id')
+    #   .where(active: true).load
+
+    @specialists = Specialist.joins(:person).select(
+      'people.name',
+    )
+
+    @specialists_by_service = SpecialistService.select('specialist_id', 'service_id')
     
     # @events = Appointment.joins(service: :item).select('appointments.id, appointments.client_name as title, items.name as desc, start_time as start, end_time as end').load
     @events = Appointment.joins(service: :item).select(
@@ -25,7 +31,8 @@ class AppointmentsController < ApplicationController
   end
 
   def show
-    render json: @appointment
+    # sleep 2
+    render json: AppointmentSerializer.new(@appointment)
   end
 
   def create
@@ -47,6 +54,21 @@ class AppointmentsController < ApplicationController
     end
   end
 
+  def cancel
+    @appointment.canceled = true
+    if @appointment.save
+      render json: 'cancelado exitosamente', status: :ok
+    else
+      render json: @appointment.errors, status: :unprocessable_entity
+    end
+  end
+
+  def specialists_by_service
+    @specialists_by_service = SpecialistService.select('specialist_id', 'service_id')
+    
+    render json: @specialists_by_service
+  end
+
   private
     def set_appointment
       @appointment = Appointment.find(params[:id])
@@ -65,3 +87,13 @@ class AppointmentsController < ApplicationController
       )
     end
 end
+
+# SELECT services.id, items.name
+#      , json_agg(json_build_object('id', specialists.id, 'name', people.name)) AS item
+# FROM   specialist_services
+# JOIN   services ON services.id = specialist_services.service_id
+# JOIN   items ON items.actable_id = services.id
+# JOIN   specialists ON specialists.id = specialist_services.specialist_id
+# JOIN   people ON people.actable_id = specialists.id
+# WHERE  specialist_services.active = true
+# GROUP  BY services.id, items.name;	

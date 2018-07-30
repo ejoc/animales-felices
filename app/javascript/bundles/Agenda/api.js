@@ -47,3 +47,21 @@ export function bookingAppointment(fields) {
 export function getAppointment(id) {
   return axios(`/appointments/${id}`)
 }
+
+export function getSpecialistsByService() {
+  return axios('/appointments/specialists_by_service')
+}
+
+export function cancelAppointment(id) {
+  return axios(getFetchInit(`/appointments/${id}/cancel`, 'delete'))
+}
+
+// export async function getAppointment(id, error) {
+//   try {
+//     const response = await axios(`/appointments/${id}`)
+//     return response.data
+//   } catch (err) {
+//     console.log(error)
+//     return error(err)
+//   }
+// }

@@ -34,7 +34,7 @@ class FormModal extends React.Component {
       form,
       specialists,
       services,
-      // slots = [null, null],
+      specialistsByService,
     } = this.props
     const { getFieldDecorator, getFieldValue } = form
     // const currentService = getFieldValue('service')
@@ -42,6 +42,20 @@ class FormModal extends React.Component {
     const firstService = (services[0] && services[0].id) || ''
     const serviceSelected = getFieldValue('service') || firstService
     const currentService = services.find(s => s.id === serviceSelected)
+
+    const specialistsIds = specialistsByService
+      .filter(s => s.service_id === serviceSelected)
+      .map(s => s.specialist_id)
+    const specialistsOptions = specialists
+      .filter(s => specialistsIds.includes(s.id))
+      .map(s => (
+        <Option
+          key={s.id}
+          value={s.id}
+        >
+          {s.name}
+        </Option>
+      ))
     return (
       <Form>
         <FormItem
@@ -89,14 +103,7 @@ class FormModal extends React.Component {
             rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
           })(
             <Select onChange={this.handleSelectChange}>
-              {specialists
-                .filter(specialist => specialist.service_id === serviceSelected)
-                .map(specialist => (
-                  <Option key={specialist.id} value={specialist.id}>
-                    {specialist.name}
-                  </Option>
-                ))
-              }
+              {specialistsOptions}
             </Select>,
           )}
         </FormItem>
@@ -122,6 +129,7 @@ class FormModal extends React.Component {
 FormModal.propTypes = {
   services: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   specialists: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  specialistsByService: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   form: PropTypes.shape().isRequired,
 }
 

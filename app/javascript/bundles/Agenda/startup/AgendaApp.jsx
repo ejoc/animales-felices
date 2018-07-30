@@ -15,7 +15,7 @@ import SpecialistFilterPanel from '../components/SpecialistFilterPanel'
 import ServiceFilterPanel from '../components/ServiceFilterPanel'
 import Agenda from '../components/Agenda'
 import getAvatarColor from '../resourceColors'
-import { bookingAppointment } from '../api'
+import { bookingAppointment, cancelAppointment } from '../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
 import ShowEvent from '../components/ShowEvent'
 
@@ -225,7 +225,7 @@ class AgendaApp extends Component {
       showAppointment,
       appointmentSelected,
     } = this.state
-    const { services, specialists } = this.props
+    const { services, specialists, specialistsByService } = this.props
     let showEvents = filtersBySpecialist
       ? events.filter(event => event.resourceId === Number(filtersBySpecialist))
       : events
@@ -294,6 +294,7 @@ class AgendaApp extends Component {
             wrappedComponentRef={this.saveFormRef}
             services={services}
             specialists={specialists}
+            specialistsByService={specialistsByService}
             // {...fields}
             // onChange={this.handleFormChange}
             // slots={currentSlots}
@@ -311,6 +312,7 @@ AgendaApp.propTypes = {
   services: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   specialists: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   events: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  specialistsByService: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 }
 
 export default AgendaApp
