@@ -261,6 +261,8 @@ class AgendaApp extends Component {
               eventPropGetter={this.eventStyleGetter}
               onSelectSlot={this.createBooking}
               onSelectEvent={this.selectEvent}
+              onNavigate={date => console.log('onNavigate', date)}
+              // onView={() => console.log('onView')}
               // {...this.props}
             />
           </Col>

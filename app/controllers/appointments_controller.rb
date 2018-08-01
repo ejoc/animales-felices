@@ -1,6 +1,8 @@
 class AppointmentsController < ApplicationController
   before_action :set_appointment, only: [:show, :edit, :update, :destroy, :cancel]
+  before_action :set_specialist, only: [:show, :edit, :create, :update, :destroy]
 
+  # agregar funcionalidad para buscar reservaciones por specialista o todo
   def index
     # @specialists = Specialist.all
     @services = Service.all
@@ -72,6 +74,10 @@ class AppointmentsController < ApplicationController
   private
     def set_appointment
       @appointment = Appointment.find(params[:id])
+    end
+
+    def set_specialist
+      @specialist = Specialist.find(params[:specialist_id])
     end
 
     def appointment_params
