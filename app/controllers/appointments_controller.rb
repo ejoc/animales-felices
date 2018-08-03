@@ -1,23 +1,16 @@
 class AppointmentsController < ApplicationController
   before_action :set_appointment, only: [:show, :edit, :update, :destroy, :cancel]
-  before_action :set_specialist, only: [:show, :edit, :create, :update, :destroy]
+  # before_action :set_specialist, only: [:show, :edit, :create, :update, :destroy]
 
   # agregar funcionalidad para buscar reservaciones por specialista o todo
   def index
-    # @specialists = Specialist.all
-    @services = Service.all
-    # @specialists = SpecialistService
-    #   .joins(specialist: :person)
-    #   .select('people.name, service_id')
-    #   .where(active: true).load
-
-    @specialists = Specialist.joins(:person).select(
-      'people.name',
-    )
-
-    @specialists_by_service = SpecialistService.select('specialist_id', 'service_id')
-    
     # @events = Appointment.joins(service: :item).select('appointments.id, appointments.client_name as title, items.name as desc, start_time as start, end_time as end').load
+    if(params[:year] && params[:month] && params[:day])
+      date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i)
+    else
+      date = Time.now
+    end
+
     @events = Appointment.joins(service: :item).select(
       'appointments.id',
       # "concat_ws(' - ', appointments.client_name, items.name) AS title",
@@ -27,9 +20,11 @@ class AppointmentsController < ApplicationController
       'end_time as end',
       'appointments.specialist_id as resource_id',
       'appointments.service_id',
-    ).load
+    ).where('start_time > ? AND end_time < ?', date.beginning_of_week, date.end_of_week)
 
-    # render json: AppointmentSerializer.new(@events).serializable_hash[:data]
+
+
+    render json: AppointmentsSerializer.new(@events).serializable_hash[:data]
   end
 
   def show

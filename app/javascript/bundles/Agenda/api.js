@@ -43,6 +43,9 @@ export function bookingAppointment(fields) {
   ))
 }
 
+export function getAppointments(date) {
+  return axios(`/appointments/${date}`)
+}
 
 export function getAppointment(id) {
   return axios(`/appointments/${id}`)

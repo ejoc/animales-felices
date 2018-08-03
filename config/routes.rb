@@ -30,11 +30,17 @@ Rails.application.routes.draw do
   end
   resources :clients, only: [:index]
   resources :services, only: [:index]
+  resources :appointments
+
+  get 'appointments/:day/:month/:year', to: 'appointments#index'
+
+  get 'agenda', to: "pages#agenda"
+  get 'facturacion', to: "pages#facturacion"
 
   # get 'agenda', to: 'agenda#index'
   # post 'booking_appoiment', to: 'agenda#appointment'
 
   devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root to: "appointments#index"
+  root to: "pages#agenda"
 end

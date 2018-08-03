@@ -15,7 +15,7 @@ import SpecialistFilterPanel from '../components/SpecialistFilterPanel'
 import ServiceFilterPanel from '../components/ServiceFilterPanel'
 import Agenda from '../components/Agenda'
 import getAvatarColor from '../resourceColors'
-import { bookingAppointment, cancelAppointment } from '../api'
+import { bookingAppointment, getAppointments, cancelAppointment } from '../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
 import ShowEvent from '../components/ShowEvent'
 
@@ -28,24 +28,28 @@ Calendar.setLocalizer(Calendar.momentLocalizer(moment))
 class AgendaApp extends Component {
   constructor(props) {
     super(props)
-    const { events } = this.props
+    const { events } = props
     // const resources = specialists
-    const allEvents = events
-      .map(event => ({
-        id: event.id,
-        ...event.attributes,
-        // resourceId: event.resource_id,
-        start: new Date(event.attributes.start),
-        end: new Date(event.attributes.end),
-      }))
     this.state = {
-      events: allEvents,
+      events: events ? events
+        .map(event => ({
+          id: event.id,
+          ...event.attributes,
+          // resourceId: event.resource_id,
+          start: new Date(event.attributes.start),
+          end: new Date(event.attributes.end),
+        })) : [],
       bookingFormVisible: false,
       showAppointment: false,
       submitting: false,
       // filtersBySpecialist: null,
       // filtersByService: null,
     }
+  }
+
+  componentDidMount() {
+    const currentDay = moment(new Date()).format('l')
+    this.fetchAppointments(currentDay)
   }
 
   /*
@@ -80,17 +84,16 @@ class AgendaApp extends Component {
               message: 'Reservación creada exitosamente!',
               description: 'Reservación creada de manera exitosa!',
             })
-            const { events } = this.state
             const event = {
               ...data,
               start: new Date(data.start),
               end: new Date(data.end),
             }
-            this.setState({
+            this.setState(prevState => ({
               submitting: false,
               bookingFormVisible: false,
-              events: events.concat(event),
-            })
+              events: prevState.events.concat(event),
+            }))
           },
           (errors) => {
             form.resetFields()
@@ -173,6 +176,14 @@ class AgendaApp extends Component {
   /*
   * Agenda
   */
+
+  handleNavigate = (d) => {
+    console.log('date', d, typeof (d))
+    console.log(moment(d).format('l'))
+    console.log(`/appointments/${d.getDay()}/${d.getMonth() + 1}/${d.getFullYear()}`)
+    this.fetchAppointments(moment(d).format('l'))
+  }
+
   createBooking = (slotInfo) => {
     // alert(
     //   `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
@@ -213,6 +224,28 @@ class AgendaApp extends Component {
     })
   }
 
+  fetchAppointments(d) {
+    console.log('date', d, typeof (d))
+    getAppointments(d).then(
+      ({ data }) => {
+        const events = data
+          .map(event => ({
+            id: event.id,
+            ...event.attributes,
+            // resourceId: event.resource_id,
+            start: new Date(event.attributes.start),
+            end: new Date(event.attributes.end),
+          }))
+
+        this.setState({
+          events,
+        })
+      },
+      error => console.log(error),
+    )
+  }
+
+
   render() {
     const {
       bookingFormVisible,
@@ -226,6 +259,10 @@ class AgendaApp extends Component {
       appointmentSelected,
     } = this.state
     const { services, specialists, specialistsByService } = this.props
+    const filters = {
+      resourceId: filtersBySpecialist,
+      serviceId: filtersByService,
+    }
     let showEvents = filtersBySpecialist
       ? events.filter(event => event.resourceId === Number(filtersBySpecialist))
       : events
@@ -261,7 +298,7 @@ class AgendaApp extends Component {
               eventPropGetter={this.eventStyleGetter}
               onSelectSlot={this.createBooking}
               onSelectEvent={this.selectEvent}
-              onNavigate={date => console.log('onNavigate', date)}
+              onNavigate={this.handleNavigate}
               // onView={() => console.log('onView')}
               // {...this.props}
             />
@@ -313,8 +350,12 @@ class AgendaApp extends Component {
 AgendaApp.propTypes = {
   services: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   specialists: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  events: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  events: PropTypes.arrayOf(PropTypes.shape()),
   specialistsByService: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+}
+
+AgendaApp.defaultProps = {
+  events: [],
 }
 
 export default AgendaApp

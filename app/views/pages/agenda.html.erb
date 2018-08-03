@@ -1,0 +1,6 @@
+<%= react_component("AgendaApp", props: {
+  specialists: @specialists,
+  specialistsByService: @specialists_by_service,
+  services: @services,
+  events: AppointmentsSerializer.new(@events).serializable_hash[:data],
+}, prerender: false) %>
