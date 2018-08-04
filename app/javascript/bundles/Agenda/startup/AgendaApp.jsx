@@ -6,24 +6,20 @@ import {
   Modal,
   notification,
   Button,
+  Card,
 } from 'antd'
-import Calendar from 'react-big-calendar'
+import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 
+import FilterPanel from '../components/FilterPanel'
 import BookingForm from '../components/BookingForm'
-import SpecialistFilterPanel from '../components/SpecialistFilterPanel'
-import ServiceFilterPanel from '../components/ServiceFilterPanel'
 import Agenda from '../components/Agenda'
-import getAvatarColor from '../resourceColors'
-import { bookingAppointment, getAppointments, cancelAppointment } from '../api'
+import { bookingAppointment, getAppointments } from '../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
 import ShowEvent from '../components/ShowEvent'
 
 moment.locale('es')
-Calendar.setLocalizer(Calendar.momentLocalizer(moment))
-// BigCalendar.setLocalizer(BigCalendar.globalizeLocalizer(globalize))
-
-// localizer(globalize)
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
 class AgendaApp extends Component {
   constructor(props) {
@@ -48,7 +44,7 @@ class AgendaApp extends Component {
   }
 
   componentDidMount() {
-    const currentDay = moment(new Date()).format('l')
+    const currentDay = new Date()
     this.fetchAppointments(currentDay)
   }
 
@@ -176,21 +172,11 @@ class AgendaApp extends Component {
   /*
   * Agenda
   */
-
-  handleNavigate = (d) => {
-    console.log('date', d, typeof (d))
-    console.log(moment(d).format('l'))
-    console.log(`/appointments/${d.getDay()}/${d.getMonth() + 1}/${d.getFullYear()}`)
-    this.fetchAppointments(moment(d).format('l'))
+  handleNavigate = (day) => {
+    this.fetchAppointments(day)
   }
 
   createBooking = (slotInfo) => {
-    // alert(
-    //   `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-    //     `\nend: ${slotInfo.end.toLocaleString()}` +
-    //     `\naction: ${slotInfo.action}`
-    // )
-
     this.setState({
       bookingFormVisible: true,
       currentSlots: slotInfo.slots,
@@ -198,24 +184,7 @@ class AgendaApp extends Component {
     })
   }
 
-  // eventStyleGetter = (event, start, end, isSelected) => {
-  eventStyleGetter = (event) => {
-    // const backgroundColor = '#' + event.resourceId
-    const backgroundColor = getAvatarColor(event.resourceId)
-    const style = {
-      backgroundColor,
-      // borderRadius: '0px',
-      // opacity: 0.8,
-      // color: 'black',
-      border: '1px solid #595959',
-      display: 'block',
-      // left: '0%',
-      // width: '100%',
-    }
-    return {
-      style,
-    }
-  }
+  handleCalendarSelect = day => this.fetchAppointments(day.toDate())
 
   selectEvent = (event) => {
     this.setState({
@@ -224,9 +193,10 @@ class AgendaApp extends Component {
     })
   }
 
-  fetchAppointments(d) {
-    console.log('date', d, typeof (d))
-    getAppointments(d).then(
+  fetchAppointments(day) {
+    const date = moment(day).format('l')
+    this.setState({ fetching: true })
+    getAppointments(date).then(
       ({ data }) => {
         const events = data
           .map(event => ({
@@ -239,12 +209,13 @@ class AgendaApp extends Component {
 
         this.setState({
           events,
+          day,
+          fetching: false,
         })
       },
-      error => console.log(error),
+      error => console.error(error),
     )
   }
-
 
   render() {
     const {
@@ -257,12 +228,14 @@ class AgendaApp extends Component {
       filtersByService,
       showAppointment,
       appointmentSelected,
+      day,
+      fetching,
     } = this.state
     const { services, specialists, specialistsByService } = this.props
-    const filters = {
-      resourceId: filtersBySpecialist,
-      serviceId: filtersByService,
-    }
+    // const filters = {
+    //   resourceId: filtersBySpecialist,
+    //   serviceId: filtersByService,
+    // }
     let showEvents = filtersBySpecialist
       ? events.filter(event => event.resourceId === Number(filtersBySpecialist))
       : events
@@ -273,35 +246,36 @@ class AgendaApp extends Component {
     return (
       <div style={{ padding: '10px', height: '700px' }}>
         <Row gutter={8}>
-          <Col span={4}>
-            <SpecialistFilterPanel
+          <Col span={5}>
+            <FilterPanel
+              handleCalendarSelect={this.handleCalendarSelect}
               handleSpecialistClick={this.handleSpecialistClick}
               filtersBySpecialist={filtersBySpecialist}
               specialists={specialists}
               viewAllSpecialists={this.viewAllSpecialists}
-            />
-
-            <ServiceFilterPanel
               handleServiceClick={this.handleServiceClick}
               filtersByService={filtersByService}
               services={services}
               viewAllServices={this.viewAllServices}
+
             />
           </Col>
-          <Col span={20} style={{ height: '600px' }}>
-            <Agenda
-              events={showEvents}
-              // onEventDrop={this.moveEvent}
-              // onEventResize={this.resizeEvent}
-              // slotPropGetter={() => {}}
-              // scrollToTime={new Date()}
-              eventPropGetter={this.eventStyleGetter}
-              onSelectSlot={this.createBooking}
-              onSelectEvent={this.selectEvent}
-              onNavigate={this.handleNavigate}
-              // onView={() => console.log('onView')}
-              // {...this.props}
-            />
+          <Col span={19} style={{ height: '600px' }}>
+            <Card className={fetching ? 'fetching' : ''}>
+              <Agenda
+                events={showEvents}
+                date={day || new Date()}
+                // onEventDrop={this.moveEvent}
+                // onEventResize={this.resizeEvent}
+                // slotPropGetter={() => {}}
+                // scrollToTime={new Date()}
+                onSelectSlot={this.createBooking}
+                onSelectEvent={this.selectEvent}
+                onNavigate={this.handleNavigate}
+                // onView={() => console.log('onView')}
+                // {...this.props}
+              />
+            </Card>
           </Col>
         </Row>
 
@@ -359,35 +333,3 @@ AgendaApp.defaultProps = {
 }
 
 export default AgendaApp
-
-
-// resizeEvent = (resizeType, { event, start, end }) => {
-//   const { events } = this.state
-
-//   const nextEvents = events.map(existingEvent => (existingEvent.id === event.id
-//     ? { ...existingEvent, start, end }
-//     : existingEvent
-//   ))
-
-//   this.setState({
-//     events: nextEvents,
-//   })
-
-//   console.log(`${event.title} was resized to ${start}-${end}`)
-// }
-
-// moveEvent = ({ event, start, end }) => {
-//   const { events } = this.state
-
-//   const idx = events.indexOf(event)
-//   const updatedEvent = { ...event, start, end }
-
-//   const nextEvents = [...events]
-//   nextEvents.splice(idx, 1, updatedEvent)
-
-//   this.setState({
-//     events: nextEvents,
-//   })
-
-//   console.log(`${event.title} was dropped onto ${event.start}`)
-// }

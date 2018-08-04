@@ -9,6 +9,7 @@ import BigCalendar from 'react-big-calendar'
 
 import WorkWeek from './WorkWeek'
 import CustomEvent from './CustomEvent'
+import getAvatarColor from '../../resourceColors'
 
 const messages = {
   month: 'Mes',
@@ -28,34 +29,42 @@ const messages = {
 
 // const DragAndDropCalendar = withDragAndDrop(BigCalendar)
 
-class Agenda extends React.Component {
-  render() {
-    return (
-      <BigCalendar
-        selectable
-        views={{ month: true, week: WorkWeek, day: true }}
-        culture="es-Es"
-        formats={{ eventTimeRangeFormat: () => null }}
-        components={{
-          event: CustomEvent,
-        }}
-        // events={events}
-        // resizable
-        defaultView={BigCalendar.Views.WEEK}
-        messages={messages}
-        step={15}
-        // timeslots={1}
-        min={new Date(2017, 10, 0, 8, 0, 0)}
-        max={new Date(2017, 10, 0, 18, 0, 0)}
-        {...this.props}
-        // eventPropGetter={this.eventStyleGetter}
-        // onSelectSlot={this.createBooking}
-        // onEventResize={this.resizeEvent}
-        // onEventDrop={this.moveEvent}
-      />
-    )
+function eventStyleGetter(event) {
+  // const backgroundColor = '#' + event.resourceId
+  const backgroundColor = getAvatarColor(event.resourceId)
+  const style = {
+    backgroundColor,
+    border: '1px solid #595959',
+    display: 'block',
+  }
+  return {
+    style,
   }
 }
+
+const Agenda = props => (
+  <BigCalendar
+    selectable
+    eventPropGetter={eventStyleGetter}
+    views={{ week: WorkWeek, day: true }}
+    culture="es-Es"
+    formats={{ eventTimeRangeFormat: () => null }}
+    components={{
+      event: CustomEvent,
+    }}
+    defaultView={BigCalendar.Views.WEEK}
+    messages={messages}
+    step={15}
+    // timeslots={1}
+    min={new Date(2017, 10, 0, 8, 0, 0)}
+    max={new Date(2017, 10, 0, 18, 0, 0)}
+    {...props}
+    // eventPropGetter={this.eventStyleGetter}
+    // onSelectSlot={this.createBooking}
+    // onEventResize={this.resizeEvent}
+    // onEventDrop={this.moveEvent}
+  />
+)
 
 Agenda.propTypes = {
   events: PropTypes.arrayOf(PropTypes.shape()).isRequired,
