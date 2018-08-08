@@ -30,7 +30,14 @@ Rails.application.routes.draw do
   end
   resources :clients, only: [:index]
   resources :services, only: [:index]
-  resources :appointments
+  resources :appointments, except: [:new, :edit, :destroy] do
+    collection do
+      get 'specialists_by_service'
+    end
+    member do
+      delete 'cancel'
+    end
+  end
 
   get 'appointments/:day/:month/:year', to: 'appointments#index'
 

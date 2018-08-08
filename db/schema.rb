@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
     t.string "client_email"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.string "canceled", default: "f"
+    t.boolean "canceled", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["service_id"], name: "index_appointments_on_service_id"

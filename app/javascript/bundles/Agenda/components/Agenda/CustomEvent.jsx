@@ -14,10 +14,10 @@ const CustomEvent = ({ event }) => {
   return (
     <div style={{ paddingTop: '5px' }}>
       <strong>
-        {moment(event.start).format('LT')}
+        {moment(event.startTime).format('LT')}
       </strong>
       &nbsp;-&nbsp;
-      {event.title}
+      {event.clientName}
       <span className="pull-right" style={{ float: 'right', marginRight: '4px' }}>
         {icon}
       </span>

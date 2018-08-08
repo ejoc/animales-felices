@@ -9,7 +9,7 @@ class CreateAppointments < ActiveRecord::Migration[5.2]
       t.timestamp  :start_time
       t.timestamp  :end_time
       # t.date       :date
-      t.string     :canceled, default: false
+      t.boolean    :canceled, default: false
 
       t.timestamps
     end

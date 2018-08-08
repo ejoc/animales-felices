@@ -14,7 +14,11 @@ import moment from 'moment'
 import FilterPanel from '../components/FilterPanel'
 import BookingForm from '../components/BookingForm'
 import Agenda from '../components/Agenda'
-import { bookingAppointment, getAppointments } from '../api'
+import {
+  bookingAppointment,
+  getAppointments,
+  cancelAppointment,
+} from '../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
 import ShowEvent from '../components/ShowEvent'
 
@@ -32,12 +36,16 @@ class AgendaApp extends Component {
           id: event.id,
           ...event.attributes,
           // resourceId: event.resource_id,
-          start: new Date(event.attributes.start),
-          end: new Date(event.attributes.end),
+          startTime: new Date(event.attributes.startTime),
+          endTime: new Date(event.attributes.endTime),
         })) : [],
       bookingFormVisible: false,
       showAppointment: false,
       submitting: false,
+      filters: {
+        canceled: false,
+        // concluded: true,
+      },
       // filtersBySpecialist: null,
       // filtersByService: null,
     }
@@ -80,10 +88,12 @@ class AgendaApp extends Component {
               message: 'Reservación creada exitosamente!',
               description: 'Reservación creada de manera exitosa!',
             })
+            const response = data.data
             const event = {
-              ...data,
-              start: new Date(data.start),
-              end: new Date(data.end),
+              id: response.id,
+              ...response.attributes,
+              startTime: new Date(response.attributes.startTime),
+              endTime: new Date(response.attributes.endTime),
             }
             this.setState(prevState => ({
               submitting: false,
@@ -131,7 +141,7 @@ class AgendaApp extends Component {
     form.resetFields()
   }
 
-  handleShowAppointment = () => {
+  hideAppointment = () => {
     this.setState({
       showAppointment: false,
     })
@@ -141,32 +151,36 @@ class AgendaApp extends Component {
   * Specialist Filter
   */
   handleSpecialistClick = ({ key }) => {
-    this.setState({
+    this.setState(prevState => ({
       filtersBySpecialist: key,
-    })
+      filters: { ...prevState.filters, specialistId: key },
+    }))
   }
 
   viewAllSpecialists = (e) => {
     e.preventDefault()
-    this.setState({
+    this.setState(prevState => ({
       filtersBySpecialist: null,
-    })
+      filters: { ...prevState.filters, specialistId: null },
+    }))
   }
 
   /*
   * Service Filter
   */
   handleServiceClick = ({ key }) => {
-    this.setState({
+    this.setState(prevState => ({
       filtersByService: key,
-    })
+      filters: { ...prevState.filters, serviceId: key },
+    }))
   }
 
   viewAllServices = (e) => {
     e.preventDefault()
-    this.setState({
+    this.setState(prevState => ({
       filtersByService: null,
-    })
+      filters: { ...prevState.filters, serviceId: null },
+    }))
   }
 
   /*
@@ -186,6 +200,38 @@ class AgendaApp extends Component {
 
   handleCalendarSelect = day => this.fetchAppointments(day.toDate())
 
+  handleCancelAppointment = () => {
+    // e.preventDefault() // eliminar si es necesario
+    this.setState({
+      cancelLoading: true,
+    })
+    const { appointmentSelected } = this.state
+    cancelAppointment(appointmentSelected).then(
+      ({ data }) => {
+        notification.success({
+          message: 'Reservación cancelada exitosamente!',
+          // description: 'Reservación creada de manera exitosa!',
+        })
+
+        this.setState(prevState => ({
+          showAppointment: false,
+          cancelLoading: false,
+          events: prevState.events.map((event) => {
+            if (Number(event.id) === Number(data)) {
+              return { ...event, canceled: true }
+            }
+            return event
+          }),
+        }))
+      },
+      error => console.log(error),
+    )
+  }
+
+  handleUpdateAppointment = (e) => {
+    
+  }
+
   selectEvent = (event) => {
     this.setState({
       showAppointment: true,
@@ -203,8 +249,8 @@ class AgendaApp extends Component {
             id: event.id,
             ...event.attributes,
             // resourceId: event.resource_id,
-            start: new Date(event.attributes.start),
-            end: new Date(event.attributes.end),
+            startTime: new Date(event.attributes.startTime),
+            endTime: new Date(event.attributes.endTime),
           }))
 
         this.setState({
@@ -229,20 +275,28 @@ class AgendaApp extends Component {
       showAppointment,
       appointmentSelected,
       day,
+      cancelLoading,
       fetching,
+      filters,
     } = this.state
     const { services, specialists, specialistsByService } = this.props
-    // const filters = {
-    //   resourceId: filtersBySpecialist,
-    //   serviceId: filtersByService,
-    // }
-    let showEvents = filtersBySpecialist
-      ? events.filter(event => event.resourceId === Number(filtersBySpecialist))
-      : events
 
-    showEvents = filtersByService
-      ? showEvents.filter(event => event.serviceId === Number(filtersByService))
-      : showEvents
+    const filterKeys = Object.keys(filters)
+    const showEvents = events.filter(event => filterKeys.every((eachKey) => {
+      if (filters[eachKey] === null) {
+        return true
+      }
+      // console.log(eachKey, filters[eachKey], event[eachKey])
+      return filters[eachKey] == (event[eachKey])
+    }))
+
+    // let showEvents = filtersBySpecialist
+    //   ? events.filter(event => event.resourceId === Number(filtersBySpecialist))
+    //   : events
+
+    // showEvents = filtersByService
+    //   ? showEvents.filter(event => event.serviceId === Number(filtersByService))
+    //   : showEvents
     return (
       <div style={{ padding: '10px', height: '700px' }}>
         <Row gutter={8}>
@@ -284,7 +338,9 @@ class AgendaApp extends Component {
             visible={showAppointment}
             appointmentId={appointmentSelected}
             onOk={this.handleOk}
-            onCancel={this.handleShowAppointment}
+            onCancel={this.hideAppointment}
+            onCancelAppointment={this.handleCancelAppointment}
+            cancelLoading={cancelLoading}
           />
         )}
 

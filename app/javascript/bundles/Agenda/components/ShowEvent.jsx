@@ -5,12 +5,12 @@ import {
   Row,
   Col,
   Spin,
-  notification,
+  Popconfirm,
 } from 'antd'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import { getAppointment, cancelAppointment } from '../api'
+import { getAppointment } from '../api'
 
 class ShowEvent extends Component {
   _mounted = false
@@ -19,7 +19,6 @@ class ShowEvent extends Component {
     // appointmentId: null,
     // attributes: {},
     loading: true,
-    cancelLoading: false,
   }
 
   componentDidMount() {
@@ -34,23 +33,19 @@ class ShowEvent extends Component {
     // }
   }
 
-  handleCancel = (e) => {
-    e.preventDefault() // eliminar si es necesario
-    this.setState({
-      cancelLoading: true,
-    })
-    const { onCancel, appointmentId } = this.props
-    cancelAppointment(appointmentId).then(
-      ({ data }) => {
-        notification.success({
-          message: 'Reservación cancelada exitosamente!',
-          description: 'Reservación creada de manera exitosa!',
-        })
-        onCancel()
-      },
-      error => console.log(error),
-    )
-  }
+  // handleCancelAppointment = () => {
+  //   const { onCancelAppointment, onCancel } = this.props
+  //   onCancel()
+  //   confirm({
+  //     title: 'Estas seguro que desea cancelar la reservación?',
+  //     content: 'datos de la reservación....',
+  //     onOk() {
+  //       onCancelAppointment()
+  //     },
+  //     okText: 'Si',
+  //     cancelText: 'No',
+  //   })
+  // }
 
   fetchAppointment() {
     // // cancel the previous request
@@ -80,7 +75,6 @@ class ShowEvent extends Component {
           //     return result
           //   }, {}),
           // }
-          console.log(data.data)
           this.setState({
             event: data.data.attributes,
             loading: false,
@@ -91,19 +85,16 @@ class ShowEvent extends Component {
         },
       )
   }
-  
 
   render() {
     const {
       visible,
       onOk,
       onCancel,
-    } = this.props
-    console.log(this.state)
-    const {
-      loading,
       cancelLoading,
-    } = this.state
+      onCancelAppointment,
+    } = this.props
+    const { loading } = this.state
 
     return (
       <Modal
@@ -114,15 +105,24 @@ class ShowEvent extends Component {
         onCancel={onCancel}
         // okButtonProps={{ disabled: true }}
         footer={[
-          <Button
+          <Popconfirm
             key="back"
-            type="danger"
-            onClick={this.handleCancel}
-            disabled={loading}
-            loading={cancelLoading}
+            // placement="topLeft"
+            title="Seguro que desea cancelar la reservación?"
+            okType="danger"
+            onConfirm={onCancelAppointment}
+            okText="Si"
+            cancelText="No"
           >
-            Cancelar reservación
-          </Button>,
+            <Button
+              type="danger"
+              // onClick={this.handleCancelAppointment}
+              // disabled={loading}
+              loading={cancelLoading}
+            >
+              Cancelar reservación
+            </Button>
+          </Popconfirm>,
           <Button key="submit" onClick={onOk} disabled={loading}>
             Modificar reservación
           </Button>,

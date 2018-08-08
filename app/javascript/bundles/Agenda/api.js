@@ -55,6 +55,10 @@ export function getSpecialistsByService() {
   return axios('/appointments/specialists_by_service')
 }
 
+export function updateAppointment(id, fields) {
+  return axios(getFetchInit(`/appointments/${id}`, 'PATCH', { appointment: fields }))
+}
+
 export function cancelAppointment(id) {
   return axios(getFetchInit(`/appointments/${id}/cancel`, 'delete'))
 }

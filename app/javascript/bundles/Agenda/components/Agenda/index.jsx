@@ -31,7 +31,7 @@ const messages = {
 
 function eventStyleGetter(event) {
   // const backgroundColor = '#' + event.resourceId
-  const backgroundColor = getAvatarColor(event.resourceId)
+  const backgroundColor = getAvatarColor(event.specialistId)
   const style = {
     backgroundColor,
     border: '1px solid #595959',
@@ -58,6 +58,8 @@ const Agenda = props => (
     // timeslots={1}
     min={new Date(2017, 10, 0, 8, 0, 0)}
     max={new Date(2017, 10, 0, 18, 0, 0)}
+    startAccessor="startTime"
+    endAccessor="endTime"
     {...props}
     // eventPropGetter={this.eventStyleGetter}
     // onSelectSlot={this.createBooking}

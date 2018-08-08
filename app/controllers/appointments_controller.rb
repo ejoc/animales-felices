@@ -11,18 +11,20 @@ class AppointmentsController < ApplicationController
       date = Time.now
     end
 
-    @events = Appointment.joins(service: :item).select(
-      'appointments.id',
-      # "concat_ws(' - ', appointments.client_name, items.name) AS title",
-      "appointments.client_name AS title",
-      'items.name as desc',
-      'start_time as start',
-      'end_time as end',
-      'appointments.specialist_id as resource_id',
-      'appointments.service_id',
-    ).where('start_time > ? AND end_time < ?', date.beginning_of_week, date.end_of_week)
+    # @events = Appointment.joins(service: :item).select(
+    #   'appointments.id',
+    #   # "concat_ws(' - ', appointments.client_name, items.name) AS title",
+    #   "appointments.client_name AS title",
+    #   'items.name as desc',
+    #   'start_time as start',
+    #   'end_time as end',
+    #   'appointments.specialist_id',
+    #   'appointments.service_id',
+    #   'appointments.canceled'
+    # ).where('start_time > ? AND end_time < ?', date.beginning_of_week, date.end_of_week)
 
-
+    @events = Appointment.joins(service: :item)
+      .where('start_time > ? AND end_time < ?', date.beginning_of_week, date.end_of_week)
 
     render json: AppointmentsSerializer.new(@events).serializable_hash[:data]
   end
@@ -35,17 +37,16 @@ class AppointmentsController < ApplicationController
   def create
     @appointment = Appointment.new(appointment_params)
     if @appointment.save
-      # render json: "Reservación creada de manera exitosa!", status: :created #, location: @appointment
-      # render :show, status: :created, location: @appointment
-      render json: {
-        id: @appointment.id,
-        title: @appointment.client_name,
-        start: @appointment.start_time,
-        end: @appointment.end_time,
-        desc: @appointment.service.name,
-        resourceId: @appointment.specialist_id,
-        serviceId: @appointment.service_id,
-        }, status: :created
+      # render json: {
+      #   id: @appointment.id,
+      #   title: @appointment.client_name,
+      #   start: @appointment.start_time,
+      #   end: @appointment.end_time,
+      #   desc: @appointment.service.name,
+      #   specialistId: @appointment.specialist_id,
+      #   serviceId: @appointment.service_id,
+      #   }, status: :created
+      render json: AppointmentsSerializer.new(@appointment), status: :created
     else
       render json: @appointment.errors, status: :unprocessable_entity
     end
@@ -54,9 +55,17 @@ class AppointmentsController < ApplicationController
   def cancel
     @appointment.canceled = true
     if @appointment.save
-      render json: 'cancelado exitosamente', status: :ok
+      render json: @appointment.id, status: :ok
     else
       render json: @appointment.errors, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @appointment.update(appointment_params)
+      render json: AppointmentsSerializer.new(@appointment), status: :ok
+    else
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
