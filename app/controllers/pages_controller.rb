@@ -8,5 +8,7 @@ class PagesController < ApplicationController
 
     @specialists_by_service = SpecialistService.select('specialist_id', 'service_id')
       .where(active: true)
+
+    # render json: ServiceSerializer.new(@services)
   end
 end

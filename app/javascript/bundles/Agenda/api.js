@@ -35,20 +35,65 @@ export function getClients(searchParam) {
   // return response.data
 }
 
-export function bookingAppointment(fields) {
-  return axios(getFetchInit(
-    '/appointments',
-    'post',
-    { appointment: fields },
-  ))
+export function bookingAppointment(fields, ok, error) {
+  // return axios(getFetchInit(
+  //   '/appointments',
+  //   'post',
+  //   { appointment: fields },
+  // ))
+
+  axios(getFetchInit('/appointments', 'post', { appointment: fields }))
+    .then(
+      ({ data }) => {
+        const response = data.data
+        const event = {
+          id: response.id,
+          ...response.attributes,
+          startTime: new Date(response.attributes.startTime),
+          endTime: new Date(response.attributes.endTime),
+        }
+        ok(event)
+      },
+      err => error(err),
+    )
 }
 
-export function getAppointments(date) {
-  return axios(`/appointments/${date}`)
+let currentDate
+
+export function getAppointments(date, ok, error) {
+  currentDate = date
+  // return axios(`/appointments/${date}`)
+  axios(`/appointments/${date}`)
+    .then(({ data }) => {
+      if (currentDate === date) {
+        const events = data
+          .map(event => ({
+            id: event.id,
+            ...event.attributes,
+            // resourceId: event.resource_id,
+            startTime: new Date(event.attributes.startTime),
+            endTime: new Date(event.attributes.endTime),
+          }))
+
+        ok(events)
+      }
+    })
+    .catch(err => error(err))
 }
 
-export function getAppointment(id) {
-  return axios(`/appointments/${id}`)
+let currentAppointmentId
+export function getAppointment(id, ok, error) {
+  // return axios(`/appointments/${id}`)
+  currentAppointmentId = id
+  axios(`/appointments/${id}`)
+    .then(
+      ({ data }) => {
+        if (currentAppointmentId === id) {
+          ok(data.data)
+        }
+      },
+      err => error(err),
+    )
 }
 
 export function getSpecialistsByService() {

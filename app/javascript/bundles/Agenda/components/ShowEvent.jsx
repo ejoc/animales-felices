@@ -62,19 +62,6 @@ class ShowEvent extends Component {
           if (!this._mounted) {
             return
           }
-          // const {
-          //   attributes,
-          //   relationships,
-          // } = data
-          // const event = {
-          //   attributes,
-          //   relationships,
-          //   included: included.reduce((prev, item) => {
-          //     const result = prev
-          //     result[item.type] = { id: item.id, attributes: { ...item.attributes } }
-          //     return result
-          //   }, {}),
-          // }
           this.setState({
             event: data.data.attributes,
             loading: false,
@@ -90,6 +77,7 @@ class ShowEvent extends Component {
     const {
       visible,
       onOk,
+      onEditAppointment,
       onCancel,
       cancelLoading,
       onCancelAppointment,
@@ -123,7 +111,7 @@ class ShowEvent extends Component {
               Cancelar reservación
             </Button>
           </Popconfirm>,
-          <Button key="submit" onClick={onOk} disabled={loading}>
+          <Button key="submit" onClick={onEditAppointment} disabled={loading}>
             Modificar reservación
           </Button>,
         ]}
@@ -247,3 +235,17 @@ ShowEvent.propTypes = {
 }
 
 export default ShowEvent
+
+// const {
+//   attributes,
+//   relationships,
+// } = data
+// const event = {
+//   attributes,
+//   relationships,
+//   included: included.reduce((prev, item) => {
+//     const result = prev
+//     result[item.type] = { id: item.id, attributes: { ...item.attributes } }
+//     return result
+//   }, {}),
+// }

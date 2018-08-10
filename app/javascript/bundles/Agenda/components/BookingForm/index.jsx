@@ -34,28 +34,31 @@ class FormModal extends React.Component {
       form,
       specialists,
       services,
-      specialistsByService,
+      // specialistsByService,
     } = this.props
     const { getFieldDecorator, getFieldValue } = form
     // const currentService = getFieldValue('service')
     // const currentService = services.find(s => s.id === this.props.service.value)
-    const firstService = (services[0] && services[0].id) || ''
-    const serviceSelected = getFieldValue('service') || firstService
-    const currentService = services.find(s => s.id === serviceSelected)
 
-    const specialistsIds = specialistsByService
-      .filter(s => s.service_id === serviceSelected)
-      .map(s => s.specialist_id)
+    const serviceField = getFieldValue('service') || (services[0] && services[0].id) || ''
+
+    const serviceSelected = services.find(s => s.id === serviceField)
+    let specialistsIds = []
+    if (serviceSelected) {
+      specialistsIds = serviceSelected.attributes.specialists
+    }
+
     const specialistsOptions = specialists
-      .filter(s => specialistsIds.includes(s.id))
+      .filter(s => specialistsIds.includes(String(s.id)))
       .map(s => (
         <Option
           key={s.id}
           value={s.id}
         >
-          {s.name}
+          {s.attributes.name}
         </Option>
       ))
+
     return (
       <Form>
         <FormItem
@@ -68,7 +71,7 @@ class FormModal extends React.Component {
           {...formItemLayout}
         >
           {getFieldDecorator('service', {
-            initialValue: firstService,
+            initialValue: serviceField,
             rules: [{ required: true, message: 'Por favor seleccione el servicio!' }],
           })(
             <Select onChange={this.handleServiceChange}>
@@ -77,14 +80,14 @@ class FormModal extends React.Component {
                   key={service.id}
                   value={service.id}
                 >
-                  {service.name}
+                  {service.attributes.name}
                 </Option>
               ))}
             </Select>,
           )}
-          {currentService && (
+          {serviceSelected && (
             <span>
-              {`Duración del servicio: ${currentService.duration_min} minutos`}
+              {`Duración del servicio: ${serviceSelected.attributes.durationMin} minutos`}
             </span>
           )}
         </FormItem>

@@ -34,7 +34,7 @@ const ServiceFilter = ({
       >
         {services.map(service => (
           <Menu.Item key={service.id}>
-            {service.name}
+            {service.attributes.name}
           </Menu.Item>
         ))}
       </Menu>

@@ -30,8 +30,8 @@ class AppointmentsController < ApplicationController
   end
 
   def show
-    # sleep 2
-    render json: AppointmentSerializer.new(@appointment)
+    sleep 1
+    render json: AppointmentsSerializer.new(@appointment)
   end
 
   def create

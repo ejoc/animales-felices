@@ -50,7 +50,7 @@ const SpecialistFilter = ({
                 borderRadius: '4px',
               }}
             />
-            {specialist.name}
+            {specialist.attributes.name}
           </Menu.Item>
         ))}
       </Menu>
