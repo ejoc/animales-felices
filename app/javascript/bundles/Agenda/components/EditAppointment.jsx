@@ -26,6 +26,9 @@ const formItemLayout = {
   },
 }
 
+const dateFormat = 'YYYY/MM/DD'
+const formatTime = 'hh:mm'
+
 function disabledDate(current) {
   // Can not select days before today and today
   return current && current < moment().endOf('day')
@@ -34,7 +37,7 @@ function disabledDate(current) {
 
 function range(start, end) {
   const result = []
-  for (let i = start; i < end; i++) {
+  for (let i = start; i < end; i += 1) {
     result.push(i)
   }
   return result
@@ -45,20 +48,18 @@ function disabledDateTime() {
     disabledHours: () => range(0, 24).splice(4, 20),
     disabledMinutes: () => range(30, 60),
     disabledSeconds: () => [55, 56],
-  };
+  }
 }
 
-const formatTime = 'HH:mm'
-
 class FormModal extends React.Component {
-  componentDidMount() {
-    const { form, appointment } = this.props
-    const { setFieldsValue } = form
-    setFieldsValue({
-      service: String(appointment.attributes.serviceId),
-      specialist: String(appointment.attributes.specialistId),
-    })
-  }
+  // componentDidMount() {
+  //   const { form, appointment } = this.props
+  //   const { setFieldsValue } = form
+  //   setFieldsValue({
+  //     service: String(appointment.serviceId),
+  //     specialist: String(appointment.specialistId),
+  //   })
+  // }
 
   handleServiceChange = () => {
     const { form } = this.props
@@ -72,15 +73,14 @@ class FormModal extends React.Component {
       form,
       specialists,
       services,
-      specialistsByService,
       visible,
       onOk,
       onCancel,
       appointment,
     } = this.props
     const { getFieldDecorator, getFieldValue } = form
-    // const currentService = getFieldValue('service')
-    // const currentService = services.find(s => s.id === this.props.service.value)
+    const appointmentDate = moment(appointment.startTime).format('MMMM DD, h:mm a')
+    const title = `Editar de reservación para ${appointment.clientName} - ${appointmentDate}`
     const serviceField = getFieldValue('service') || (services[0] && services[0].id) || ''
 
     const serviceSelected = services.find(s => s.id === serviceField)
@@ -88,6 +88,7 @@ class FormModal extends React.Component {
     if (serviceSelected) {
       specialistsIds = serviceSelected.attributes.specialists
     }
+    console.log(moment(appointment.startTime, formatTime))
 
     const specialistsOptions = specialists
       .filter(s => specialistsIds.includes(String(s.id)))
@@ -101,8 +102,7 @@ class FormModal extends React.Component {
       ))
     return (
       <Modal
-        title="Editar de reservación"
-        // title="Crear reservacion"
+        title={title}
         visible={visible}
         onOk={onOk}
         onCancel={onCancel}
@@ -118,7 +118,7 @@ class FormModal extends React.Component {
             {...formItemLayout}
           >
             {getFieldDecorator('service', {
-              // initialValue: appointment.serviceId,
+              initialValue: String(appointment.serviceId),
               rules: [{ required: true, message: 'Por favor seleccione el servicio!' }],
             })(
               <Select onChange={this.handleServiceChange}>
@@ -148,7 +148,7 @@ class FormModal extends React.Component {
             {...formItemLayout}
           >
             {getFieldDecorator('specialist', {
-              // initialValue: appointment.specialistId,
+              initialValue: String(appointment.specialistId),
               rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
             })(
               <Select onChange={this.handleSelectChange}>
@@ -161,29 +161,32 @@ class FormModal extends React.Component {
             {...formItemLayout}
             label="Fecha"
           >
-            {getFieldDecorator('startTime', {
+            {getFieldDecorator('date', {
+              initialValue: moment(appointment.startTime, dateFormat),
               rules: [{ type: 'object', required: true, message: 'Please select time!' }],
             })(
               <DatePicker
                 // showTime
-                format="YYYY-MM-DD"
+                format={dateFormat}
                 disabledDate={disabledDate}
-                disabledTime={disabledDateTime}
               />,
             )}
           </FormItem>
 
           <FormItem
             {...formItemLayout}
-            label="TimePicker"
+            label="Hora"
           >
-            {getFieldDecorator('time-picker', {
+            {getFieldDecorator('time', {
+              initialValue: moment(appointment.startTime),
               rules: [{ type: 'object', required: true, message: 'Please select time!' }],
             })(
               <TimePicker
                 minuteStep={serviceSelected.attributes.durationMin}
                 // defaultValue={moment(formatTime)}
                 format={formatTime}
+                disabledHours={() => range(0, 24).splice(4, 20)}
+                disabledMinutes={() => range(30, 60)}
               />,
             )}
           </FormItem>

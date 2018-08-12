@@ -87,6 +87,7 @@ class AgendaApp extends Component {
         bookingAppointment(
           fields,
           (event) => {
+            console.log('event show', event)
             this.setState(prevState => ({
               submitting: false,
               modals: { ...prevState.modals, newAppointment: false },
@@ -257,7 +258,6 @@ class AgendaApp extends Component {
             .find(s => Number(s.id) === Number(appointment.attributes.serviceId))
           const specialist = prevState.specialists
             .find(s => Number(s.id) === Number(appointment.attributes.specialistId))
-          console.log(service, prevState.services)
           return {
             appointmentSelected: {
               id: appointment.id,
@@ -368,7 +368,7 @@ class AgendaApp extends Component {
         {editAppointment && (
           <EditAppointment
             visible={editAppointment}
-            appointment={appointmentSelected}
+            appointment={appointmentSelected.attributes}
             onOk={e => console.log(e)}
             onCancel={this.hideEditAppointment}
             onCancelAppointment={this.handleCancelAppointment}
