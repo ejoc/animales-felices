@@ -27,6 +27,10 @@ Rails.application.routes.draw do
         delete 'cancel'
       end
     end
+
+    member do
+      get 'bussy_slots'
+    end
   end
   resources :clients, only: [:index]
   resources :services, only: [:index]

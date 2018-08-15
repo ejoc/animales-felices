@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 import snakeCaseKeys from 'snakecase-keys'
 
 function authenticityToken() {
@@ -106,6 +107,27 @@ export function updateAppointment(id, fields) {
 
 export function cancelAppointment(id) {
   return axios(getFetchInit(`/appointments/${id}/cancel`, 'delete'))
+}
+
+export function bussySlotsSpecialist(id, date, durationMin, ok, error) {
+  axios(`/specialists/${id}/bussy_slots?date=${date}&duration_min=${durationMin}`)
+    .then(
+      ({ data }) => {
+        const response = data.map((r) => {
+          const time = moment(new Date(r.slot))
+          const hour = Number(time.format('hh'))
+          const minute = Number(time.format('mm'))
+          return {
+            slot: time,
+            bussy: r.bussy,
+            hour,
+            minute,
+          }
+        })
+        ok(response)
+      },
+      err => error(err),
+    )
 }
 
 // export async function getAppointment(id, error) {

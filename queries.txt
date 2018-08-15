@@ -1,0 +1,53 @@
+SELECT id, service_id, specialist_id, client_name, client_phone, client_email, start_time, end_time, canceled, created_at, updated_at
+	FROM public.appointments;
+
+SELECT Available_from, Available_to
+      FROM (
+      SELECT @lasttime_to AS Available_from, start AS Available_to, @lasttime_to := finish
+      FROM (SELECT start, finish
+            FROM appointments
+            WHERE finish >= '2013-11-12 08:29'
+              AND start < '2016-11-12 13:01'
+              AND provider_id = 1
+             UNION ALL
+           SELECT '2016-11-12 08:30', '2016-11-12 08:30'
+             UNION ALL
+           SELECT '2016-11-12 13:00', '2016-11-12 13:00'
+                 ORDER BY time_from 
+
+           ) e
+      JOIN (SELECT @lasttime_to := NULL) init) x
+      WHERE Available_to > DATE_ADD(Available_from, INTERVAL 15 MINUTE)
+
+
+
+SELECT Available_from, Available_to
+      FROM (
+      SELECT end_time AS Available_from, start_time AS Available_to
+	  FROM (
+		SELECT start_time, end_time
+		FROM appointments
+		WHERE end_time >= '2018-08-06 08:00'
+		AND start_time < '2018-08-06 18:01'
+		AND specialist_id = 1
+		AND canceled = false
+		UNION ALL
+		SELECT '2018-08-06 08:00', '2018-08-06 08:00'
+		UNION ALL
+		SELECT '2018-08-06 18:00', '2018-08-06 18:00'
+		ORDER BY start_time) e
+      JOIN (SELECT end_time := NULL) init) x
+      WHERE Available_to > DATE_ADD(Available_from, INTERVAL 15 MINUTE)
+	  
+	  
+SELECT start_time, end_time
+	FROM appointments
+	WHERE end_time >= '2018-08-06 08:00'
+	AND start_time < '2018-08-06 18:01'
+	AND specialist_id = 1
+	AND canceled = false
+	UNION ALL
+   SELECT '2018-08-06 08:00', '2018-08-06 08:00'
+	UNION ALL
+   SELECT '2018-08-06 18:00', '2018-08-06 18:00'
+	ORDER BY start_time

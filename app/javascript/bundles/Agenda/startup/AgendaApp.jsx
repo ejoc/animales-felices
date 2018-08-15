@@ -368,7 +368,7 @@ class AgendaApp extends Component {
         {editAppointment && (
           <EditAppointment
             visible={editAppointment}
-            appointment={appointmentSelected.attributes}
+            appointment={appointmentSelected}
             onOk={e => console.log(e)}
             onCancel={this.hideEditAppointment}
             onCancelAppointment={this.handleCancelAppointment}
