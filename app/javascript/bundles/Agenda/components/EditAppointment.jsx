@@ -9,9 +9,9 @@ import {
   Spin,
 } from 'antd'
 import moment from 'moment'
-import { bussySlotsSpecialist } from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import { bussySlotsSpecialist } from '../api'
 
 const FormItem = Form.Item
 
@@ -28,12 +28,12 @@ const formItemLayout = {
   },
 }
 
-const dateFormat = 'YYYY/MM/DD'
+const dateFormat = 'YYYY-MM-DD'
 const formatTime = 'hh:mm'
 
 function disabledDate(current) {
   // Can not select days before today and today
-  return current && current < moment().endOf('day')
+  return current && current < moment().endOf('day').subtract(1, 'days')
 }
 
 
@@ -60,6 +60,10 @@ function getUniqueValuesOfKey(array, key) {
   }, [])
 }
 
+function getNonWorkingHours() {
+  return range(0, 7).concat(range(18, 24))
+}
+
 class FormModal extends React.Component {
   state = {
     specialistSchedule: {
@@ -67,36 +71,79 @@ class FormModal extends React.Component {
       fetching: false,
     },
   }
-  // componentDidMount() {
-  //   const { form, appointment } = this.props
-  //   const { setFieldsValue } = form
-  //   setFieldsValue({
-  //     service: String(appointment.serviceId),
-  //     specialist: String(appointment.specialistId),
-  //   })
-  // }
 
-  handleServiceChange = () => {
+  componentDidMount() {
     const { form } = this.props
+    const { getFieldsValue } = form
+    const { service, specialist, date } = getFieldsValue(['service', 'specialist', 'date'])
+    this.fetchBussySlotsSpecialist(service, specialist, date.format(dateFormat))
+  }
+
+  handleServiceChange = (service) => {
+    // const { form } = this.props
+    const { form, services } = this.props
+    const { getFieldsValue } = form
+    const { specialist, date } = getFieldsValue(['specialist', 'date'])
+    const serviceObject = services.find(s => s.id === service)
+    const { attributes } = serviceObject
     form.setFieldsValue({
-      specialist: '',
+      specialist: attributes.specialists[0],
     })
+    this.fetchBussySlotsSpecialist(specialist, service, date.format(dateFormat))
+  }
+
+  handleSpecialistChange = (specialist) => {
+    const { form } = this.props
+    const { getFieldsValue } = form
+    const { service, date } = getFieldsValue(['service', 'date'])
+    this.fetchBussySlotsSpecialist(specialist, service, date.format(dateFormat))
   }
 
   handleDateChange = (_, dateString) => {
-    const { form, services } = this.props
-    const { getFieldValue } = form
-    const specialistId = getFieldValue('specialist')
-    const serviceSelected = services.find(s => s.id === getFieldValue('service'))
-    console.log(getFieldValue('service'), serviceSelected)
-    // const durationMin = serviceSelected.attributes.durationMin
-    const { attributes } = serviceSelected
-    const { durationMin } = attributes
+    const { form } = this.props
+    const { getFieldsValue } = form
+    const { service, specialist } = getFieldsValue(['service', 'specialist'])
+    // console.log(service, specialist, dateString)
+    this.fetchBussySlotsSpecialist(specialist, service, dateString)
+  }
+
+  disabledHours = () => {
+    const { specialistSchedule } = this.state
+    const { schedule } = specialistSchedule
+    const currentTime = new Date()
+    const disabledHours = schedule // .filter(s => s.bussy)
+      .reduce((carry, item) => {
+        const res = carry
+        if (item.hour in res && res[item.hour] === false) return res
+        if (item.bussy || currentTime > item.slot) {
+          res[item.hour] = true
+          return res
+        }
+        res[item.hour] = false
+        return res
+      }, {})
+    return Object.keys(disabledHours)
+      .filter(x => disabledHours[x])
+      .map(s => Number(s))
+      .concat(getNonWorkingHours())
+  }
+
+  disabledMinutes = (selectedHour) => {
+    // console.log(selectedHour)
+    const { specialistSchedule } = this.state
+    const { schedule } = specialistSchedule
+
+    return schedule
+      .filter(s => s.hour === selectedHour && s.bussy)
+      .map(s => Number(s.minute))
+  }
+
+  fetchBussySlotsSpecialist(specialist, service, date) {
     this.setState({ specialistSchedule: { schedule: [], fetching: true } })
     bussySlotsSpecialist(
-      specialistId,
-      dateString.split('/').join('-'),
-      durationMin,
+      specialist,
+      service,
+      date,
       (data) => {
         console.log(data)
         this.setState({
@@ -106,30 +153,8 @@ class FormModal extends React.Component {
           },
         })
       },
-      error => console.log(error),
+      error => console.warn(error),
     )
-  }
-
-  disabledHours = () => {
-    const { specialistSchedule } = this.state
-    const { schedule } = specialistSchedule
-    const disabledHours = schedule // .filter(s => s.bussy)
-      .reduce((carry, item) => {
-        if (carry[item.hour] && carry[item.hour] === false) return carry
-        if (!item.bussy) {
-          const res = carry
-          res[item.hour] = false
-          return res
-        }
-        const res = carry
-        res[item.hour] = true
-        return res
-      }, {})
-    console.log(disabledHours)
-    // return Object.keys(disabledHours)
-    return Object.keys(disabledHours)
-      .filter(x => disabledHours[x] !== false)
-      .map(s => Number(s))
   }
 
   render() {
@@ -147,7 +172,7 @@ class FormModal extends React.Component {
       appointment,
     } = this.props
     const { getFieldDecorator, getFieldValue } = form
-    const appointmentDate = moment(appointment.startTime).format('MMMM DD, h:mm a')
+    const appointmentDate = moment(appointment.attributes.startTime).format('MMMM DD, h:mm a')
     const title = `Editar de reservación para ${appointment.attributes.clientName} - ${appointmentDate}`
     const serviceField = getFieldValue('service') || (services[0] && services[0].id) || ''
 
@@ -218,7 +243,7 @@ class FormModal extends React.Component {
               initialValue: String(appointment.attributes.specialistId),
               rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
             })(
-              <Select onChange={this.handleSelectChange}>
+              <Select onChange={this.handleSpecialistChange}>
                 {specialistsOptions}
               </Select>,
             )}
@@ -229,7 +254,7 @@ class FormModal extends React.Component {
             label="Fecha"
           >
             {getFieldDecorator('date', {
-              // initialValue: moment(appointment.startTime, dateFormat),
+              initialValue: moment(),
               rules: [{ type: 'object', required: true, message: 'Please select time!' }],
             })(
               <DatePicker
@@ -254,8 +279,9 @@ class FormModal extends React.Component {
                 minuteStep={serviceSelected.attributes.durationMin}
                 // defaultValue={moment(formatTime)}
                 format={formatTime}
+                hideDisabledOptions
                 disabledHours={this.disabledHours}
-                disabledMinutes={() => range(30, 60)}
+                disabledMinutes={this.disabledMinutes}
               />,
             )}
             { fetching

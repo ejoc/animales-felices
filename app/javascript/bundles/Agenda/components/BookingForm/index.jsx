@@ -22,10 +22,12 @@ const formItemLayout = {
 }
 
 class FormModal extends React.Component {
-  handleServiceChange = () => {
-    const { form } = this.props
+  handleServiceChange = (service) => {
+    const { form, services } = this.props
+    const serviceObject = services.find(s => s.id === service)
+    const { attributes } = serviceObject
     form.setFieldsValue({
-      specialist: '',
+      specialist: attributes.specialists[0],
     })
   }
 
@@ -37,10 +39,8 @@ class FormModal extends React.Component {
       // specialistsByService,
     } = this.props
     const { getFieldDecorator, getFieldValue } = form
-    // const currentService = getFieldValue('service')
-    // const currentService = services.find(s => s.id === this.props.service.value)
-
-    const serviceField = getFieldValue('service') || (services[0] && services[0].id) || ''
+    const serviceInitial = (services[0] && services[0].id) || ''
+    const serviceField = getFieldValue('service') || serviceInitial
 
     const serviceSelected = services.find(s => s.id === serviceField)
     let specialistsIds = []
@@ -48,16 +48,8 @@ class FormModal extends React.Component {
       specialistsIds = serviceSelected.attributes.specialists
     }
 
-    const specialistsOptions = specialists
+    const specialistsByService = specialists
       .filter(s => specialistsIds.includes(String(s.id)))
-      .map(s => (
-        <Option
-          key={s.id}
-          value={s.id}
-        >
-          {s.attributes.name}
-        </Option>
-      ))
 
     return (
       <Form>
@@ -71,7 +63,7 @@ class FormModal extends React.Component {
           {...formItemLayout}
         >
           {getFieldDecorator('service', {
-            initialValue: serviceField,
+            initialValue: serviceInitial,
             rules: [{ required: true, message: 'Por favor seleccione el servicio!' }],
           })(
             <Select onChange={this.handleServiceChange}>
@@ -103,10 +95,18 @@ class FormModal extends React.Component {
           {...formItemLayout}
         >
           {getFieldDecorator('specialist', {
+            initialValue: (specialists[0] && specialists[0].id) || '',
             rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
           })(
-            <Select onChange={this.handleSelectChange}>
-              {specialistsOptions}
+            <Select>
+              {specialistsByService.map(s => (
+                <Option
+                  key={s.id}
+                  value={s.id}
+                >
+                  {s.attributes.name}
+                </Option>
+              ))}
             </Select>,
           )}
         </FormItem>

@@ -109,16 +109,17 @@ export function cancelAppointment(id) {
   return axios(getFetchInit(`/appointments/${id}/cancel`, 'delete'))
 }
 
-export function bussySlotsSpecialist(id, date, durationMin, ok, error) {
-  axios(`/specialists/${id}/bussy_slots?date=${date}&duration_min=${durationMin}`)
+export function bussySlotsSpecialist(id, service, date, ok, error) {
+  axios(`/specialists/${id}/bussy_slots?date=${date}&service_id=${service}`)
     .then(
       ({ data }) => {
         const response = data.map((r) => {
-          const time = moment(new Date(r.slot))
-          const hour = Number(time.format('hh'))
+          const slot = new Date(r.slot)
+          const time = moment(slot)
+          const hour = Number(time.format('H'))
           const minute = Number(time.format('mm'))
           return {
-            slot: time,
+            slot,
             bussy: r.bussy,
             hour,
             minute,
