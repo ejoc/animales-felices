@@ -103,7 +103,6 @@ class FormModal extends React.Component {
     const { form } = this.props
     const { getFieldsValue } = form
     const { service, specialist } = getFieldsValue(['service', 'specialist'])
-    // console.log(service, specialist, dateString)
     this.fetchBussySlotsSpecialist(specialist, service, dateString)
   }
 
@@ -129,10 +128,8 @@ class FormModal extends React.Component {
   }
 
   disabledMinutes = (selectedHour) => {
-    // console.log(selectedHour)
     const { specialistSchedule } = this.state
     const { schedule } = specialistSchedule
-
     return schedule
       .filter(s => s.hour === selectedHour && s.bussy)
       .map(s => Number(s.minute))
@@ -145,7 +142,6 @@ class FormModal extends React.Component {
       service,
       date,
       (data) => {
-        console.log(data)
         this.setState({
           specialistSchedule: {
             schedule: data,

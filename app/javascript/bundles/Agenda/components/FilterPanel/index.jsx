@@ -3,18 +3,21 @@ import { Calendar } from 'antd'
 
 import SpecialistFilter from './SpecialistFilter'
 import ServiceFilter from './ServiceFilter'
+import AppointmentFilter from './AppointmentFilter'
 
 const FilterPanel = ({
+  filters,
   handleCalendarSelect,
   handleSpecialistClick,
-  filtersBySpecialist,
   specialists,
   viewAllSpecialists,
 
   handleServiceClick,
-  filtersByService,
   services,
-  viewAllServices,  
+  viewAllServices,
+
+  onConcludedClick,
+  onCanceledClick,
 }) => (
   <React.Fragment>
     <div style={{ width: 270, border: '1px solid #d9d9d9', borderRadius: 4 }}>
@@ -25,16 +28,22 @@ const FilterPanel = ({
         onSelect={handleCalendarSelect}
       />
     </div>
+
+    <AppointmentFilter
+      onCanceledClick={onCanceledClick}
+      onConcludedClick={onConcludedClick}
+    />
+
     <SpecialistFilter
       handleSpecialistClick={handleSpecialistClick}
-      filtersBySpecialist={filtersBySpecialist}
+      filtersBySpecialist={filters.specialistId}
       specialists={specialists}
       viewAllSpecialists={viewAllSpecialists}
     />
 
     <ServiceFilter
       handleServiceClick={handleServiceClick}
-      filtersByService={filtersByService}
+      filtersByService={filters.serviceId}
       services={services}
       viewAllServices={viewAllServices}
     />

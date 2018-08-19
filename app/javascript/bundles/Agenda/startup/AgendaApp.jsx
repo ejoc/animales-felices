@@ -21,7 +21,7 @@ import {
   getAppointment,
 } from '../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
-import ShowEvent from '../components/ShowEvent'
+
 import EditAppointment from '../components/EditAppointment'
 import ShowAppointment from '../components/ShowAppointment'
 
@@ -43,7 +43,7 @@ class AgendaApp extends Component {
       submitting: false,
       filters: {
         canceled: false,
-        // concluded: true,
+        concluded: false,
       },
       services: services.data,
       specialists: specialists.data,
@@ -87,7 +87,6 @@ class AgendaApp extends Component {
         bookingAppointment(
           fields,
           (event) => {
-            console.log('event show', event)
             this.setState(prevState => ({
               submitting: false,
               modals: { ...prevState.modals, newAppointment: false },
@@ -121,7 +120,7 @@ class AgendaApp extends Component {
                 },
               }
             }
-            form.resetFields()
+            // form.resetFields()
             form.setFields(fieldErrors)
             this.setState({ submitting: false })
           },
@@ -131,7 +130,6 @@ class AgendaApp extends Component {
   }
 
   handleCancel = (e) => {
-    console.log(e)
     e.preventDefault() // eliminar si es necesario
     this.setState(prevState => ({
       modals: { ...prevState.modals, newAppointment: false },
@@ -153,11 +151,25 @@ class AgendaApp extends Component {
   }
 
   /*
+  * Appointment Filter
+  */
+  handleCanceledClick = (e) => {
+    this.setState(prevState => ({
+      filters: { ...prevState.filters, canceled: e.target.checked },
+    }))
+  }
+
+  handleConcludedClick = (e) => {
+    this.setState(prevState => ({
+      filters: { ...prevState.filters, concluded: e.target.checked },
+    }))
+  }
+
+  /*
   * Specialist Filter
   */
   handleSpecialistClick = ({ key }) => {
     this.setState(prevState => ({
-      filtersBySpecialist: key,
       filters: { ...prevState.filters, specialistId: key },
     }))
   }
@@ -165,7 +177,6 @@ class AgendaApp extends Component {
   viewAllSpecialists = (e) => {
     e.preventDefault()
     this.setState(prevState => ({
-      filtersBySpecialist: null,
       filters: { ...prevState.filters, specialistId: null },
     }))
   }
@@ -175,7 +186,6 @@ class AgendaApp extends Component {
   */
   handleServiceClick = ({ key }) => {
     this.setState(prevState => ({
-      filtersByService: key,
       filters: { ...prevState.filters, serviceId: key },
     }))
   }
@@ -183,7 +193,6 @@ class AgendaApp extends Component {
   viewAllServices = (e) => {
     e.preventDefault()
     this.setState(prevState => ({
-      filtersByService: null,
       filters: { ...prevState.filters, serviceId: null },
     }))
   }
@@ -285,7 +294,7 @@ class AgendaApp extends Component {
           fetching: false,
         })
       },
-      error => console.error(error),
+      error => console.warn(error),
     )
   }
 
@@ -295,8 +304,6 @@ class AgendaApp extends Component {
       currentSlots,
       events,
       submitting,
-      filtersBySpecialist,
-      filtersByService,
       appointmentSelected,
       day,
       cancelLoading,
@@ -310,12 +317,19 @@ class AgendaApp extends Component {
     const { specialistsByService } = this.props
 
     const filterKeys = Object.keys(filters)
+    const currentTime = new Date()
     const showEvents = events.filter(event => filterKeys.every((eachKey) => {
       if (filters[eachKey] === null) {
         return true
       }
+      if (eachKey === 'canceled' && filters[eachKey]) {
+        return true
+      }
+      if (eachKey === 'concluded') {
+        return filters[eachKey] ? true : event.endTime > currentTime
+      }
       // console.log(eachKey, filters[eachKey], event[eachKey])
-      return filters[eachKey] == event[eachKey]
+      return Number(filters[eachKey]) === Number(event[eachKey])
     }))
 
     return (
@@ -323,16 +337,16 @@ class AgendaApp extends Component {
         <Row gutter={8}>
           <Col span={5}>
             <FilterPanel
+              filters={filters}
               handleCalendarSelect={this.handleCalendarSelect}
+              onCanceledClick={this.handleCanceledClick}
+              onConcludedClick={this.handleConcludedClick}
               handleSpecialistClick={this.handleSpecialistClick}
-              filtersBySpecialist={filtersBySpecialist}
               specialists={specialists}
               viewAllSpecialists={this.viewAllSpecialists}
               handleServiceClick={this.handleServiceClick}
-              filtersByService={filtersByService}
               services={services}
               viewAllServices={this.viewAllServices}
-
             />
           </Col>
           <Col span={19} style={{ height: '600px' }}>
