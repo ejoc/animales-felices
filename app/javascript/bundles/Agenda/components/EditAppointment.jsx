@@ -61,7 +61,7 @@ function getUniqueValuesOfKey(array, key) {
 }
 
 function getNonWorkingHours() {
-  return range(0, 7).concat(range(18, 24))
+  return range(0, 8).concat(range(18, 24))
 }
 
 class FormModal extends React.Component {
@@ -75,6 +75,11 @@ class FormModal extends React.Component {
   componentDidMount() {
     const { form } = this.props
     const { getFieldsValue } = form
+    // setFieldsValue({
+    //   service: String(appointment.attributes.serviceId),
+    //   specialist: String(appointment.attributes.specialistId),
+    //   date: moment(),
+    // })
     const { service, specialist, date } = getFieldsValue(['service', 'specialist', 'date'])
     this.fetchBussySlotsSpecialist(service, specialist, date.format(dateFormat))
   }
@@ -142,6 +147,7 @@ class FormModal extends React.Component {
       service,
       date,
       (data) => {
+        console.log(data)
         this.setState({
           specialistSchedule: {
             schedule: data,
@@ -196,6 +202,7 @@ class FormModal extends React.Component {
         onCancel={onCancel}
       >
         <Form>
+          {/* {getFieldDecorator('serviceDurationMin', { hidde: true })} */}
           <FormItem
             label={(
               <span>
@@ -224,8 +231,6 @@ class FormModal extends React.Component {
               {`Duración del servicio: ${serviceSelected.attributes.durationMin} minutos`}
             </span>
           </FormItem>
-
-          {/* {getFieldDecorator('serviceDurationMin', { hidde: true })} */}
           <FormItem
             label={(
               <span>

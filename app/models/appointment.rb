@@ -27,11 +27,12 @@ class AppointmentTimeValidator
   end
 
   def validate
-    exists = @specialist.appointments
-      .exists?(["start_time <= ? AND end_time >= ?", @appointment.start_time, @appointment.end_time])
-    if exists
+    @appointment.errors.add(:start_time, 'La fecha de la reservacion debe ser mayor a la fecha actual') if @appointment.start_time < Time.now
+    if @appointment.start_time_changed?
+      exists = @specialist.appointments
+        .exists?(["canceled = ? AND start_time <= ? AND end_time >= ?", false, @appointment.start_time, @appointment.end_time])
       # cambiar specialist por specialist_id
-      @appointment.errors.add(:specialist, 'Ya existe una reservación en la fecha seleccionada')
+      @appointment.errors.add(:specialist, 'Ya existe una reservación en la fecha seleccionada') if exists
     end
   end
 end

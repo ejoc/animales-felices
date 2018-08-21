@@ -24,9 +24,14 @@ class Specialist < ApplicationRecord
       .step(duration_min.minutes)
       .map do |date|
         slot = Time.at(date)
+        end_slot = slot + duration_min.minutes
         bussy = false
         b_slots.each do |bussy_slot|
-          if (bussy_slot.cover?(slot + 1.second))
+          # if (bussy_slot.cover?(slot + 1.second))
+          #   bussy = true
+          #   next
+          # end
+          if (bussy_slot.first - end_slot) * (slot - (bussy_slot.end - 1.second)) > 0
             bussy = true
             next
           end

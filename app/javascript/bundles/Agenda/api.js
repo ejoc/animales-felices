@@ -101,8 +101,21 @@ export function getSpecialistsByService() {
   return axios('/appointments/specialists_by_service')
 }
 
-export function updateAppointment(id, fields) {
-  return axios(getFetchInit(`/appointments/${id}`, 'PATCH', { appointment: fields }))
+export function updateAppointment(id, fields, ok, error) {
+  axios(getFetchInit(`/appointments/${id}`, 'PATCH', { appointment: fields }))
+    .then(
+      ({ data }) => {
+        const response = data.data
+        const event = {
+          id: response.id,
+          ...response.attributes,
+          startTime: new Date(response.attributes.startTime),
+          endTime: new Date(response.attributes.endTime),
+        }
+        ok(event)
+      },
+      err => error(err),
+    )
 }
 
 export function cancelAppointment(id) {

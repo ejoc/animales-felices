@@ -18,6 +18,7 @@ import {
   bookingAppointment,
   getAppointments,
   cancelAppointment,
+  updateAppointment,
   getAppointment,
 } from '../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -204,12 +205,20 @@ class AgendaApp extends Component {
     this.fetchAppointments(day)
   }
 
-  createBooking = (slotInfo) => {
-    this.setState(prevState => ({
-      modals: { ...prevState.modals, newAppointment: true },
-      currentSlots: slotInfo.slots,
-      // currentSlotInfo: slotInfo,
-    }))
+  createBooking = ({ slots }) => {
+    // console.log(slots[0], new Date(), slots[0] < new Date())
+    if (slots[0] < new Date()) {
+      Modal.error({
+        title: 'Ops... Aun no viajamos en el tiempo',
+        content: `puedes reservar desde ${moment().format('lll')}`,
+      })
+    } else {
+      this.setState(prevState => ({
+        modals: { ...prevState.modals, newAppointment: true },
+        currentSlots: slots,
+        // currentSlotInfo: slotInfo,
+      }))
+    }
   }
 
   handleCalendarSelect = day => this.fetchAppointments(day.toDate())
@@ -250,6 +259,74 @@ class AgendaApp extends Component {
         editAppointment: true,
       },
     }))
+  }
+
+  handleUpdateAppointment = (e) => {
+    e.preventDefault()
+    const { form } = this.formRef.props
+    const { appointmentSelected } = this.state
+    form.validateFields((err, values) => {
+      if (!err) {
+        // this.setState({ submitting: true })
+        const startTime = values.date.set({
+          hour: values.time.get('hour'),
+          minute: values.time.get('minute'),
+          second: 0,
+        }).toDate()
+        const fields = {
+          serviceId: values.service,
+          specialistId: values.specialist,
+          startTime,
+          // endTime: currentSlots[1],
+        }
+
+        updateAppointment(
+          appointmentSelected.id,
+          fields,
+          (event) => {
+            this.setState(prevState => ({
+              submitting: false,
+              modals: { ...prevState.modals, editAppointment: false },
+              events: prevState.events.map(appointment => (appointment.id === appointmentSelected.id
+                ? { ...appointment, ...event }
+                : appointment
+              )),
+            }))
+            form.resetFields()
+            notification.success({
+              message: 'Reservación actualizada exitosamente!',
+              description: 'Reservación actualizada de manera exitosa!',
+            })
+          },
+          (errors) => {
+            const errorsData = errors.response.data
+            let fieldErrors
+            if (errorsData instanceof Array) {
+              fieldErrors = errorsData.map((error) => {
+                const fieldError = Object.keys(error)[0]
+                return {
+                  [fieldError]: {
+                    value: values[fieldError],
+                    errors: error[fieldError].map(er => new Error(er)),
+                  },
+                }
+              })
+            } else {
+              const fieldError = Object.keys(errorsData)[0]
+              fieldErrors = {
+                [fieldError]: {
+                  value: values[fieldError],
+                  errors: errorsData[fieldError].map(er => new Error(er)),
+                },
+              }
+            }
+            // form.resetFields()
+            form.setFields(fieldErrors)
+            this.setState({ submitting: false })
+          },
+        )
+      }
+    })
   }
 
   handleShowAppointment = (event) => {
@@ -328,7 +405,6 @@ class AgendaApp extends Component {
       if (eachKey === 'concluded') {
         return filters[eachKey] ? true : event.endTime > currentTime
       }
-      // console.log(eachKey, filters[eachKey], event[eachKey])
       return Number(filters[eachKey]) === Number(event[eachKey])
     }))
 
@@ -381,9 +457,10 @@ class AgendaApp extends Component {
 
         {editAppointment && (
           <EditAppointment
+            wrappedComponentRef={this.saveFormRef}
             visible={editAppointment}
             appointment={appointmentSelected}
-            onOk={e => console.log(e)}
+            onOk={this.handleUpdateAppointment}
             onCancel={this.hideEditAppointment}
             onCancelAppointment={this.handleCancelAppointment}
             onEditAppointment={this.handleEditAppointment}
@@ -395,7 +472,7 @@ class AgendaApp extends Component {
         )}
 
         <Modal
-          title={`Crear reservación ${currentSlots && moment(currentSlots[0]).format('MMMM DD, h:mm a')}`}
+          title={`Crear reservación ${currentSlots && moment(currentSlots[0]).format('lll')}`}
           visible={newAppointment}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
