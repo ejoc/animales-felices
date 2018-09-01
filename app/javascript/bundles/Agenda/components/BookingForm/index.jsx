@@ -95,7 +95,7 @@ class FormModal extends React.Component {
           {...formItemLayout}
         >
           {getFieldDecorator('specialist', {
-            initialValue: (specialists[0] && specialists[0].id) || '',
+            initialValue: (specialistsByService[0] && specialistsByService[0].id) || '',
             rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
           })(
             <Select>
