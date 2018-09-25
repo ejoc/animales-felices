@@ -32,6 +32,12 @@ es:
       specialist_service:
         one: Servicio de especialista
         other: Servicio de especialista
+      unit_type:
+        one: Tipo de unidad
+        other: Tipo de unidades
+      product_category:
+        one: Producto categoria
+        other: Productos categorias
     attributes:
       specialist:
         <<: *person_attributes

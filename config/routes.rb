@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     resources :products
     resources :services
     resources :specialist_services
+    resources :unit_types
+    resources :product_categories
     # resources :users
 
     # resources :appointments
@@ -18,20 +20,20 @@ Rails.application.routes.draw do
     root to: "clients#index"
   end
 
-  resources :specialists, only: [:index] do
-    resources :appointments, except: [:new, :edit, :destroy] do
-      collection do
-        get 'specialists_by_service'
-      end
-      member do
-        delete 'cancel'
-      end
-    end
+  # resources :specialists, only: [:index] do
+  #   resources :appointments, except: [:new, :edit, :destroy] do
+  #     collection do
+  #       get 'specialists_by_service'
+  #     end
+  #     member do
+  #       delete 'cancel'
+  #     end
+  #   end
 
-    member do
-      get 'bussy_slots'
-    end
-  end
+  #   member do
+  #     get 'bussy_slots'
+  #   end
+  # end
   resources :clients, only: [:index]
   resources :services, only: [:index]
   resources :appointments, except: [:new, :edit, :destroy] do
@@ -44,6 +46,14 @@ Rails.application.routes.draw do
   end
 
   get 'appointments/:day/:month/:year', to: 'appointments#index'
+
+  resources :invoices, only: [:index, :create] do
+    member { delete 'cancel' }
+  end
+
+  resources :income_products, only: [:index, :create]
+
+  resources :stock_products, only: :index
 
   get 'agenda', to: "pages#agenda"
   get 'facturacion', to: "pages#facturacion"

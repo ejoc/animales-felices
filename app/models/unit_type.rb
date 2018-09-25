@@ -1,0 +1,3 @@
+class UnitType < ApplicationRecord
+  
+end

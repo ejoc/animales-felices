@@ -72,3 +72,5 @@ gem 'mini_racer', platforms: :ruby
 gem 'administrate', '~> 0.10.0'
 gem 'active_link_to'
 gem 'fast_jsonapi'
+
+gem 'kaminari'

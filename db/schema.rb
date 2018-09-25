@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_11_045945) do
+ActiveRecord::Schema.define(version: 2018_09_24_024922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
   end
 
   create_table "clients", force: :cascade do |t|
+    t.string "cedula"
+    t.index ["cedula"], name: "index_clients_on_cedula", unique: true
   end
 
   create_table "companies", force: :cascade do |t|
@@ -43,14 +45,34 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "income_product_details", force: :cascade do |t|
+    t.bigint "income_product_id"
+    t.bigint "product_id"
+    t.decimal "quantity"
+    t.decimal "price_unit", precision: 5, scale: 2
+    t.decimal "price_total", precision: 5, scale: 2
+    t.index ["income_product_id"], name: "index_income_product_details_on_income_product_id"
+    t.index ["product_id"], name: "index_income_product_details_on_product_id"
+  end
+
+  create_table "income_products", force: :cascade do |t|
+    t.bigint "specialist_id"
+    t.bigint "supplier_id"
+    t.decimal "sub_total", precision: 5, scale: 2
+    t.decimal "total", precision: 5, scale: 2
+    t.decimal "iva", precision: 5, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["specialist_id"], name: "index_income_products_on_specialist_id"
+    t.index ["supplier_id"], name: "index_income_products_on_supplier_id"
+  end
+
   create_table "invoice_details", force: :cascade do |t|
     t.bigint "invoice_id"
     t.bigint "item_id"
-    t.decimal "cantidad"
+    t.decimal "quantity"
     t.decimal "price_unit", precision: 5, scale: 2
     t.decimal "price_total", precision: 5, scale: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["invoice_id"], name: "index_invoice_details_on_invoice_id"
     t.index ["item_id"], name: "index_invoice_details_on_item_id"
   end
@@ -78,8 +100,17 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
     t.index ["actable_type", "actable_id"], name: "index_items_on_actable_type_and_actable_id"
   end
 
-# Could not dump table "people" because of following StandardError
-#   Unknown type 'gender' for column 'gender'
+  create_table "people", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "address"
+    t.string "phone"
+    t.string "actable_type"
+    t.bigint "actable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actable_type", "actable_id"], name: "index_people_on_actable_type_and_actable_id"
+  end
 
   create_table "product_categories", force: :cascade do |t|
     t.string "name"
@@ -88,9 +119,10 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.string "unit_type"
+    t.bigint "unit_type_id"
     t.bigint "product_category_id"
     t.index ["product_category_id"], name: "index_products_on_product_category_id"
+    t.index ["unit_type_id"], name: "index_products_on_unit_type_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -113,10 +145,26 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
     t.index ["user_id"], name: "index_specialists_on_user_id"
   end
 
+  create_table "stock_products", force: :cascade do |t|
+    t.bigint "product_id"
+    t.float "stock", default: 0.0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_stock_products_on_product_id"
+  end
+
   create_table "suppliers", force: :cascade do |t|
+    t.string "cedula"
     t.bigint "company_id"
     t.string "company_role"
+    t.index ["cedula"], name: "index_suppliers_on_cedula", unique: true
     t.index ["company_id"], name: "index_suppliers_on_company_id"
+  end
+
+  create_table "unit_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -138,13 +186,19 @@ ActiveRecord::Schema.define(version: 2018_07_11_045945) do
 
   add_foreign_key "appointments", "services"
   add_foreign_key "appointments", "specialists"
+  add_foreign_key "income_product_details", "income_products"
+  add_foreign_key "income_product_details", "products"
+  add_foreign_key "income_products", "specialists"
+  add_foreign_key "income_products", "suppliers"
   add_foreign_key "invoice_details", "invoices"
   add_foreign_key "invoice_details", "items"
   add_foreign_key "invoices", "clients"
   add_foreign_key "invoices", "specialists"
   add_foreign_key "products", "product_categories"
+  add_foreign_key "products", "unit_types"
   add_foreign_key "specialist_services", "services"
   add_foreign_key "specialist_services", "specialists"
   add_foreign_key "specialists", "users"
+  add_foreign_key "stock_products", "products"
   add_foreign_key "suppliers", "companies"
 end

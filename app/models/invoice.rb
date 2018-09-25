@@ -1,4 +1,17 @@
 class Invoice < ApplicationRecord
   belongs_to :client
   belongs_to :specialist
+
+  has_many :details, class_name: 'InvoiceDetail'
+
+  accepts_nested_attributes_for :details
+
+  before_validation :calculate_total
+ 
+  private
+    def calculate_total
+      self.sub_total = self.details.map{|i| i.price_total }.sum()
+      self.iva = Rails.configuration.iva
+      self.total = self.sub_total + (self.sub_total * self.iva)
+    end
 end

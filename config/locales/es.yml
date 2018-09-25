@@ -189,6 +189,10 @@ es:
         address: Direccion
         phone: Telefono
         website: Sitio web
+      unit_type:
+        name: Nombre
+      product_category:
+        name: Nombre
     select:
       prompt: Por favor seleccione
     submit:

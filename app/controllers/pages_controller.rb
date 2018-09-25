@@ -11,4 +11,12 @@ class PagesController < ApplicationController
 
     # render json: ServiceSerializer.new(@services)
   end
+
+  def facturacion
+    @items = Item.all
+
+    @specialists = Specialist.joins(:person).select(
+      'people.name',
+    )
+  end
 end

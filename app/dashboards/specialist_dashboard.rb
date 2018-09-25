@@ -14,7 +14,7 @@ class SpecialistDashboard < Administrate::BaseDashboard
     name: Field::String,
     address: Field::String,
     phone: Field::String,
-    gender: GenderField,
+    # gender: GenderField,
     # user: Field::BelongsTo,
   }.freeze
 
@@ -30,7 +30,7 @@ class SpecialistDashboard < Administrate::BaseDashboard
     :name,
     :address,
     :phone,
-    :gender,
+    # :gender,
     # :user,
   ].freeze
 
@@ -56,7 +56,7 @@ class SpecialistDashboard < Administrate::BaseDashboard
     :name,
     :address,
     :phone,
-    :gender,
+    # :gender,
     # :user,
   ].freeze
 
