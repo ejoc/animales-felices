@@ -10,7 +10,7 @@ import {
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import { getAppointment } from '../api'
+import { getAppointment } from '../../../api'
 
 class ShowEvent extends Component {
   _mounted = false

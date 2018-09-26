@@ -1,7 +1,7 @@
 class StockProductsController < ApplicationController
 
   def index
-    if params[:search]
+    if search_params
       @products = StockProduct
         .joins(product: :item)
         .where('items.name LIKE ?', "%#{params[:search]}%")

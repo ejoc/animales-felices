@@ -11,7 +11,7 @@ import {
 import moment from 'moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
-import { bussySlotsSpecialist } from '../api'
+import { bussySlotsSpecialist } from '../../../api'
 
 const FormItem = Form.Item
 
@@ -147,7 +147,6 @@ class FormModal extends React.Component {
       service,
       date,
       (data) => {
-        console.log(data)
         this.setState({
           specialistSchedule: {
             schedule: data,

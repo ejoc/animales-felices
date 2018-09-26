@@ -20,22 +20,23 @@ Rails.application.routes.draw do
     root to: "clients#index"
   end
 
-  # resources :specialists, only: [:index] do
-  #   resources :appointments, except: [:new, :edit, :destroy] do
-  #     collection do
-  #       get 'specialists_by_service'
-  #     end
-  #     member do
-  #       delete 'cancel'
-  #     end
-  #   end
+  # ruta para bussy_slots
+  resources :specialists, only: [:index] do
+    resources :appointments, except: [:new, :edit, :destroy] do
+      collection do
+        get 'specialists_by_service'
+      end
+      member do
+        delete 'cancel'
+      end
+    end
 
-  #   member do
-  #     get 'bussy_slots'
-  #   end
-  # end
-  resources :clients, only: [:index]
-  resources :services, only: [:index]
+    member do
+      get 'bussy_slots'
+    end
+  end
+
+  # redundat podria cambiar
   resources :appointments, except: [:new, :edit, :destroy] do
     collection do
       get 'specialists_by_service'
@@ -44,6 +45,10 @@ Rails.application.routes.draw do
       delete 'cancel'
     end
   end
+
+  resources :suppliers, only: [:index]
+  resources :clients, only: [:index]
+  resources :services, only: [:index]
 
   get 'appointments/:day/:month/:year', to: 'appointments#index'
 
@@ -54,6 +59,7 @@ Rails.application.routes.draw do
   resources :income_products, only: [:index, :create]
 
   resources :stock_products, only: :index
+  resources :products, only: :index
 
   get 'agenda', to: "pages#agenda"
   get 'facturacion', to: "pages#facturacion"

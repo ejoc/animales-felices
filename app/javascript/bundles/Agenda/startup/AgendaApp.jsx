@@ -20,7 +20,7 @@ import {
   cancelAppointment,
   updateAppointment,
   getAppointment,
-} from '../api'
+} from '../../../api'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 import EditAppointment from '../components/EditAppointment'

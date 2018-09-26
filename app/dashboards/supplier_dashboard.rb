@@ -14,7 +14,7 @@ class SupplierDashboard < Administrate::BaseDashboard
     name: Field::String,
     address: Field::String,
     phone: Field::String,
-    gender: GenderField,
+    # gender: GenderField,
     company: Field::BelongsTo,
     company_role: Field::String,
   }.freeze
@@ -31,7 +31,7 @@ class SupplierDashboard < Administrate::BaseDashboard
     :name,
     :address,
     :phone,
-    :gender,
+    # :gender,
     :company,
   ].freeze
 
@@ -44,7 +44,7 @@ class SupplierDashboard < Administrate::BaseDashboard
     :name,
     :address,
     :phone,
-    :gender,
+    # :gender,
     :company,
     :company_role,
   ].freeze
@@ -58,7 +58,7 @@ class SupplierDashboard < Administrate::BaseDashboard
     :name,
     :address,
     :phone,
-    :gender,
+    # :gender,
     :company,
     :company_role,
   ].freeze
