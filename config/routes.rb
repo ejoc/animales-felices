@@ -46,8 +46,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :suppliers, only: [:index]
-  resources :clients, only: [:index]
+  resources :suppliers, only: [:index, :show]
+  resources :clients, only: [:index, :show]
   resources :services, only: [:index]
 
   get 'appointments/:day/:month/:year', to: 'appointments#index'
@@ -62,7 +62,8 @@ Rails.application.routes.draw do
   resources :products, only: :index
 
   get 'agenda', to: "pages#agenda"
-  get 'facturacion', to: "pages#facturacion"
+  get 'facturacion', to: "pages#invoice"
+  get 'ingreso-productos', to: "pages#purchase_invoice"
 
   # get 'agenda', to: 'agenda#index'
   # post 'booking_appoiment', to: 'agenda#appointment'

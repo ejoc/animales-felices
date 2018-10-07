@@ -8,6 +8,7 @@
     "import/extensions": "off",
     "react/jsx-filename-extension": "off",
     "no-underscore-dangle": "off",
+    // "react/no-unused-state": "off",
     "quotes": [
         "error",
         "single"

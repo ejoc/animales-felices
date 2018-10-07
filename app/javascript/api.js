@@ -133,29 +133,34 @@ export function registerIncomeProducts(fields, ok, error) {
     )
 }
 
-export function getProducts(searchTerm, page, ok, error) {
+export function getProducts(searchTerm, ok, error) {
   const obj = {
     search: searchTerm,
-    page,
+    // page,
   }
   const querystring = objectToQueryString(obj)
 
   axios.get(`products?${querystring}`).then(
-    ({ data }) => ok(data),
+    ({ data }) => {
+      const products = data.data.map(product => ({ ...product.attributes }))
+      ok(products)
+    },
     err => error(err),
   )
 }
 
 
-export function getStockProducts(searchTerm, page, ok, error) {
+export function getStockProducts(searchTerm, ok, error) {
   const obj = {
     search: searchTerm,
-    page,
   }
   const querystring = objectToQueryString(obj)
 
   axios.get(`stock_products?${querystring}`).then(
-    ({ data }) => ok(data),
+    ({ data }) => {
+      const products = data.data.map(product => ({ ...product.attributes }))
+      ok(products)
+    },
     err => error(err),
   )
 }
@@ -173,15 +178,29 @@ export function getClients2(searchTerm, page, ok, error) {
   )
 }
 
-export function getSupplier(searchTerm, page, ok, error) {
+export function getSuppliers(searchTerm) {
   const obj = {
     search: searchTerm,
-    page,
   }
   const querystring = objectToQueryString(obj)
 
-  axios.get(`suppliers?${querystring}`).then(
-    ({ data }) => ok(data),
-    err => error(err),
-  )
+  return axios.get(`suppliers?${querystring}`)
 }
+
+export function getSuppliersByCode(cedula) {
+  return axios.get(`suppliers/${cedula}`)
+}
+
+export default {
+  getSuppliers,
+  getClients2,
+  getStockProducts,
+  getProducts,
+}
+
+// export function getSupplierById(id, ok, error) {
+//   axios.get(`suppliers?cedula=${id}`).then(
+//     ({ data }) => ok(data),
+//     err => error(err),
+//   )
+// }

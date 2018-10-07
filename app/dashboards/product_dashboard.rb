@@ -15,7 +15,7 @@ class ProductDashboard < Administrate::BaseDashboard
     description: Field::String,
     price: Field::Number.with_options(prefix: "USD", decimals: 2),
     unit_type: Field::BelongsTo,
-    product_category_id: Field::Number,
+    product_category: Field::BelongsTo,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -43,7 +43,7 @@ class ProductDashboard < Administrate::BaseDashboard
     :description,
     :price,
     :unit_type,
-    :product_category_id,
+    :product_category,
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -56,7 +56,7 @@ class ProductDashboard < Administrate::BaseDashboard
     :description,
     :price,
     :unit_type,
-    :product_category_id,
+    :product_category,
   ].freeze
 
   # Overwrite this method to customize how products are displayed
