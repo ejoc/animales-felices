@@ -12,12 +12,12 @@ import {
   Table,
 } from 'antd'
 import { getSuppliersByCode } from '../../../api'
-import PersonModal from '../../../shared/components/PersonModal'
+// import PersonModal from '../../../shared/components/PersonModal'
 import withSubscription from '../../../shared/lib/withSubscription'
-// import TableList from '../../../shared/components/TableList'
+import TableList from '../../../shared/components/TableList'
 import ListItem from '../components/ListItem'
 import SelectProductForm from '../components/SelectProductForm'
-// import SearchableInput from '../components/SearchableInput'
+import SearchableInput from '../components/SearchableInput'
 
 const columns = [{
   title: 'Codigo',
@@ -33,37 +33,10 @@ const columns = [{
   key: 'address',
 }]
 
-const itemColumns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-  }, {
-    title: 'Nombre',
-    dataIndex: 'name',
-    key: 'name',
-  }, {
-    title: 'Cantidad',
-    dataIndex: 'quantity',
-    key: 'quantity',
-  },
-  {
-    title: 'Precio',
-    dataIndex: 'priceUnit',
-    key: 'priceUnit',
-  },
-  {
-    title: 'Total',
-    dataIndex: 'priceTotal',
-    key: 'priceTotal',
-  },
-]
-
-const SupplierModal = withSubscription(
+const SupplierList = withSubscription(
   (api, input, ok, error) => api.getSuppliers(input, ok, error),
   null,
-)(PersonModal)
-
+)(TableList)
 
 const formItemLayout = {
   labelCol: {
@@ -80,20 +53,18 @@ const FormItem = Form.Item
 
 class PurchaseInvoiceApp extends React.Component {
   state = {
-    currentSupplier: {},
-    supplierCodeInput: '',
     products: [],
     modals: {
-      showSupplier: false,
+      showSuppliers: false,
       selectProductForm: false,
     },
     // visibleSupplierModal: false,
 
   }
 
-  handleModalCancel = () => {
+  handleSupplierModalCancel = () => {
     this.setState(prevState => ({
-      modals: { ...prevState.modals, showSupplier: false },
+      modals: { ...prevState.modals, showSuppliers: false },
     }))
   }
 
@@ -121,18 +92,17 @@ class PurchaseInvoiceApp extends React.Component {
     })
   }
 
+  handleItemDelete = (productId) => {
+    console.log(productId, this.state.products)
+    this.setState(prevState => ({
+      products: prevState.products.filter(p => p.id !== productId),
+    }))
+  }
+
   handleItemModalCancel = () => {
     this.setState(prevState => ({
       modals: { ...prevState.modals, selectProductForm: false },
     }))
-  }
-
-  handleSupplierInputChange = (e) => {
-    const { target } = e
-    const { value } = target
-    this.setState({
-      supplierCodeInput: value,
-    })
   }
 
   handleSupplierBlur = (e) => {
@@ -158,23 +128,25 @@ class PurchaseInvoiceApp extends React.Component {
     }
   }
 
-  handleSupplierSelected = (supplier) => {
+  handleSupplierRowClick = (supplier) => {
+    console.log('item selected asdsad', supplier)
     const { form } = this.props
     form.setFieldsValue({
-      supplierId: supplier.id,
+      supplier: {
+        resourceId: supplier.cedula,
+        inputText: supplier.name,
+      },
     })
 
     this.setState(prevState => ({
-      currentSupplier: supplier,
-      supplierCodeInput: supplier.cedula,
-      modals: { ...prevState.modals, showSupplier: false },
+      modals: { ...prevState.modals, showSuppliers: false },
     }))
   }
 
   showModalSupplier = () => {
     // getSupplier()
     this.setState(prevState => ({
-      modals: { ...prevState.modals, showSupplier: true },
+      modals: { ...prevState.modals, showSuppliers: true },
     }))
   }
 
@@ -195,11 +167,9 @@ class PurchaseInvoiceApp extends React.Component {
     const {
       products,
       modals,
-      currentSupplier,
-      supplierCodeInput,
     } = this.state
 
-    const { showSupplier, selectProductForm } = modals
+    const { showSuppliers, selectProductForm } = modals
 
     return (
       <div style={{ padding: '50px 160px', height: '700px' }}>
@@ -207,21 +177,15 @@ class PurchaseInvoiceApp extends React.Component {
           <Row gutter={16}>
             <Col span={12}>
               <FormItem label="Proveedor" {...formItemLayout}>
-                {getFieldDecorator('supplierId', {
+                {getFieldDecorator('supplier', {
+                  initialValue: { resourceId: null, inputText: '' },
                   rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
                 })(
-                  <Input hidden />,
+                  <SearchableInput
+                    onSearch={this.showModalSupplier}
+                    layout="vertical"
+                  />,
                 )}
-                <Input
-                  value={supplierCodeInput}
-                  onChange={this.handleSupplierInputChange}
-                  placeholder="Codigo"
-                  style={{ width: '88%' }}
-                  onBlur={this.handleSupplierBlur}
-                />
-                &nbsp;
-                <Button shape="circle" icon="search" onClick={this.showModalSupplier} />
-                <Input placeholder="Nombre" value={currentSupplier.name} disabled />
               </FormItem>
             </Col>
 
@@ -243,10 +207,6 @@ class PurchaseInvoiceApp extends React.Component {
               <h3>
                 Productos
                 <span style={{ float: 'right', paddingBottom: '8px' }}>
-                  <Button>
-                    Eliminar
-                  </Button>
-                  &nbsp;
                   <Button onClick={this.showModalItem}>
                     Agregar
                   </Button>
@@ -254,11 +214,15 @@ class PurchaseInvoiceApp extends React.Component {
               </h3>
             </Col>
             <Col span={24}>
-              <Table
+              {/* <Table
                 dataSource={products}
                 columns={itemColumns}
                 size="small"
                 rowKey="id"
+              /> */}
+              <ListItem
+                items={products}
+                onItemDelete={this.handleItemDelete}
               />
             </Col>
           </Row>
@@ -272,13 +236,13 @@ class PurchaseInvoiceApp extends React.Component {
           </Row>
         </Card>
 
-        <SupplierModal
-          columns={columns}
+        <Modal
           title="Buscar proveedores"
-          visible={showSupplier}
-          onCancel={this.handleModalCancel}
-          onRowClick={this.handleSupplierSelected}
-        />
+          visible={showSuppliers}
+          onCancel={this.handleSupplierModalCancel}
+        >
+          <SupplierList columns={columns} onRowClick={this.handleSupplierRowClick} />
+        </Modal>
 
         <Modal
           title="Seleccionar Producto"

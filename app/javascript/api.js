@@ -178,13 +178,16 @@ export function getClients2(searchTerm, page, ok, error) {
   )
 }
 
-export function getSuppliers(searchTerm) {
+export function getSuppliers(searchTerm, ok, error) {
   const obj = {
     search: searchTerm,
   }
   const querystring = objectToQueryString(obj)
 
-  return axios.get(`suppliers?${querystring}`)
+  axios.get(`suppliers?${querystring}`).then(
+    ({ data }) => ok(data),
+    err => error(err),
+  )
 }
 
 export function getSuppliersByCode(cedula) {
