@@ -1,7 +1,7 @@
 import React from 'react'
 import api from '../../api'
 
-function withSubscription(selectList, selectOne) {
+function withSubscription(selectList) {
   // ...and returns another component...
   return (WrappedComponent) => {
     class ConnectedComponent extends React.Component {

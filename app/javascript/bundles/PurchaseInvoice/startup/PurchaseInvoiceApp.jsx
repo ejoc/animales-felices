@@ -9,7 +9,6 @@ import {
   Input,
   Button,
   Modal,
-  Table,
 } from 'antd'
 import { getSuppliersByCode } from '../../../api'
 // import PersonModal from '../../../shared/components/PersonModal'
@@ -18,6 +17,9 @@ import TableList from '../../../shared/components/TableList'
 import ListItem from '../components/ListItem'
 import SelectProductForm from '../components/SelectProductForm'
 import SearchableInput from '../components/SearchableInput'
+import InvoiceFooter from '../components/InvoiceFooter'
+
+const IVA = 0.12
 
 const columns = [{
   title: 'Codigo',
@@ -35,7 +37,6 @@ const columns = [{
 
 const SupplierList = withSubscription(
   (api, input, ok, error) => api.getSuppliers(input, ok, error),
-  null,
 )(TableList)
 
 const formItemLayout = {
@@ -76,14 +77,14 @@ class PurchaseInvoiceApp extends React.Component {
         return
       }
 
-      const { price } = values.priceAndQuantity
-      const { quantity } = values.priceAndQuantity
+      const { quantity, priceUnit } = values
+      const priceTotal = quantity * priceUnit
       const newProduct = {
-        id: values.item.resourceId,
-        name: values.item.inputText,
+        id: values.product.resourceId,
+        name: values.product.inputText,
         quantity,
-        priceUnit: price,
-        priceTotal: quantity * price,
+        priceUnit,
+        priceTotal,
       }
       this.setState(prevState => ({
         products: prevState.products.concat(newProduct),
@@ -93,7 +94,6 @@ class PurchaseInvoiceApp extends React.Component {
   }
 
   handleItemDelete = (productId) => {
-    console.log(productId, this.state.products)
     this.setState(prevState => ({
       products: prevState.products.filter(p => p.id !== productId),
     }))
@@ -116,11 +116,11 @@ class PurchaseInvoiceApp extends React.Component {
           const supplier = data || {}
           const { form } = this.props
           form.setFieldsValue({
-            supplierId: supplier.id,
-          })
-
-          this.setState({
-            currentSupplier: supplier,
+            supplier: {
+              resourceId: supplier.id,
+              inputText: supplier.cedula,
+            },
+            supplierName: supplier.name,
           })
         },
         err => console.error(err),
@@ -129,18 +129,28 @@ class PurchaseInvoiceApp extends React.Component {
   }
 
   handleSupplierRowClick = (supplier) => {
-    console.log('item selected asdsad', supplier)
     const { form } = this.props
     form.setFieldsValue({
       supplier: {
-        resourceId: supplier.cedula,
-        inputText: supplier.name,
+        resourceId: supplier.id,
+        inputText: supplier.cedula,
       },
+      supplierName: supplier.name,
     })
 
     this.setState(prevState => ({
       modals: { ...prevState.modals, showSuppliers: false },
     }))
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    const { form } = this.props
+    form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values)
+      }
+    })
   }
 
   showModalSupplier = () => {
@@ -171,69 +181,86 @@ class PurchaseInvoiceApp extends React.Component {
 
     const { showSuppliers, selectProductForm } = modals
 
+    const subTotal = products.reduce((acc, curr) => acc + curr.priceTotal, 0)
+    const iva = (subTotal * IVA)
+    const total = (subTotal + iva)
+
     return (
       <div style={{ padding: '50px 160px', height: '700px' }}>
         <Card title="Ingreso de productos">
-          <Row gutter={16}>
-            <Col span={12}>
-              <FormItem label="Proveedor" {...formItemLayout}>
-                {getFieldDecorator('supplier', {
-                  initialValue: { resourceId: null, inputText: '' },
-                  rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
-                })(
-                  <SearchableInput
-                    onSearch={this.showModalSupplier}
-                    layout="vertical"
-                  />,
-                )}
-              </FormItem>
-            </Col>
+          <Form onSubmit={this.handleSubmit}>
+            <Row gutter={16}>
+              <Col span={12}>
+                <FormItem label="Proveedor" {...formItemLayout}>
+                  {getFieldDecorator('supplier', {
+                    initialValue: { resourceId: null, inputText: '' },
+                    rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                  })(
+                    <SearchableInput
+                      onSearch={this.showModalSupplier}
+                      onBlur={this.handleSupplierBlur}
+                      layout="vertical"
+                    />,
+                  )}
+                </FormItem>
 
-            <Col span={12}>
-              <FormItem label="Personal" {...formItemLayout}>
-                {getFieldDecorator('specialistId', {
-                  rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
-                })(
-                  <Input placeholder="Codigo" disabled />,
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+                <FormItem label="Nombre" {...formItemLayout}>
+                  {getFieldDecorator('supplierName')(
+                    <Input
+                      type="text"
+                      disabled
+                    />,
+                  )}
+                </FormItem>
+              </Col>
 
-          <Divider />
+              <Col span={12}>
+                <FormItem label="Personal" {...formItemLayout}>
+                  {getFieldDecorator('specialistId', {
+                    // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                  })(
+                    <Input placeholder="Codigo" disabled />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
 
-          <Row>
-            <Col span={24}>
-              <h3>
-                Productos
-                <span style={{ float: 'right', paddingBottom: '8px' }}>
-                  <Button onClick={this.showModalItem}>
-                    Agregar
-                  </Button>
-                </span>
-              </h3>
-            </Col>
-            <Col span={24}>
-              {/* <Table
-                dataSource={products}
-                columns={itemColumns}
-                size="small"
-                rowKey="id"
-              /> */}
-              <ListItem
-                items={products}
-                onItemDelete={this.handleItemDelete}
-              />
-            </Col>
-          </Row>
+            <Divider />
 
-          <Row>
-            <Col offset={16}>
-              <span>
-                Subtotal
-              </span>
-            </Col>
-          </Row>
+            <Row>
+              <Col span={24}>
+                <h3>
+                  Productos
+                  <span style={{ float: 'right', paddingBottom: '8px' }}>
+                    <Button onClick={this.showModalItem}>
+                      Agregar
+                    </Button>
+                  </span>
+                </h3>
+              </Col>
+              <Col span={24}>
+                <ListItem
+                  items={products}
+                  onItemDelete={this.handleItemDelete}
+                />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col offset={18}>
+                <InvoiceFooter
+                  subtotal={subTotal.toFixed(2)}
+                  total={total.toFixed(2)}
+                  iva={iva.toFixed(2)}
+                />
+              </Col>
+            </Row>
+            <div style={{ float: 'right', paddingTop: '30px' }}>
+              <Button type="primary" htmlType="submit">
+                Grabar
+              </Button>
+            </div>
+          </Form>
         </Card>
 
         <Modal
@@ -246,6 +273,7 @@ class PurchaseInvoiceApp extends React.Component {
 
         <Modal
           title="Seleccionar Producto"
+          // width={400}
           visible={selectProductForm}
           onCancel={this.handleItemModalCancel}
           onOk={this.handleItemSelected}

@@ -22,11 +22,11 @@ class SearchableInput extends Component {
   }
 
   handleInputChange = (e) => {
-    const resourceId = e.target.value
+    const inputText = e.target.value
     if (!('value' in this.props)) {
-      this.setState({ resourceId })
+      this.setState({ inputText })
     }
-    this.triggerChange({ resourceId })
+    this.triggerChange({ inputText })
   }
 
   triggerChange = (changedValue) => {
@@ -37,71 +37,97 @@ class SearchableInput extends Component {
     }
   }
 
-  renderLayout(layout) {
-    const { size, onSearch } = this.props
+  render() {
+    // const { layout } = this.props
+    const {
+      size,
+      onSearch,
+      disabled,
+      onBlur,
+    } = this.props
     const { resourceId, inputText } = this.state
-    if (layout === 'vertical') {
-      return (
-        <span>
-          <Input
-            type="text"
-            size={size}
-            value={resourceId}
-            // onBlur={onBlur}
-            onChange={this.handleInputChange}
-            style={{ width: '86%', marginRight: '3%' }}
-          />
-          <Button shape="circle" icon="search" onClick={onSearch} />
-          <Input
-            disabled
-            type="text"
-            size={size}
-            value={inputText}
-            // style={{ width: '58%', marginRight: '3%' }}
-          />
-        </span>
-      )
-    }
     return (
       <span>
         <Input
-          type="text"
+          hidden
           size={size}
           value={resourceId}
-          // onBlur={onBlur}
-          onChange={this.handleInputChange}
-          style={{ width: '26%', marginRight: '3%' }}
         />
         <Input
-          disabled
+          disabled={disabled}
           type="text"
           size={size}
           value={inputText}
-          style={{ width: '58%', marginRight: '3%' }}
+          onChange={this.handleInputChange}
+          onBlur={onBlur}
+          style={{ width: '86%', marginRight: '3%' }}
         />
         <Button shape="circle" icon="search" onClick={onSearch} />
       </span>
     )
   }
-
-  render() {
-    const { layout } = this.props
-    return this.renderLayout(layout)
-  }
 }
 
 SearchableInput.propTypes = {
-  layout: PropTypes.string,
+  disabled: PropTypes.bool,
   onSearch: PropTypes.func.isRequired,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
   size: PropTypes.string,
   value: PropTypes.shape().isRequired,
 }
 
 SearchableInput.defaultProps = {
-  layout: 'horizontal',
+  disabled: false,
   size: null,
   onChange: () => {},
+  onBlur: () => {},
 }
 
 export default SearchableInput
+
+
+// renderLayout(layout) {
+//   const { size, onSearch } = this.props
+//   const { resourceId, inputText } = this.state
+//   if (layout === 'vertical') {
+//     return (
+//       <span>
+//         <Input
+//           type="text"
+//           size={size}
+//           value={resourceId}
+//           // onBlur={onBlur}
+//           onChange={this.handleInputChange}
+//           style={{ width: '86%', marginRight: '3%' }}
+//         />
+//         <Button shape="circle" icon="search" onClick={onSearch} />
+//         <Input
+//           disabled
+//           type="text"
+//           size={size}
+//           value={inputText}
+//           // style={{ width: '58%', marginRight: '3%' }}
+//         />
+//       </span>
+//     )
+//   }
+//   return (
+//     <span>
+//       <Input
+//         hidden
+//         size={size}
+//         value={resourceId}
+//       />
+//       <Input
+//         disabled
+//         type="text"
+//         size={size}
+//         value={inputText}
+//         onChange={this.handleInputChange}
+//         style={{ width: '58%', marginRight: '3%' }}
+//       />
+//       <Button shape="circle" icon="search" onClick={onSearch} />
+//     </span>
+//   )
+// }

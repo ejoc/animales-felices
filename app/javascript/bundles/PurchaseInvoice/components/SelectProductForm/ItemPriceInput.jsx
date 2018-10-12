@@ -46,6 +46,7 @@ class InputPriceInput extends Component {
         <InputNumber
           size={size}
           value={quantity}
+          min={0.001}
           // onBlur={onBlur}
           onChange={this.handleInputChange}
           style={{ width: '26%', marginRight: '3%' }}
