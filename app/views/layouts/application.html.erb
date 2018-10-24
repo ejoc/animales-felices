@@ -9,6 +9,7 @@
   </title>
   <%= csrf_meta_tags %>
 
+  <%= stylesheet_link_tag "#{params[:controller]}/#{params[:action]}" if ::Rails.application.assets.find_asset("#{params[:controller]}/#{params[:action]}.css") %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%# render "layouts/stylesheet" %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
@@ -17,7 +18,6 @@
 </head>
 <body>
   <%= render "layouts/topnavbar" %>
-
   <div class="app-container">
     <main class="main-content" role="main">
       <%= render "layouts/flashes" -%>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="ROBOTS" content="NOODP">
+  <meta name="viewport" content="initial-scale=1">
+  <title>
+    <%= content_for(:title) %> - <%= Rails.application.class.parent_name.titlecase %>
+  </title>
+  <%= csrf_meta_tags %>
+
+  <!-- Include style per-controller - vendor plugins -->
+  <%= stylesheet_link_tag params[:controller] if ::Rails.application.assets.find_asset("#{params[:controller]}.css") %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%# render "layouts/stylesheet" %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+<body>
+  <div class="app-container">
+    <main class="main-content" role="main">
+      <%= render "layouts/flashes" -%>
+      <%= yield %>
+    </main>
+  </div>
+
+</body>
+</html>

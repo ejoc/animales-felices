@@ -1,7 +1,7 @@
 {
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier", "prettier/react"],
   "parser": "babel-eslint",
-  "plugins": ["react", "import", "jsx-a11y"],
+  "plugins": ["react", "import", "jsx-a11y", "prettier"],
   "rules": {
     "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": "off",
@@ -9,14 +9,20 @@
     "react/jsx-filename-extension": "off",
     "no-underscore-dangle": "off",
     // "react/no-unused-state": "off",
-    "quotes": [
-        "error",
-        "single"
-    ],
-    "semi": ["error","never"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"],
     "env": {
       "browser": true,
       "node": true
     }
-  }
+  },
+  "prettier/prettier": [
+    "error",
+    {
+      "trailingComma": "es5",
+      "semi": false,
+      "singleQuote": true,
+      "printWidth": 120
+    }
+  ]
 }

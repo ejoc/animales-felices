@@ -22,6 +22,13 @@ module AnimalesFelices
 
     config.to_prepare do
       Administrate::ApplicationController.helper AnimalesFelices::Application.helpers
+
+      Devise::SessionsController.layout "devise"
+      # Devise::RegistrationsController.layout proc{ |controller| user_signed_in? ? "application" : "devise" }
+      Devise::RegistrationsController.layout "devise"
+      Devise::ConfirmationsController.layout "devise"
+      Devise::UnlocksController.layout "devise"            
+      Devise::PasswordsController.layout "devise"
     end
   end
 end

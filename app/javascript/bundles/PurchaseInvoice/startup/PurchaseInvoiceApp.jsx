@@ -9,17 +9,17 @@ import {
   Input,
   Button,
   Modal,
+  message,
 } from 'antd'
-import { getSuppliersByCode } from '../../../api'
-// import PersonModal from '../../../shared/components/PersonModal'
+import { getSupplierByCode, registerIncomeProducts } from '../../../api'
 import withSubscription from '../../../shared/lib/withSubscription'
-import TableList from '../../../shared/components/TableList'
-import ListItem from '../components/ListItem'
+import TableList from '../../../shared/components/SearchableTable'
+import InvoiceListItem from '../../../shared/components/InvoiceListItem'
 import SelectProductForm from '../components/SelectProductForm'
-import SearchableInput from '../components/SearchableInput'
-import InvoiceFooter from '../components/InvoiceFooter'
+import SearchableInput from '../../../shared/components/SearchableInput'
+import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 
-const IVA = 0.12
+import { IVA } from '../../../utils/utils'
 
 const columns = [{
   title: 'Codigo',
@@ -80,7 +80,7 @@ class PurchaseInvoiceApp extends React.Component {
       const { quantity, priceUnit } = values
       const priceTotal = quantity * priceUnit
       const newProduct = {
-        id: values.product.resourceId,
+        productId: values.product.resourceId,
         name: values.product.inputText,
         quantity,
         priceUnit,
@@ -95,7 +95,7 @@ class PurchaseInvoiceApp extends React.Component {
 
   handleItemDelete = (productId) => {
     this.setState(prevState => ({
-      products: prevState.products.filter(p => p.id !== productId),
+      products: prevState.products.filter(p => p.productId !== productId),
     }))
   }
 
@@ -111,7 +111,7 @@ class PurchaseInvoiceApp extends React.Component {
     // const value = e.target.value
 
     if (value) {
-      getSuppliersByCode(value).then(
+      getSupplierByCode(value).then(
         ({ data }) => {
           const supplier = data || {}
           const { form } = this.props
@@ -146,9 +146,26 @@ class PurchaseInvoiceApp extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const { form } = this.props
+    const { products } = this.state
+    if (products.length < 1) {
+      message.error('Debe seleccionar al menos 1 producto')
+      return
+    }
     form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values)
+        const fields = {
+          supplierId: values.supplier.resourceId,
+          details_attributes: products,
+        }
+        console.log(fields)
+        registerIncomeProducts(fields,
+          (ok) => {
+            form.resetFields()
+            this.setState({
+              products: [],
+            }, () => message.success('Se ha registrado el ingresado de productos correctamente!'))
+          },
+          error => console.error(error))
       }
     })
   }
@@ -171,8 +188,17 @@ class PurchaseInvoiceApp extends React.Component {
     this.formRef = formRef
   }
 
+  // Valida el proveedor
+  checkResourceId = (rule, value, callback) => {
+    if (!value.resourceId) {
+      callback('Por favor ingrese el proveedor')
+      return
+    }
+    callback()
+  }
+
   render() {
-    const { form } = this.props
+    const { form, currentUser } = this.props
     const { getFieldDecorator } = form
     const {
       products,
@@ -186,7 +212,7 @@ class PurchaseInvoiceApp extends React.Component {
     const total = (subTotal + iva)
 
     return (
-      <div style={{ padding: '50px 160px', height: '700px' }}>
+      <div>
         <Card title="Ingreso de productos">
           <Form onSubmit={this.handleSubmit}>
             <Row gutter={16}>
@@ -194,7 +220,7 @@ class PurchaseInvoiceApp extends React.Component {
                 <FormItem label="Proveedor" {...formItemLayout}>
                   {getFieldDecorator('supplier', {
                     initialValue: { resourceId: null, inputText: '' },
-                    rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                    rules: [{ validator: this.checkResourceId }],
                   })(
                     <SearchableInput
                       onSearch={this.showModalSupplier}
@@ -217,9 +243,10 @@ class PurchaseInvoiceApp extends React.Component {
               <Col span={12}>
                 <FormItem label="Personal" {...formItemLayout}>
                   {getFieldDecorator('specialistId', {
+                    initialValue: currentUser,
                     // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
                   })(
-                    <Input placeholder="Codigo" disabled />,
+                    <Input placeholder={currentUser} disabled />,
                   )}
                 </FormItem>
               </Col>
@@ -239,7 +266,7 @@ class PurchaseInvoiceApp extends React.Component {
                 </h3>
               </Col>
               <Col span={24}>
-                <ListItem
+                <InvoiceListItem
                   items={products}
                   onItemDelete={this.handleItemDelete}
                 />
@@ -291,6 +318,7 @@ class PurchaseInvoiceApp extends React.Component {
 
 PurchaseInvoiceApp.propTypes = {
   form: PropType.shape().isRequired,
+  currentUser: PropType.string.isRequired,
 }
 
 export default Form.create()(PurchaseInvoiceApp)

@@ -33,16 +33,16 @@ SpecialistService.create({
   service: service2
 })
 
-unit_type = UnitType.create(name: 'Unidad')
+# unit_type = UnitType.create(name: 'Unidad')
 
-product_type = ProductCategory.create(name: 'Medicamentos')
+# product_type = ProductCategory.create(name: 'Medicamentos')
 
-Product.create(name: 'Producto 1', unit_type: unit_type, price: 2.00, product_category: product_type)
+# Product.create(name: 'Producto 1', unit_type: unit_type, price: 2.00, product_category: product_type)
 
-company = Company.create(bin: '112231', name: 'Empresa 1')
-Supplier.create(cedula: '09999999', company: company, company_role: 'Gerente')
+# company = Company.create(bin: '112231', name: 'Empresa 1')
+# Supplier.create(cedula: '09999999', company: company, company_role: 'Gerente')
 
-Client.create(name: 'Cliente1', email: 'email1', address: 'address1', phone: '050515', cedula: '0999999999')
+# Client.create(name: 'Cliente1', email: 'email1', address: 'address1', phone: '050515', cedula: '0999999999')
 
 # for test
 

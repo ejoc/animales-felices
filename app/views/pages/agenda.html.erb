@@ -1,6 +1,8 @@
-<%= react_component("AgendaApp", props: {
-  specialists: SpecialistSerializer.new(@specialists),
-  specialistsByService: @specialists_by_service,
-  services: ServiceSerializer.new(@services),
-  events: AppointmentsSerializer.new(@events).serializable_hash[:data],
-}, prerender: false) %>
+<div class="page-container">
+  <%= react_component("AgendaApp", props: {
+    specialists: SpecialistSerializer.new(@specialists),
+    specialistsByService: @specialists_by_service,
+    services: ServiceSerializer.new(@services),
+    events: AppointmentsSerializer.new(@events).serializable_hash[:data],
+  }.merge(default_props), prerender: false) %>
+</div>

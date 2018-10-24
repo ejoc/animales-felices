@@ -1,14 +1,18 @@
 class IncomeProductsController < ApplicationController
   
   # desabled on production
-  skip_before_action :verify_authenticity_token
+  # skip_before_action :verify_authenticity_token
+  before_action :authenticate_user!
+
+  layout "basic", :only => [ :index ]
 
   def index
+    render 'pages/purchase_invoice/list'
   end
 
   def create
     @income_product = IncomeProduct.new(income_product_params)
-    @income_product.specialist_id = Specialist.first.id
+    @income_product.specialist_id = current_user.id
     if check_in
       render json: 'ok'
     else

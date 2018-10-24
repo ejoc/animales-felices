@@ -2,11 +2,6 @@ import axios from 'axios'
 import moment from 'moment'
 import { getFetchInit, objectToQueryString } from './utils/utils'
 
-export function getClients(searchParam) {
-  return axios.get(`/clients?search=${searchParam}`)
-  // return response.data
-}
-
 export function bookingAppointment(fields, ok, error) {
   // return axios(getFetchInit(
   //   '/appointments',
@@ -140,7 +135,7 @@ export function getProducts(searchTerm, ok, error) {
   }
   const querystring = objectToQueryString(obj)
 
-  axios.get(`products?${querystring}`).then(
+  axios.get(`/products?${querystring}`).then(
     ({ data }) => {
       const products = data.data.map(product => ({ ...product.attributes }))
       ok(products)
@@ -149,6 +144,38 @@ export function getProducts(searchTerm, ok, error) {
   )
 }
 
+export function getServices(searchTerm, ok, error) {
+  const obj = {
+    search: searchTerm,
+    // page,
+  }
+  const querystring = objectToQueryString(obj)
+
+  axios.get(`/services?${querystring}`).then(
+    ({ data }) => {
+      console.log(data)
+      // const services = data.data.map(service => ({ ...service.attributes }))
+      ok(data)
+    },
+    err => error(err),
+  )
+}
+
+export function getItems(searchTerm, ok, error) {
+  const obj = {
+    search: searchTerm,
+    // page,
+  }
+  const querystring = objectToQueryString(obj)
+
+  axios.get(`/items?${querystring}`).then(
+    ({ data }) => {
+      const items = data.data.map(item => ({ ...item.attributes }))
+      ok(items)
+    },
+    err => error(err),
+  )
+}
 
 export function getStockProducts(searchTerm, ok, error) {
   const obj = {
@@ -156,7 +183,7 @@ export function getStockProducts(searchTerm, ok, error) {
   }
   const querystring = objectToQueryString(obj)
 
-  axios.get(`stock_products?${querystring}`).then(
+  axios.get(`/stock_products?${querystring}`).then(
     ({ data }) => {
       const products = data.data.map(product => ({ ...product.attributes }))
       ok(products)
@@ -165,14 +192,14 @@ export function getStockProducts(searchTerm, ok, error) {
   )
 }
 
-export function getClients2(searchTerm, page, ok, error) {
+export function getClients(searchTerm, ok, error) {
   const obj = {
     search: searchTerm,
-    page,
+    // page,
   }
   const querystring = objectToQueryString(obj)
 
-  axios.get(`clients?${querystring}`).then(
+  axios.get(`/clients?${querystring}`).then(
     ({ data }) => ok(data),
     err => error(err),
   )
@@ -184,21 +211,28 @@ export function getSuppliers(searchTerm, ok, error) {
   }
   const querystring = objectToQueryString(obj)
 
-  axios.get(`suppliers?${querystring}`).then(
+  axios.get(`/suppliers?${querystring}`).then(
     ({ data }) => ok(data),
     err => error(err),
   )
 }
 
-export function getSuppliersByCode(cedula) {
-  return axios.get(`suppliers/${cedula}`)
+export function getSupplierByCode(cedula) {
+  return axios.get(`/suppliers/${cedula}`)
 }
+
+export function getClientByCode(cedula) {
+  return axios.get(`/clients/${cedula}`)
+}
+
+
 
 export default {
   getSuppliers,
-  getClients2,
+  getClients,
   getStockProducts,
   getProducts,
+  getServices,
 }
 
 // export function getSupplierById(id, ok, error) {

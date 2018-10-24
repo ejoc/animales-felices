@@ -1,16 +1,9 @@
 import React, { Component } from 'react'
-import {
-  Form,
-  Modal,
-  Input,
-  Button,
-  InputNumber,
-} from 'antd'
+import { Form, Modal, InputNumber } from 'antd'
 
 import withSubscription from '../../../../shared/lib/withSubscription'
-import TableList from '../../../../shared/components/TableList'
-import SearchItemInput from '../SearchableInput'
-// import ItemPriceInput from './ItemPriceInput'
+import TableList from '../../../../shared/components/SearchableTable'
+import SearchItemInput from '../../../../shared/components/SearchableInput'
 
 const FormItem = Form.Item
 
@@ -25,22 +18,31 @@ const formItemLayout = {
   },
 }
 
-const productColumns = [{
-  title: 'Codigo',
-  dataIndex: 'id',
-  key: 'id',
-}, {
-  title: 'Nombre',
-  dataIndex: 'name',
-  key: 'name',
-}, {
-  title: 'Stock',
-  dataIndex: 'stock',
-  key: 'stock',
-}]
+const productColumns = [
+  {
+    title: 'Codigo',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
+    title: 'Nombre',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Tipo de unidad',
+    dataIndex: 'unitType',
+    key: 'unitType',
+  },
+  {
+    title: 'Stock',
+    dataIndex: 'stock',
+    key: 'stock',
+  },
+]
 
-const ProductList = withSubscription(
-  (api, input, ok, error) => api.getProducts(input, ok, error),
+const ProductList = withSubscription((api, input, ok, error) =>
+  api.getProducts(input, ok, error)
 )(TableList)
 
 class SelectProduct extends Component {
@@ -63,8 +65,7 @@ class SelectProduct extends Component {
     this.setState({ productListVisible: true })
   }
 
-  handleRowClick = (item) => {
-    console.log('item selected asdsad', item)
+  handleRowClick = item => {
     const { form, onShow } = this.props
     form.setFieldsValue({
       product: {
@@ -89,33 +90,15 @@ class SelectProduct extends Component {
     const { form } = this.props
     const { productListVisible } = this.state
     const { getFieldDecorator } = form
-    // const priceUnit = getFieldValue('priceUnit')
-    // const quantity = getFieldValue('quantity')
-    // const priceTotal = (priceUnit * quantity)
     return (
       <div>
         <Form>
-          {/* <FormItem label="Producto id" {...formItemLayout}>
-            {getFieldDecorator('itemId', {
-              rules: [{ validator: this.checkItemId }],
-              // rules: [{ required: true, message: 'Por favor ingrese el producto!' }],
-            })(
-              <Input
-                hidden
-                type="text"
-                // onBlur={onBlur}
-                style={{ width: '86%', marginRight: '3%' }}
-              />,
-            )}
-            <Button shape="circle" icon="search" onClick={this.handleProductListShow} />
-          </FormItem> */}
-
           <FormItem label="Producto" {...formItemLayout}>
             {getFieldDecorator('product', {
               initialValue: { resourceId: null, inputText: '' },
               rules: [{ validator: this.checkItemId }],
             })(
-              <SearchItemInput disabled onSearch={this.handleProductListShow} />,
+              <SearchItemInput disabled onSearch={this.handleProductListShow} />
             )}
           </FormItem>
 
@@ -123,19 +106,21 @@ class SelectProduct extends Component {
             {getFieldDecorator('priceUnit')(
               <InputNumber
                 disabled
-                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                formatter={value =>
+                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
                 parser={value => value.replace(/\$\s?|(,*)/g, '')}
-              />,
+              />
             )}
           </FormItem>
 
           <FormItem label="Cantidad" {...formItemLayout}>
             {getFieldDecorator('quantity', {
-              rules: [{ required: true, message: 'Por favor ingrese la cantidad!' }],
+              rules: [
+                { required: true, message: 'Por favor ingrese la cantidad!' },
+              ],
               // rules: [{ validator: this.checkQuantity }],
-            })(
-              <InputNumber />,
-            )}
+            })(<InputNumber />)}
           </FormItem>
         </Form>
 
@@ -144,7 +129,10 @@ class SelectProduct extends Component {
           visible={productListVisible}
           onCancel={this.handleProductListClose}
         >
-          <ProductList columns={productColumns} onRowClick={this.handleRowClick} />
+          <ProductList
+            columns={productColumns}
+            onRowClick={this.handleRowClick}
+          />
         </Modal>
       </div>
     )

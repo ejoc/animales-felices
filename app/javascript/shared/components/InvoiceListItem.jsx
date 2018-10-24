@@ -42,38 +42,20 @@ const { Column } = Table
 //   },
 // ]
 
-export default ({ items, onItemDelete }) => (
-  <Table
-    dataSource={items}
-    size="small"
-    rowKey="id"
-  >
-    <Column
-      title="ID"
-      dataIndex="id"
-      key="id"
-    />
+const InvoiceListItem = ({ items, onItemDelete, rowKey = 'productId' }) => (
+  <Table dataSource={items} size="small" rowKey={rowKey}>
+    <Column title="ID" dataIndex={rowKey} key={rowKey} />
 
-    <Column
-      title="Nombre"
-      dataIndex="name"
-      key="name"
-    />
+    <Column title="Nombre" dataIndex="name" key="name" />
 
-    <Column
-      title="Cantidad"
-      dataIndex="quantity"
-      key="quantity"
-    />
+    <Column title="Cantidad" dataIndex="quantity" key="quantity" />
 
     <Column
       title="Precio"
       dataIndex="priceUnit"
       // key="priceUnit"
       render={text => (
-        <span>
-          {`$ ${text}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        </span>
+        <span>{`$ ${text}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
       )}
     />
 
@@ -81,9 +63,7 @@ export default ({ items, onItemDelete }) => (
       title="Total"
       dataIndex="priceTotal"
       render={text => (
-        <span>
-          {`$ ${text}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        </span>
+        <span>{`$ ${text}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
       )}
     />
 
@@ -91,7 +71,10 @@ export default ({ items, onItemDelete }) => (
       title=""
       key="delete"
       render={(text, record) => (
-        <Popconfirm title="Seguro que desea eliminar?" onConfirm={() => onItemDelete(record.id)}>
+        <Popconfirm
+          title="Seguro que desea eliminar?"
+          onConfirm={() => onItemDelete(record[rowKey])}
+        >
           <a href="javascript:;">
             <Icon type="delete" theme="outlined" />
           </a>
@@ -100,3 +83,5 @@ export default ({ items, onItemDelete }) => (
     />
   </Table>
 )
+
+export default InvoiceListItem

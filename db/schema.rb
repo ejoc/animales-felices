@@ -48,9 +48,9 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   create_table "income_product_details", force: :cascade do |t|
     t.bigint "income_product_id"
     t.bigint "product_id"
-    t.decimal "quantity"
-    t.decimal "price_unit", precision: 5, scale: 2
-    t.decimal "price_total", precision: 5, scale: 2
+    t.float "quantity"
+    t.float "price_unit"
+    t.float "price_total"
     t.index ["income_product_id"], name: "index_income_product_details_on_income_product_id"
     t.index ["product_id"], name: "index_income_product_details_on_product_id"
   end
@@ -58,9 +58,9 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   create_table "income_products", force: :cascade do |t|
     t.bigint "specialist_id"
     t.bigint "supplier_id"
-    t.decimal "sub_total", precision: 5, scale: 2
-    t.decimal "total", precision: 5, scale: 2
-    t.decimal "iva", precision: 5, scale: 2
+    t.float "sub_total"
+    t.float "total"
+    t.float "iva"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["specialist_id"], name: "index_income_products_on_specialist_id"
@@ -70,9 +70,9 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   create_table "invoice_details", force: :cascade do |t|
     t.bigint "invoice_id"
     t.bigint "item_id"
-    t.decimal "quantity"
-    t.decimal "price_unit", precision: 5, scale: 2
-    t.decimal "price_total", precision: 5, scale: 2
+    t.float "quantity"
+    t.float "price_unit"
+    t.float "price_total"
     t.index ["invoice_id"], name: "index_invoice_details_on_invoice_id"
     t.index ["item_id"], name: "index_invoice_details_on_item_id"
   end
@@ -80,9 +80,9 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   create_table "invoices", force: :cascade do |t|
     t.bigint "client_id"
     t.bigint "specialist_id"
-    t.decimal "sub_total", precision: 5, scale: 2
-    t.decimal "total", precision: 5, scale: 2
-    t.decimal "iva", precision: 5, scale: 2
+    t.float "sub_total"
+    t.float "total"
+    t.float "iva"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_invoices_on_client_id"
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.decimal "price", precision: 5, scale: 2
+    t.float "price"
     t.string "actable_type"
     t.bigint "actable_id"
     t.datetime "created_at", null: false

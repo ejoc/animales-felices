@@ -63,12 +63,24 @@ Rails.application.routes.draw do
 
   get 'agenda', to: "pages#agenda"
   get 'facturacion', to: "pages#invoice"
-  get 'ingreso-productos', to: "pages#purchase_invoice"
+  get 'ingreso-productos/new', to: "pages#purchase_invoice"
+  get 'ingreso-productos', to: "income_products#index"
 
   # get 'agenda', to: 'agenda#index'
   # post 'booking_appoiment', to: 'agenda#appointment'
 
   devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root to: "pages#agenda"
+  # root to: "pages#agenda"
+
+  devise_scope :user do
+    authenticated :user do
+      root 'pages#agenda', as: :authenticated_root
+    end
+  
+    unauthenticated do
+      root 'devise/sessions#new', as: :unauthenticated_root
+    end
+  end
+  
 end

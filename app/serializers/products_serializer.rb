@@ -9,5 +9,9 @@ class ProductsSerializer
     stock ? stock.stock : 0
   end
 
+  attribute :unit_type do |object|
+    object.unit_type.name
+  end
+
   set_type :product
 end

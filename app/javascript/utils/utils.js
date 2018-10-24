@@ -8,6 +8,8 @@ function authenticityToken() {
   return null
 }
 
+export const IVA = 0.12
+
 export const getFetchInit = (url, requestMethod, body) => {
   const requestHeaders = {
     "Accept": "application/json",
