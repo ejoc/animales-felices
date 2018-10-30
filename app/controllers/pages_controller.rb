@@ -29,4 +29,7 @@ class PagesController < ApplicationController
       'people.name',
     )
   end
+
+  def reports
+  end
 end

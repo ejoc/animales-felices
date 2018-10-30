@@ -61,10 +61,12 @@ Rails.application.routes.draw do
   resources :stock_products, only: :index
   resources :products, only: :index
 
+  # pages
   get 'agenda', to: "pages#agenda"
   get 'facturacion', to: "pages#invoice"
   get 'ingreso-productos/new', to: "pages#purchase_invoice"
   get 'ingreso-productos', to: "income_products#index"
+  get 'reportes', to: "pages#reports"
 
   # get 'agenda', to: 'agenda#index'
   # post 'booking_appoiment', to: 'agenda#appointment'

@@ -43,7 +43,7 @@ class SpecialistDashboard < Administrate::BaseDashboard
     :name,
     :address,
     :phone,
-    :gender,
+    # :gender,
     # :user,
   ].freeze
 
