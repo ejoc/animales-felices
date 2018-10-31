@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   resources :appointments, except: [:new, :edit, :destroy] do
     collection do
       get 'specialists_by_service'
+      get 'reports'
     end
     member do
       delete 'cancel'

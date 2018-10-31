@@ -20,10 +20,12 @@ class Appointment < ApplicationRecord
     WITH  grouped_tables AS (
       SELECT
         "appointments"."specialist_id",
-        #{select_clause.join(', ')}
+        #{select_clause.join(', ')},
+        count(*) AS counter
       FROM "appointments"
       WHERE start_time > date_trunc('#{periodicity}', current_date)
       GROUP BY "appointments"."specialist_id"
+      ORDER BY counter DESC
     )
     SELECT
       grouped_tables.*,
@@ -36,6 +38,20 @@ class Appointment < ApplicationRecord
     connection.execute(query)
 
     # Appointment.select('COUNT(*)').joins(specialist: :person).group(:specialist_id)
+  end
+
+  # SELECT
+  #   to_char(start_time, 'MM') as mon,
+  #     extract(year from start_time) as yyyy,
+  #   (extract(year from start_time) || '-' || to_char(start_time, 'MM')) as yyyymm,
+  #   SUM(items.price)
+  # FROM appointments
+  # INNER JOIN services ON services.id = appointments.service_id
+  # INNER JOIN "items" ON "items"."actable_id" = "services"."id" AND "items"."actable_type" = 'Service'
+  # WHERE start_time > date_trunc('month', NOW() - interval '12 month')
+  # GROUP BY mon, yyyy
+  # ORDER BY yyyymm
+  def other_report
   end
 
   private

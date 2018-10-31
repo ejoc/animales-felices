@@ -226,6 +226,16 @@ export function getClientByCode(cedula) {
 }
 
 
+// Reports module
+
+export function getReports(periodicity, ok, error) {
+  axios.get(`/appointments/reports?periodicity=${periodicity}`)
+    .then(
+      ({ data }) => ok(data),
+      err => error(err)
+    )
+}
+
 
 export default {
   getSuppliers,

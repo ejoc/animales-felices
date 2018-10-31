@@ -75,6 +75,11 @@ class AppointmentsController < ApplicationController
     render json: @specialists_by_service
   end
 
+  def reports
+    report = Appointment.report(reports_param)
+    render json: report
+  end
+
   private
     def set_appointment
       @appointment = Appointment.find(params[:id])
@@ -95,6 +100,10 @@ class AppointmentsController < ApplicationController
         :start_time,
         # :end_time,
       )
+    end
+
+    def reports_param
+      params[:periodicity] || 'week'
     end
 end
 
