@@ -1,4 +1,5 @@
 import React from 'react'
+import Layout from '../../../shared/components/Layout'
 import Bar from '../components/Bar'
 import MenuChart from '../components/MenuChart'
 
@@ -13,13 +14,16 @@ class ReportApp extends React.Component {
   }
 
   render() {
-    const { monthly } = this.props
+    const { monthly, ...restProps } = this.props
     const { periodicity } = this.state
     return (
-      <div>
-        <MenuChart periodicity={periodicity} onPeriodicityChange={this.handlePeriodicityChange} />
+      <Layout {...restProps} activeNav="reportes">
+        <MenuChart
+          periodicity={periodicity}
+          onPeriodicityChange={this.handlePeriodicityChange}
+        />
         <Bar periodicity={periodicity} data={monthly} />
-      </div>
+      </Layout>
     )
   }
 }

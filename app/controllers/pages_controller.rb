@@ -32,4 +32,7 @@ class PagesController < ApplicationController
 
   def reports
   end
+
+  def account
+  end
 end

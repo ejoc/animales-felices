@@ -11,6 +11,8 @@ import {
   Modal,
   message,
 } from 'antd'
+
+import Layout from '../../../shared/components/Layout'
 import { getClientByCode, invoiceCheckIn } from '../../../api'
 import withSubscription from '../../../shared/lib/withSubscription'
 import TableList from '../../../shared/components/SearchableTable'
@@ -211,7 +213,7 @@ class PurchaseInvoiceApp extends React.Component {
   }
 
   render() {
-    const { form, currentUser } = this.props
+    const { form, currentUser, ...rest } = this.props
     const { getFieldDecorator } = form
     const { items, modals } = this.state
 
@@ -222,7 +224,7 @@ class PurchaseInvoiceApp extends React.Component {
     const total = subTotal + iva
 
     return (
-      <div>
+      <Layout {...rest} currentUser={currentUser} activeNav="registro-venta">
         <Card title="Facturar">
           <Form onSubmit={this.handleSubmit}>
             <Row gutter={16}>
@@ -318,7 +320,7 @@ class PurchaseInvoiceApp extends React.Component {
             onShow={this.showModalItem}
           />
         </Modal>
-      </div>
+      </Layout>
     )
   }
 }

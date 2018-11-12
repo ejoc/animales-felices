@@ -1,11 +1,7 @@
-<div class="ant-row" style="padding: 50px 120px; height: 700px">
   <!--div class="ant-col-4">
     <%= render 'pages/purchase_invoice/nav' %>
   </div -->
-  <div class="ant-col-24">
-    <%= react_component("PurchaseInvoiceApp", props: {
-      specialists: SpecialistSerializer.new(@specialists),
-      items: ItemsSerializer.new(@items),
-    }.merge(default_props)) %>
-  </div>
-</div>
+<%= react_component("PurchaseInvoiceApp", props: {
+  specialists: SpecialistSerializer.new(@specialists),
+  items: ItemsSerializer.new(@items),
+}.merge(default_props)) %>

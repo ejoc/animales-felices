@@ -9,18 +9,18 @@ class ApplicationController < ActionController::Base
       params[:search] || false
     end
 
-    # def set_default_props
-    #   props = {
-    #     user_signed_in: user_signed_in?,
-    #     current_user: current_user && current_user.email,
-    #     flash_messages: flash_messages,
-    #   }
-    #   if(user_signed_in?)
-    #     props[:roles] = [
-    #       current_user.has_role?(:admin) ? 'admin' : nil, 
-    #       current_user.has_role?(:sales) ? 'sales' : nil
-    #     ].compact
-    #   end
-    #   return props
-    # end
+    def camelize_response(props)
+      case props
+      when Hash
+        props.each_with_object({}) do |(key, value), new_props|
+          new_key = key.to_s.camelize(:lower)
+          new_value = camelize_response(value)
+          new_props[new_key] = new_value
+        end
+      when Array
+        props.map { |item| camelize_response(item) }
+      else
+        props
+      end
+    end
 end

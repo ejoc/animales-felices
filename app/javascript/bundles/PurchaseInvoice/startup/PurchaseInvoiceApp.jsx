@@ -11,6 +11,8 @@ import {
   Modal,
   message,
 } from 'antd'
+
+import Layout from '../../../shared/components/Layout'
 import { getSupplierByCode, registerIncomeProducts } from '../../../api'
 import withSubscription from '../../../shared/lib/withSubscription'
 import TableList from '../../../shared/components/SearchableTable'
@@ -21,22 +23,26 @@ import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 
 import { IVA } from '../../../utils/utils'
 
-const columns = [{
-  title: 'Codigo',
-  dataIndex: 'cedula',
-  key: 'cedula',
-}, {
-  title: 'Nombre',
-  dataIndex: 'name',
-  key: 'name',
-}, {
-  title: 'Address',
-  dataIndex: 'address',
-  key: 'address',
-}]
+const columns = [
+  {
+    title: 'Codigo',
+    dataIndex: 'cedula',
+    key: 'cedula',
+  },
+  {
+    title: 'Nombre',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+  },
+]
 
-const SupplierList = withSubscription(
-  (api, input, ok, error) => api.getSuppliers(input, ok, error),
+const SupplierList = withSubscription((api, input, ok, error) =>
+  api.getSuppliers(input, ok, error)
 )(TableList)
 
 const formItemLayout = {
@@ -60,7 +66,6 @@ class PurchaseInvoiceApp extends React.Component {
       selectProductForm: false,
     },
     // visibleSupplierModal: false,
-
   }
 
   handleSupplierModalCancel = () => {
@@ -86,14 +91,17 @@ class PurchaseInvoiceApp extends React.Component {
         priceUnit,
         priceTotal,
       }
-      this.setState(prevState => ({
-        products: prevState.products.concat(newProduct),
-        modals: { ...prevState.modals, selectProductForm: false },
-      }), () => form.resetFields())
+      this.setState(
+        prevState => ({
+          products: prevState.products.concat(newProduct),
+          modals: { ...prevState.modals, selectProductForm: false },
+        }),
+        () => form.resetFields()
+      )
     })
   }
 
-  handleItemDelete = (productId) => {
+  handleItemDelete = productId => {
     this.setState(prevState => ({
       products: prevState.products.filter(p => p.productId !== productId),
     }))
@@ -105,7 +113,7 @@ class PurchaseInvoiceApp extends React.Component {
     }))
   }
 
-  handleSupplierBlur = (e) => {
+  handleSupplierBlur = e => {
     const { target } = e
     const { value } = target
     // const value = e.target.value
@@ -123,12 +131,12 @@ class PurchaseInvoiceApp extends React.Component {
             supplierName: supplier.name,
           })
         },
-        err => console.error(err),
+        err => console.error(err)
       )
     }
   }
 
-  handleSupplierRowClick = (supplier) => {
+  handleSupplierRowClick = supplier => {
     const { form } = this.props
     form.setFieldsValue({
       supplier: {
@@ -143,7 +151,7 @@ class PurchaseInvoiceApp extends React.Component {
     }))
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault()
     const { form } = this.props
     const { products } = this.state
@@ -158,14 +166,22 @@ class PurchaseInvoiceApp extends React.Component {
           details_attributes: products,
         }
         console.log(fields)
-        registerIncomeProducts(fields,
-          (ok) => {
+        registerIncomeProducts(
+          fields,
+          ok => {
             form.resetFields()
-            this.setState({
-              products: [],
-            }, () => message.success('Se ha registrado el ingresado de productos correctamente!'))
+            this.setState(
+              {
+                products: [],
+              },
+              () =>
+                message.success(
+                  'Se ha registrado el ingresado de productos correctamente!'
+                )
+            )
           },
-          error => console.error(error))
+          error => console.error(error)
+        )
       }
     })
   }
@@ -184,7 +200,7 @@ class PurchaseInvoiceApp extends React.Component {
     }))
   }
 
-  saveFormRef = (formRef) => {
+  saveFormRef = formRef => {
     this.formRef = formRef
   }
 
@@ -198,120 +214,115 @@ class PurchaseInvoiceApp extends React.Component {
   }
 
   render() {
-    const { form, currentUser } = this.props
+    const { form, currentUser, ...rest } = this.props
     const { getFieldDecorator } = form
-    const {
-      products,
-      modals,
-    } = this.state
+    const { products, modals } = this.state
 
     const { showSuppliers, selectProductForm } = modals
 
     const subTotal = products.reduce((acc, curr) => acc + curr.priceTotal, 0)
-    const iva = (subTotal * IVA)
-    const total = (subTotal + iva)
+    const iva = subTotal * IVA
+    const total = subTotal + iva
 
     return (
-      <div>
-        <Card title="Ingreso de productos">
-          <Form onSubmit={this.handleSubmit}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <FormItem label="Proveedor" {...formItemLayout}>
-                  {getFieldDecorator('supplier', {
-                    initialValue: { resourceId: null, inputText: '' },
-                    rules: [{ validator: this.checkResourceId }],
-                  })(
-                    <SearchableInput
-                      onSearch={this.showModalSupplier}
-                      onBlur={this.handleSupplierBlur}
-                      layout="vertical"
-                    />,
-                  )}
-                </FormItem>
+      <Layout {...rest} currentUser={currentUser} activeNav="ingreso-productos">
+        <div style={{ padding: '50px 120px', height: '700px' }}>
+          <Card title="Ingreso de productos">
+            <Form onSubmit={this.handleSubmit}>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <FormItem label="Proveedor" {...formItemLayout}>
+                    {getFieldDecorator('supplier', {
+                      initialValue: { resourceId: null, inputText: '' },
+                      rules: [{ validator: this.checkResourceId }],
+                    })(
+                      <SearchableInput
+                        onSearch={this.showModalSupplier}
+                        onBlur={this.handleSupplierBlur}
+                        layout="vertical"
+                      />
+                    )}
+                  </FormItem>
 
-                <FormItem label="Nombre" {...formItemLayout}>
-                  {getFieldDecorator('supplierName')(
-                    <Input
-                      type="text"
-                      disabled
-                    />,
-                  )}
-                </FormItem>
-              </Col>
+                  <FormItem label="Nombre" {...formItemLayout}>
+                    {getFieldDecorator('supplierName')(
+                      <Input type="text" disabled />
+                    )}
+                  </FormItem>
+                </Col>
 
-              <Col span={12}>
-                <FormItem label="Personal" {...formItemLayout}>
-                  {getFieldDecorator('specialistId', {
-                    initialValue: currentUser,
-                    // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
-                  })(
-                    <Input placeholder={currentUser} disabled />,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
+                <Col span={12}>
+                  <FormItem label="Personal" {...formItemLayout}>
+                    {getFieldDecorator('specialistId', {
+                      initialValue: currentUser,
+                      // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                    })(<Input placeholder={currentUser} disabled />)}
+                  </FormItem>
+                </Col>
+              </Row>
 
-            <Divider />
+              <Divider />
 
-            <Row>
-              <Col span={24}>
-                <h3>
-                  Productos
-                  <span style={{ float: 'right', paddingBottom: '8px' }}>
-                    <Button onClick={this.showModalItem}>
-                      Agregar
-                    </Button>
-                  </span>
-                </h3>
-              </Col>
-              <Col span={24}>
-                <InvoiceListItem
-                  items={products}
-                  onItemDelete={this.handleItemDelete}
-                />
-              </Col>
-            </Row>
+              <Row>
+                <Col span={24}>
+                  <h3>
+                    Productos
+                    <span style={{ float: 'right', paddingBottom: '8px' }}>
+                      <Button onClick={this.showModalItem}>Agregar</Button>
+                    </span>
+                  </h3>
+                </Col>
+                <Col span={24}>
+                  <InvoiceListItem
+                    items={products}
+                    onItemDelete={this.handleItemDelete}
+                  />
+                </Col>
+              </Row>
 
-            <Row>
-              <Col offset={18}>
-                <InvoiceFooter
-                  subtotal={subTotal.toFixed(2)}
-                  total={total.toFixed(2)}
-                  iva={iva.toFixed(2)}
-                />
-              </Col>
-            </Row>
-            <div style={{ float: 'right', paddingTop: '30px' }}>
-              <Button type="primary" htmlType="submit">
-                Grabar
-              </Button>
-            </div>
-          </Form>
-        </Card>
+              <Row>
+                <Col offset={18}>
+                  <InvoiceFooter
+                    subtotal={subTotal.toFixed(2)}
+                    total={total.toFixed(2)}
+                    iva={iva.toFixed(2)}
+                  />
+                </Col>
+              </Row>
+              <div style={{ float: 'right', paddingTop: '30px' }}>
+                <Button type="primary" htmlType="submit">
+                  Grabar
+                </Button>
+              </div>
+            </Form>
+          </Card>
 
-        <Modal
-          title="Buscar proveedores"
-          visible={showSuppliers}
-          onCancel={this.handleSupplierModalCancel}
-        >
-          <SupplierList columns={columns} onRowClick={this.handleSupplierRowClick} />
-        </Modal>
+          <Modal
+            title="Buscar proveedores"
+            visible={showSuppliers}
+            onCancel={this.handleSupplierModalCancel}
+          >
+            <SupplierList
+              columns={columns}
+              onRowClick={this.handleSupplierRowClick}
+            />
+          </Modal>
 
-        <Modal
-          title="Seleccionar Producto"
-          // width={400}
-          visible={selectProductForm}
-          onCancel={this.handleItemModalCancel}
-          onOk={this.handleItemSelected}
-        >
-          <SelectProductForm
-            wrappedComponentRef={this.saveFormRef}
-            onHide={this.handleItemModalCancel}
-            onShow={this.showModalItem}
-          />
-        </Modal>
-      </div>
+          <Modal
+            title="Seleccionar Producto"
+            // width={400}
+            visible={selectProductForm}
+            onCancel={this.handleItemModalCancel}
+            onOk={this.handleItemSelected}
+          >
+            <SelectProductForm
+              wrappedComponentRef={this.saveFormRef}
+              onHide={this.handleItemModalCancel}
+              onShow={this.showModalItem}
+            />
+          </Modal>
+        </div>
+      </Layout>
     )
   }
 }

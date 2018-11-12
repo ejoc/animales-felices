@@ -17,10 +17,9 @@
   <%= stylesheet_pack_tag "#{controller_name}-bundle" %>
 </head>
 <body>
-  <%= render "layouts/topnavbar" %>
+  <%- render "layouts/topnavbar" %>
   <div class="app-container">
     <main class="main-content" role="main">
-      <%= render "layouts/flashes" -%>
       <%= yield %>
     </main>
   </div>

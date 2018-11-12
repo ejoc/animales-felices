@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Col,
-  Row,
-  Modal,
-  notification,
-  Button,
-  Card,
-} from 'antd'
+import { Col, Row, Modal, notification, Button, Card } from 'antd'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 
+import Layout from '../../../shared/components/Layout'
 import FilterPanel from '../components/FilterPanel'
 import BookingForm from '../components/BookingForm'
 import Agenda from '../components/Agenda'
@@ -34,13 +28,14 @@ class AgendaApp extends Component {
     super(props)
     const { events, services, specialists } = props
     this.state = {
-      events: events ? events
-        .map(event => ({
-          id: event.id,
-          ...event.attributes,
-          startTime: new Date(event.attributes.startTime),
-          endTime: new Date(event.attributes.endTime),
-        })) : [],
+      events: events
+        ? events.map(event => ({
+            id: event.id,
+            ...event.attributes,
+            startTime: new Date(event.attributes.startTime),
+            endTime: new Date(event.attributes.endTime),
+          }))
+        : [],
       submitting: false,
       filters: {
         canceled: false,
@@ -63,13 +58,13 @@ class AgendaApp extends Component {
   }
 
   /*
-  * Modal
-  */
-  saveFormRef = (formRef) => {
+   * Modal
+   */
+  saveFormRef = formRef => {
     this.formRef = formRef
   }
 
-  handleOk = (e) => {
+  handleOk = e => {
     e.preventDefault()
     const { form } = this.formRef.props
     const { currentSlots } = this.state
@@ -87,7 +82,7 @@ class AgendaApp extends Component {
         }
         bookingAppointment(
           fields,
-          (event) => {
+          event => {
             this.setState(prevState => ({
               submitting: false,
               modals: { ...prevState.modals, newAppointment: false },
@@ -99,11 +94,11 @@ class AgendaApp extends Component {
               description: 'Reservación creada de manera exitosa!',
             })
           },
-          (errors) => {
+          errors => {
             const errorsData = errors.response.data
             let fieldErrors
             if (errorsData instanceof Array) {
-              fieldErrors = errorsData.map((error) => {
+              fieldErrors = errorsData.map(error => {
                 const fieldError = Object.keys(error)[0]
                 return {
                   [fieldError]: {
@@ -124,13 +119,13 @@ class AgendaApp extends Component {
             // form.resetFields()
             form.setFields(fieldErrors)
             this.setState({ submitting: false })
-          },
+          }
         )
       }
     })
   }
 
-  handleCancel = (e) => {
+  handleCancel = e => {
     e.preventDefault() // eliminar si es necesario
     this.setState(prevState => ({
       modals: { ...prevState.modals, newAppointment: false },
@@ -152,30 +147,30 @@ class AgendaApp extends Component {
   }
 
   /*
-  * Appointment Filter
-  */
-  handleCanceledClick = (e) => {
+   * Appointment Filter
+   */
+  handleCanceledClick = e => {
     this.setState(prevState => ({
       filters: { ...prevState.filters, canceled: e.target.checked },
     }))
   }
 
-  handleConcludedClick = (e) => {
+  handleConcludedClick = e => {
     this.setState(prevState => ({
       filters: { ...prevState.filters, concluded: e.target.checked },
     }))
   }
 
   /*
-  * Specialist Filter
-  */
+   * Specialist Filter
+   */
   handleSpecialistClick = ({ key }) => {
     this.setState(prevState => ({
       filters: { ...prevState.filters, specialistId: key },
     }))
   }
 
-  viewAllSpecialists = (e) => {
+  viewAllSpecialists = e => {
     e.preventDefault()
     this.setState(prevState => ({
       filters: { ...prevState.filters, specialistId: null },
@@ -183,15 +178,15 @@ class AgendaApp extends Component {
   }
 
   /*
-  * Service Filter
-  */
+   * Service Filter
+   */
   handleServiceClick = ({ key }) => {
     this.setState(prevState => ({
       filters: { ...prevState.filters, serviceId: key },
     }))
   }
 
-  viewAllServices = (e) => {
+  viewAllServices = e => {
     e.preventDefault()
     this.setState(prevState => ({
       filters: { ...prevState.filters, serviceId: null },
@@ -199,9 +194,9 @@ class AgendaApp extends Component {
   }
 
   /*
-  * Agenda
-  */
-  handleNavigate = (day) => {
+   * Agenda
+   */
+  handleNavigate = day => {
     this.fetchAppointments(day)
   }
 
@@ -228,7 +223,9 @@ class AgendaApp extends Component {
     this.setState({
       cancelLoading: true,
     })
-    const { appointmentSelected: { id } } = this.state
+    const {
+      appointmentSelected: { id },
+    } = this.state
     cancelAppointment(id).then(
       ({ data }) => {
         notification.success({
@@ -239,7 +236,7 @@ class AgendaApp extends Component {
         this.setState(prevState => ({
           modals: { ...prevState.modals, showAppointment: false },
           cancelLoading: false,
-          events: prevState.events.map((event) => {
+          events: prevState.events.map(event => {
             if (Number(event.id) === Number(data)) {
               return { ...event, canceled: true }
             }
@@ -247,7 +244,7 @@ class AgendaApp extends Component {
           }),
         }))
       },
-      error => console.log(error),
+      error => console.log(error)
     )
   }
 
@@ -261,18 +258,20 @@ class AgendaApp extends Component {
     }))
   }
 
-  handleUpdateAppointment = (e) => {
+  handleUpdateAppointment = e => {
     e.preventDefault()
     const { form } = this.formRef.props
     const { appointmentSelected } = this.state
     form.validateFields((err, values) => {
       if (!err) {
         // this.setState({ submitting: true })
-        const startTime = values.date.set({
-          hour: values.time.get('hour'),
-          minute: values.time.get('minute'),
-          second: 0,
-        }).toDate()
+        const startTime = values.date
+          .set({
+            hour: values.time.get('hour'),
+            minute: values.time.get('minute'),
+            second: 0,
+          })
+          .toDate()
         const fields = {
           serviceId: values.service,
           specialistId: values.specialist,
@@ -283,14 +282,15 @@ class AgendaApp extends Component {
         updateAppointment(
           appointmentSelected.id,
           fields,
-          (event) => {
+          event => {
             this.setState(prevState => ({
               submitting: false,
               modals: { ...prevState.modals, editAppointment: false },
-              events: prevState.events.map(appointment => (appointment.id === appointmentSelected.id
-                ? { ...appointment, ...event }
-                : appointment
-              )),
+              events: prevState.events.map(appointment =>
+                appointment.id === appointmentSelected.id
+                  ? { ...appointment, ...event }
+                  : appointment
+              ),
             }))
             form.resetFields()
             notification.success({
@@ -298,11 +298,11 @@ class AgendaApp extends Component {
               description: 'Reservación actualizada de manera exitosa!',
             })
           },
-          (errors) => {
+          errors => {
             const errorsData = errors.response.data
             let fieldErrors
             if (errorsData instanceof Array) {
-              fieldErrors = errorsData.map((error) => {
+              fieldErrors = errorsData.map(error => {
                 const fieldError = Object.keys(error)[0]
                 return {
                   [fieldError]: {
@@ -323,13 +323,13 @@ class AgendaApp extends Component {
             // form.resetFields()
             form.setFields(fieldErrors)
             this.setState({ submitting: false })
-          },
+          }
         )
       }
     })
   }
 
-  handleShowAppointment = (event) => {
+  handleShowAppointment = event => {
     const appointmentId = event.id
     this.setState(prevState => ({
       modals: { ...prevState.modals, showAppointment: true },
@@ -338,12 +338,14 @@ class AgendaApp extends Component {
 
     getAppointment(
       appointmentId,
-      (appointment) => {
-        this.setState((prevState) => {
-          const service = prevState.services
-            .find(s => Number(s.id) === Number(appointment.attributes.serviceId))
-          const specialist = prevState.specialists
-            .find(s => Number(s.id) === Number(appointment.attributes.specialistId))
+      appointment => {
+        this.setState(prevState => {
+          const service = prevState.services.find(
+            s => Number(s.id) === Number(appointment.attributes.serviceId)
+          )
+          const specialist = prevState.specialists.find(
+            s => Number(s.id) === Number(appointment.attributes.specialistId)
+          )
           return {
             appointmentSelected: {
               id: appointment.id,
@@ -355,7 +357,7 @@ class AgendaApp extends Component {
           }
         })
       },
-      error => console.error(error),
+      error => console.error(error)
     )
   }
 
@@ -364,14 +366,14 @@ class AgendaApp extends Component {
     this.setState({ fetching: true })
     getAppointments(
       date,
-      (events) => {
+      events => {
         this.setState({
           events,
           day,
           fetching: false,
         })
       },
-      error => console.warn(error),
+      error => console.warn(error)
     )
   }
 
@@ -391,113 +393,123 @@ class AgendaApp extends Component {
     } = this.state
 
     const { newAppointment, showAppointment, editAppointment } = modals
-    const { specialistsByService } = this.props
+    const { specialistsByService, ...rest } = this.props
 
     const filterKeys = Object.keys(filters)
     const currentTime = new Date()
-    const showEvents = events.filter(event => filterKeys.every((eachKey) => {
-      if (filters[eachKey] === null) {
-        return true
-      }
-      if (eachKey === 'canceled' && filters[eachKey]) {
-        return true
-      }
-      if (eachKey === 'concluded') {
-        return filters[eachKey] ? true : event.endTime > currentTime
-      }
-      return Number(filters[eachKey]) === Number(event[eachKey])
-    }))
+    const showEvents = events.filter(event =>
+      filterKeys.every(eachKey => {
+        if (filters[eachKey] === null) {
+          return true
+        }
+        if (eachKey === 'canceled' && filters[eachKey]) {
+          return true
+        }
+        if (eachKey === 'concluded') {
+          return filters[eachKey] ? true : event.endTime > currentTime
+        }
+        return Number(filters[eachKey]) === Number(event[eachKey])
+      })
+    )
 
     return (
-      <div style={{ padding: '10px', height: '700px' }}>
-        <Row gutter={8}>
-          <Col span={5}>
-            <FilterPanel
-              filters={filters}
-              handleCalendarSelect={this.handleCalendarSelect}
-              onCanceledClick={this.handleCanceledClick}
-              onConcludedClick={this.handleConcludedClick}
-              handleSpecialistClick={this.handleSpecialistClick}
-              specialists={specialists}
-              viewAllSpecialists={this.viewAllSpecialists}
-              handleServiceClick={this.handleServiceClick}
-              services={services}
-              viewAllServices={this.viewAllServices}
-            />
-          </Col>
-          <Col span={19} style={{ height: '600px' }}>
-            <Card className={fetching ? 'fetching' : ''}>
-              <Agenda
-                events={showEvents}
-                date={day || new Date()}
-                // onEventDrop={this.moveEvent}
-                // onEventResize={this.resizeEvent}
-                // slotPropGetter={() => {}}
-                // scrollToTime={new Date()}
-                onSelectSlot={this.createBooking}
-                onSelectEvent={this.handleShowAppointment}
-                onNavigate={this.handleNavigate}
-                // onView={() => console.log('onView')}
+      <Layout {...rest} activeNav="agenda">
+        <div style={{ padding: '10px', height: '700px' }}>
+          <Row gutter={8}>
+            <Col span={5}>
+              <FilterPanel
+                filters={filters}
+                handleCalendarSelect={this.handleCalendarSelect}
+                onCanceledClick={this.handleCanceledClick}
+                onConcludedClick={this.handleConcludedClick}
+                handleSpecialistClick={this.handleSpecialistClick}
+                specialists={specialists}
+                viewAllSpecialists={this.viewAllSpecialists}
+                handleServiceClick={this.handleServiceClick}
+                services={services}
+                viewAllServices={this.viewAllServices}
               />
-            </Card>
-          </Col>
-        </Row>
+            </Col>
+            <Col span={19} style={{ height: '600px' }}>
+              <Card className={fetching ? 'fetching' : ''}>
+                <Agenda
+                  events={showEvents}
+                  date={day || new Date()}
+                  // onEventDrop={this.moveEvent}
+                  // onEventResize={this.resizeEvent}
+                  // slotPropGetter={() => {}}
+                  // scrollToTime={new Date()}
+                  onSelectSlot={this.createBooking}
+                  onSelectEvent={this.handleShowAppointment}
+                  onNavigate={this.handleNavigate}
+                  // onView={() => console.log('onView')}
+                />
+              </Card>
+            </Col>
+          </Row>
 
-        {showAppointment && (
-          <ShowAppointment
-            visible={showAppointment}
-            appointment={appointmentSelected}
+          {showAppointment && (
+            <ShowAppointment
+              visible={showAppointment}
+              appointment={appointmentSelected}
+              onOk={this.handleOk}
+              onCancel={this.hideAppointment}
+              onCancelAppointment={this.handleCancelAppointment}
+              onEditAppointment={this.handleEditAppointment}
+              cancelLoading={cancelLoading}
+            />
+          )}
+
+          {editAppointment && (
+            <EditAppointment
+              wrappedComponentRef={this.saveFormRef}
+              visible={editAppointment}
+              appointment={appointmentSelected}
+              onOk={this.handleUpdateAppointment}
+              onCancel={this.hideEditAppointment}
+              onCancelAppointment={this.handleCancelAppointment}
+              onEditAppointment={this.handleEditAppointment}
+              cancelLoading={cancelLoading}
+              services={services}
+              specialists={specialists}
+              specialistsByService={specialistsByService}
+            />
+          )}
+
+          <Modal
+            title={`Crear reservación ${currentSlots &&
+              moment(currentSlots[0]).format('lll')}`}
+            visible={newAppointment}
             onOk={this.handleOk}
-            onCancel={this.hideAppointment}
-            onCancelAppointment={this.handleCancelAppointment}
-            onEditAppointment={this.handleEditAppointment}
-            cancelLoading={cancelLoading}
-          />
-        )}
-
-        {editAppointment && (
-          <EditAppointment
-            wrappedComponentRef={this.saveFormRef}
-            visible={editAppointment}
-            appointment={appointmentSelected}
-            onOk={this.handleUpdateAppointment}
-            onCancel={this.hideEditAppointment}
-            onCancelAppointment={this.handleCancelAppointment}
-            onEditAppointment={this.handleEditAppointment}
-            cancelLoading={cancelLoading}
-            services={services}
-            specialists={specialists}
-            specialistsByService={specialistsByService}
-          />
-        )}
-
-        <Modal
-          title={`Crear reservación ${currentSlots && moment(currentSlots[0]).format('lll')}`}
-          visible={newAppointment}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel}>
-              Cancelar
-            </Button>,
-            <Button key="submit" type="primary" loading={submitting} onClick={this.handleOk}>
-              { submitting ? 'Creando' : 'Crear' }
-            </Button>,
-          ]}
-        >
-          <BookingForm
-            wrappedComponentRef={this.saveFormRef}
-            services={services}
-            specialists={specialists}
-            specialistsByService={specialistsByService}
-            // {...fields}
-            // onChange={this.handleFormChange}
-            // slots={currentSlots}
-            // onOk={this.handleOk}
-            // onCancel={this.handleCancel}
-          />
-        </Modal>
-      </div>
+            onCancel={this.handleCancel}
+            footer={[
+              <Button key="back" onClick={this.handleCancel}>
+                Cancelar
+              </Button>,
+              <Button
+                key="submit"
+                type="primary"
+                loading={submitting}
+                onClick={this.handleOk}
+              >
+                {submitting ? 'Creando' : 'Crear'}
+              </Button>,
+            ]}
+          >
+            <BookingForm
+              wrappedComponentRef={this.saveFormRef}
+              services={services}
+              specialists={specialists}
+              specialistsByService={specialistsByService}
+              // {...fields}
+              // onChange={this.handleFormChange}
+              // slots={currentSlots}
+              // onOk={this.handleOk}
+              // onCancel={this.handleCancel}
+            />
+          </Modal>
+        </div>
+      </Layout>
     )
   }
 }

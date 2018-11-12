@@ -237,6 +237,24 @@ export function getReports(periodicity, ok, error) {
 }
 
 
+// Account Module
+export function updatePassword(params = {}) {
+  return axios(getFetchInit(
+    '/account/update_password',
+    'PATCH',
+    { user: params },
+  ))
+}
+
+export function updateEmail(email) {
+  return axios(getFetchInit(
+    '/account/update_email',
+    'PATCH',
+    { user: { email } },
+  ))
+}
+
+
 export default {
   getSuppliers,
   getClients,

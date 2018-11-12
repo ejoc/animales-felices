@@ -6,6 +6,8 @@ import InvoiceApp from '../bundles/Invoice/startup/InvoiceApp'
 
 import PurchaseInvoiceApp from '../bundles/PurchaseInvoice/startup/PurchaseInvoiceApp'
 
+import AccountApp from '../bundles/Account/startup/AccountApp'
+
 import ReportApp from '../bundles/Report/startup/ReportApp'
 
 ReactOnRails.register({
@@ -13,4 +15,5 @@ ReactOnRails.register({
   InvoiceApp,
   PurchaseInvoiceApp,
   ReportApp,
+  AccountApp,
 })
