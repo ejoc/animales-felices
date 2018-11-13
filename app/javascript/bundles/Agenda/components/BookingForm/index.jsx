@@ -2,7 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Select } from 'antd'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faUser, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import {
+  faUsers,
+  faUser,
+  faCalendarCheck,
+} from '@fortawesome/free-solid-svg-icons'
 
 import ClientInput from './ClientInput'
 
@@ -22,13 +26,22 @@ const formItemLayout = {
 }
 
 class FormModal extends React.Component {
-  handleServiceChange = (service) => {
+  handleServiceChange = service => {
     const { form, services } = this.props
     const serviceObject = services.find(s => s.id === service)
     const { attributes } = serviceObject
     form.setFieldsValue({
       specialist: attributes.specialists[0],
     })
+  }
+
+  checkClient = (rule, value, cb) => {
+    console.log(value)
+    if (!value.name.length) {
+      cb('Por favor digite el nombre del cliente')
+      return
+    }
+    cb()
   }
 
   render() {
@@ -48,80 +61,86 @@ class FormModal extends React.Component {
       specialistsIds = serviceSelected.attributes.specialists
     }
 
-    const specialistsByService = specialists
-      .filter(s => specialistsIds.includes(String(s.id)))
+    const specialistsByService = specialists.filter(s =>
+      specialistsIds.includes(String(s.id))
+    )
 
     return (
       <Form>
         <FormItem
-          label={(
+          label={
             <span>
               Servicio &nbsp;
               <FontAwesomeIcon icon={faCalendarCheck} />
             </span>
-          )}
+          }
           {...formItemLayout}
         >
           {getFieldDecorator('service', {
             initialValue: serviceInitial,
-            rules: [{ required: true, message: 'Por favor seleccione el servicio!' }],
+            rules: [
+              { required: true, message: 'Por favor seleccione el servicio!' },
+            ],
           })(
             <Select onChange={this.handleServiceChange}>
               {services.map(service => (
-                <Option
-                  key={service.id}
-                  value={service.id}
-                >
+                <Option key={service.id} value={service.id}>
                   {service.attributes.name}
                 </Option>
               ))}
-            </Select>,
+            </Select>
           )}
           {serviceSelected && (
             <span>
-              {`Duración del servicio: ${serviceSelected.attributes.durationMin} minutos`}
+              {`Duración del servicio: ${
+                serviceSelected.attributes.durationMin
+              } minutos`}
             </span>
           )}
         </FormItem>
 
         {/* {getFieldDecorator('serviceDurationMin', { hidde: true })} */}
         <FormItem
-          label={(
+          label={
             <span>
               Especialista &nbsp;
               <FontAwesomeIcon icon={faUsers} />
             </span>
-          )}
+          }
           {...formItemLayout}
         >
           {getFieldDecorator('specialist', {
-            initialValue: (specialistsByService[0] && specialistsByService[0].id) || '',
-            rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
+            initialValue:
+              (specialistsByService[0] && specialistsByService[0].id) || '',
+            rules: [
+              {
+                required: true,
+                message: 'Por favor seleccione el especialista!',
+              },
+            ],
           })(
             <Select>
               {specialistsByService.map(s => (
-                <Option
-                  key={s.id}
-                  value={s.id}
-                >
+                <Option key={s.id} value={s.id}>
                   {s.attributes.name}
                 </Option>
               ))}
-            </Select>,
+            </Select>
           )}
         </FormItem>
 
         <FormItem
-          label={(
+          label={
             <span>
               Cliente &nbsp;
               <FontAwesomeIcon icon={faUser} />
-            </span>)}
+            </span>
+          }
           {...formItemLayout}
         >
           {getFieldDecorator('clientFields', {
             initialValue: { name: '', phone: '', email: '' },
-            rules: [{ required: true, message: 'Por favor digite el nombre del cliente' }],
+            rules: [{ validator: this.checkClient }],
           })(<ClientInput placeholder="input search text" />)}
         </FormItem>
       </Form>

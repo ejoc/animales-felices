@@ -357,7 +357,7 @@ class AgendaApp extends Component {
           }
         })
       },
-      error => console.error(error)
+      error => console.warn(error)
     )
   }
 

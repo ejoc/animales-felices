@@ -80,6 +80,11 @@ class AppointmentsController < ApplicationController
     render json: report
   end
 
+  def other_report
+    report = Appointment.other_report
+    render json: report
+  end
+
   private
     def set_appointment
       @appointment = Appointment.find(params[:id])

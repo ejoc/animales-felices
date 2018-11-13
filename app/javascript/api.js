@@ -192,17 +192,14 @@ export function getStockProducts(searchTerm, ok, error) {
   )
 }
 
-export function getClients(searchTerm, ok, error) {
+export function getClients(searchTerm) {
   const obj = {
     search: searchTerm,
     // page,
   }
   const querystring = objectToQueryString(obj)
 
-  axios.get(`/clients?${querystring}`).then(
-    ({ data }) => ok(data),
-    err => error(err),
-  )
+  return axios.get(`/clients?${querystring}`)
 }
 
 export function getSuppliers(searchTerm, ok, error) {
@@ -230,6 +227,14 @@ export function getClientByCode(cedula) {
 
 export function getReports(periodicity, ok, error) {
   axios.get(`/appointments/reports?periodicity=${periodicity}`)
+    .then(
+      ({ data }) => ok(data),
+      err => error(err)
+    )
+}
+
+export function getServiceReport(ok, error) {
+  axios.get(`/appointments/other_report`)
     .then(
       ({ data }) => ok(data),
       err => error(err)

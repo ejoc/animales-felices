@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from '../../../shared/components/Layout'
 import Bar from '../components/Bar'
+import LineChart from '../components/LineChart'
 import MenuChart from '../components/MenuChart'
 
 class ReportApp extends React.Component {
@@ -22,7 +23,8 @@ class ReportApp extends React.Component {
           periodicity={periodicity}
           onPeriodicityChange={this.handlePeriodicityChange}
         />
-        <Bar periodicity={periodicity} data={monthly} />
+        <Bar periodicity={periodicity} />
+        <LineChart />
       </Layout>
     )
   }

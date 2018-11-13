@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Input } from 'antd'
-import { getClients } from '../../../../api'
+// import { getClients } from '../../../../api'
 // import ClientSelect from './ClientSelect'
-import AsyncSelect from '../AsyncSelect'
+// import AsyncSelect from '../AsyncSelect'
 
 class ClientInput extends React.Component {
   constructor(props) {
@@ -16,46 +16,41 @@ class ClientInput extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component.
     if ('value' in nextProps) {
-      const { value } = nextProps
-      this.setState(value)
+      return {
+        ...(nextProps.value || {}),
+      }
     }
+    return null
   }
 
-  getValues = (input) => {
-    if (!input || input.length < 3) {
-      return Promise.resolve([])
-    }
-    return getClients(input)
-      .then(response => response.data)
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   // Should be a controlled component.
+  //   if ('value' in nextProps) {
+  //     const { value } = nextProps
+  //     this.setState(value)
+  //   }
+  // }
 
-  handleNameChange = (name) => {
+  // getValues = input => {
+  //   if (!input || input.length < 3) {
+  //     return Promise.resolve([])
+  //   }
+  //   return getClients(input).then(response => response.data)
+  // }
+
+  handleInputChange = e => {
+    const { name, value } = e.target
+    const input = { [name]: value }
     if (!('value' in this.props)) {
-      this.setState({ name })
+      this.setState(input)
     }
-    this.triggerChange({ name })
+    this.triggerChange(input)
   }
 
-  handleEmailChange = (e) => {
-    const email = e.target.value
-    if (!('value' in this.props)) {
-      this.setState({ email })
-    }
-    this.triggerChange({ email })
-  }
-
-  handlePhoneChange = (e) => {
-    const phone = e.target.value
-    if (!('value' in this.props)) {
-      this.setState({ phone })
-    }
-    this.triggerChange({ phone })
-  }
-
-  triggerChange = (changedValue) => {
+  triggerChange = changedValue => {
     // Should provide an event to pass value to Form.
     const { onChange } = this.props
     if (onChange) {
@@ -68,27 +63,37 @@ class ClientInput extends React.Component {
 
     return (
       <React.Fragment>
-        <AsyncSelect
+        {/* <AsyncSelect
           placeholder="Nombre"
           value={name}
           onChange={this.handleNameChange}
           loadOptions={this.getValues}
           valueKey="name"
           labelKey="name"
+        /> */}
+
+        <Input
+          type="text"
+          name="name"
+          value={name}
+          placeholder="Nombre"
+          onChange={this.handleInputChange}
         />
 
         <Input
           type="text"
+          name="email"
           value={email}
           placeholder="Email"
-          onChange={this.handleEmailChange}
+          onChange={this.handleInputChange}
         />
 
         <Input
           type="text"
+          name="phone"
           placeholder="Telefono"
           value={phone}
-          onChange={this.handlePhoneChange}
+          onChange={this.handleInputChange}
         />
       </React.Fragment>
     )

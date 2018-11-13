@@ -24,6 +24,8 @@ class Appointment < ApplicationRecord
         count(*) AS counter
       FROM "appointments"
       WHERE start_time > date_trunc('#{periodicity}', current_date)
+      AND end_time <= current_date
+      AND canceled = false
       GROUP BY "appointments"."specialist_id"
       ORDER BY counter DESC
     )
@@ -51,7 +53,29 @@ class Appointment < ApplicationRecord
   # WHERE start_time > date_trunc('month', NOW() - interval '12 month')
   # GROUP BY mon, yyyy
   # ORDER BY yyyymm
-  def other_report
+  def self.other_report
+    query = <<-END_SQL
+    SELECT
+      to_char(start_time, 'MM') as mon,
+      extract(year from start_time) as yyyy,
+      (extract(year from start_time) || '-' || to_char(start_time, 'MM')) as yyyymm,
+      items.name,
+      SUM(items.price)
+    FROM appointments
+    INNER JOIN services ON services.id = appointments.service_id
+    INNER JOIN "items" ON "items"."actable_id" = "services"."id" AND "items"."actable_type" = 'Service'
+    WHERE start_time > date_trunc('month', NOW() - interval '12 month')
+    AND end_time <= current_date
+    AND canceled = false
+    GROUP BY mon, yyyy, items.name
+    ORDER BY yyyymm
+    END_SQL
+
+    res = connection.execute(query)
+    res.group_by{|h| h["yyyymm"]}.map do |k, v|
+      rr = v.map{|value| {value["name"] => value["sum"]}}.reduce(Hash.new, :merge)
+      {yyyymm: k}.merge(rr)
+    end
   end
 
   private

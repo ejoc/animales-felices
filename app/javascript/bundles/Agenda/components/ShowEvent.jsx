@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
-import {
-  Modal,
-  Button,
-  Row,
-  Col,
-  Spin,
-  Popconfirm,
-} from 'antd'
+import { Modal, Button, Row, Col, Spin, Popconfirm } from 'antd'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
@@ -56,21 +49,21 @@ class ShowEvent extends Component {
     // this._source = axios.CancelToken.source()
     const { appointmentId } = this.props
     // this.setState({ loading: true })
-    getAppointment(appointmentId)
-      .then(
-        ({ data }) => {
-          if (!this._mounted) {
-            return
-          }
-          this.setState({
-            event: data.data.attributes,
-            loading: false,
-          })
-        },
-        (error) => {
-          console.log(error)
-        },
-      )
+    getAppointment(appointmentId).then(
+      ({ data }) => {
+        if (!this._mounted) {
+          return
+        }
+        console.log('asdasd', data)
+        this.setState({
+          event: data.data.attributes,
+          loading: false,
+        })
+      },
+      error => {
+        console.log(error)
+      }
+    )
   }
 
   render() {
@@ -125,99 +118,71 @@ class ShowEvent extends Component {
             <Row gutter={18}>
               <Col span={8}>
                 <p style={{ textAlign: 'right' }}>
-                  <strong>
-                    Servicio:
-                  </strong>
+                  <strong>Servicio:</strong>
                 </p>
               </Col>
               <Col span={16}>
-                <p>
-                  {this.state.event.service.name}
-                </p>
+                <p>{this.state.event.service.name}</p>
               </Col>
             </Row>
             <Row gutter={18}>
               <Col span={8}>
                 <p style={{ textAlign: 'right' }}>
-                  <strong>
-                    Duración servicio:
-                  </strong>
+                  <strong>Duración servicio:</strong>
                 </p>
               </Col>
               <Col span={16}>
-                <p>
-                  {this.state.event.service.duration_min} minutos
-                </p>
+                <p>{this.state.event.service.duration_min} minutos</p>
               </Col>
             </Row>
             <Row gutter={18}>
               <Col span={8}>
                 <p style={{ textAlign: 'right' }}>
-                  <strong>
-                    Personal:
-                  </strong>
+                  <strong>Personal:</strong>
                 </p>
               </Col>
               <Col span={16}>
-                <p>
-                  {this.state.event.specialist.name}
-                </p>
+                <p>{this.state.event.specialist.name}</p>
               </Col>
             </Row>
             <Row gutter={18}>
               <Col span={8}>
                 <p style={{ textAlign: 'right' }}>
-                  <strong>
-                    Horario:
-                  </strong>
+                  <strong>Horario:</strong>
                 </p>
               </Col>
               <Col span={16}>
-                <p>
-                  {moment(this.state.event.startTime).format('LLLL')}
-                </p>
+                <p>{moment(this.state.event.startTime).format('LLLL')}</p>
               </Col>
             </Row>
             <Row gutter={18}>
               <Col span={8}>
                 <p style={{ textAlign: 'right' }}>
-                  <strong>
-                    Nombre cliente:
-                  </strong>
+                  <strong>Nombre cliente:</strong>
                 </p>
               </Col>
               <Col span={16}>
-                <p>
-                  {this.state.event.clientName}
-                </p>
+                <p>{this.state.event.clientName}</p>
               </Col>
             </Row>
             <Row gutter={18}>
               <Col span={8}>
                 <p style={{ textAlign: 'right' }}>
-                  <strong>
-                    Email cliente:
-                  </strong>
+                  <strong>Email cliente:</strong>
                 </p>
               </Col>
               <Col span={16}>
-                <p>
-                  {this.state.event.clientEmail}
-                </p>
+                <p>{this.state.event.clientEmail}</p>
               </Col>
             </Row>
             <Row gutter={18}>
               <Col span={8}>
                 <p style={{ textAlign: 'right' }}>
-                  <strong>
-                    Email telefono:
-                  </strong>
+                  <strong>Email telefono:</strong>
                 </p>
               </Col>
               <Col span={16}>
-                <p>
-                  {this.state.event.clientPhone}
-                </p>
+                <p>{this.state.event.clientPhone}</p>
               </Col>
             </Row>
           </div>

@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     collection do
       get 'specialists_by_service'
       get 'reports'
+      get 'other_report'
     end
     member do
       delete 'cancel'
