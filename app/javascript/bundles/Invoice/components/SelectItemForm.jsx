@@ -21,6 +21,7 @@ const formItemLayout = {
 class SelectItem extends Component {
   state = {
     listItemVisible: false,
+    // listItemType: 'service'
   }
 
   handleListItemClose = () => {
@@ -61,7 +62,8 @@ class SelectItem extends Component {
     const { form } = this.props
     const { listItemVisible } = this.state
     const { getFieldDecorator, getFieldValue } = form
-    const { resourceType } = getFieldValue('item') || 'product'
+    const initalResourceType = 'service'
+    const { resourceType } = getFieldValue('item') || initalResourceType
     return (
       <div>
         <Form>
@@ -70,7 +72,7 @@ class SelectItem extends Component {
               initialValue: {
                 resourceId: null,
                 inputText: '',
-                resourceType: 'product',
+                resourceType: initalResourceType,
               },
               rules: [{ validator: this.checkItemId }],
             })(<SearchItemInput disabled onSearch={this.handleListItemShow} />)}

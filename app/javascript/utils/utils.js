@@ -34,7 +34,7 @@ export const getFetchInit = (url, requestMethod, body) => {
 export const objectToQueryString = (obj) => {
   const str = []
   Object.keys(obj).forEach((key) => {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+    if (obj[key] && Object.prototype.hasOwnProperty.call(obj, key)) {
       str.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
     }
   })

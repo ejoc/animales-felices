@@ -30,7 +30,10 @@ class PagesController < ApplicationController
     )
   end
 
-  def reports
+  def statistical_reports
+  end
+
+  def sales_reports
   end
 
   def account

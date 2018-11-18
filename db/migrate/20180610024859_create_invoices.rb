@@ -6,7 +6,7 @@ class CreateInvoices < ActiveRecord::Migration[5.2]
       t.float :sub_total, precision: 5, scale: 2
       t.float :total, precision: 5, scale: 2
       t.float :iva, precision: 5, scale: 2
-
+      # t.string :forma_pago
       # t.actable
       t.timestamps
     end

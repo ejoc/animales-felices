@@ -16,12 +16,13 @@ class SearchableInput extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // Should be a controlled component.
+  static getDerivedStateFromProps(nextProps) {
     if ('value' in nextProps) {
-      const { value } = nextProps
-      this.setState(value)
+      return {
+        ...(nextProps.value || {}),
+      }
     }
+    return null
   }
 
   handleSelectChange = resourceType => {
@@ -47,8 +48,8 @@ class SearchableInput extends Component {
       <span>
         <Input hidden size={size} value={resourceId} />
         <Select value={resourceType} onChange={this.handleSelectChange}>
+          <Option value="service">Servicio</Option>
           <Option value="product">Producto</Option>
-          <Option value="item">Servicio</Option>
         </Select>
         <Input
           disabled={disabled}

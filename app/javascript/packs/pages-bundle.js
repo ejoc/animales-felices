@@ -10,10 +10,13 @@ import AccountApp from '../bundles/Account/startup/AccountApp'
 
 import ReportApp from '../bundles/Report/startup/ReportApp'
 
+import SalesReportApp from '../bundles/SalesReport/startup/SalesReportApp'
+
 ReactOnRails.register({
   AgendaApp,
   InvoiceApp,
   PurchaseInvoiceApp,
   ReportApp,
+  SalesReportApp,
   AccountApp,
 })

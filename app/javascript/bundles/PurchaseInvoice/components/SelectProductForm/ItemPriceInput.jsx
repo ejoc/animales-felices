@@ -12,15 +12,24 @@ class InputPriceInput extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // Should be a controlled component.
+  static getDerivedStateFromProps(nextProps) {
     if ('value' in nextProps) {
-      const { value } = nextProps
-      this.setState(value)
+      return {
+        ...(nextProps.value || {}),
+      }
     }
+    return null
   }
 
-  handleInputChange = (quantity) => {
+  // componentWillReceiveProps(nextProps) {
+  //   // Should be a controlled component.
+  //   if ('value' in nextProps) {
+  //     const { value } = nextProps
+  //     this.setState(value)
+  //   }
+  // }
+
+  handleInputChange = quantity => {
     // const quantity = value
     if (!('value' in this.props)) {
       this.setState({ quantity })
@@ -28,7 +37,7 @@ class InputPriceInput extends Component {
     this.triggerChange({ quantity })
   }
 
-  triggerChange = (changedValue) => {
+  triggerChange = changedValue => {
     // Should provide an event to pass value to Form.
     const { onChange } = this.props
     if (onChange) {
@@ -54,7 +63,9 @@ class InputPriceInput extends Component {
         PVP:&nbsp;
         <InputNumber
           disabled
-          formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          formatter={value =>
+            `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          }
           parser={value => value.replace(/\$\s?|(,*)/g, '')}
           size={size}
           value={price}

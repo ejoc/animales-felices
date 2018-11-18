@@ -21,10 +21,9 @@ class LineChartService extends React.PureComponent {
 
   render() {
     const { data } = this.state
-    console.log('data ss', data)
     return (
       <LineChart
-        width={600}
+        width={1200}
         height={300}
         data={data}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}

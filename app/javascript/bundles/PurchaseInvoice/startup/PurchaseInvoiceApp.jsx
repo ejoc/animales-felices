@@ -226,7 +226,7 @@ class PurchaseInvoiceApp extends React.Component {
 
     return (
       <Layout {...rest} currentUser={currentUser} activeNav="ingreso-productos">
-        <div style={{ padding: '50px 120px', height: '700px' }}>
+        <div style={{ padding: '20px 120px', height: '700px' }}>
           <Card title="Ingreso de productos">
             <Form onSubmit={this.handleSubmit}>
               <Row gutter={16}>

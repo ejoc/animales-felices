@@ -78,7 +78,8 @@ Rails.application.routes.draw do
   get 'facturacion', to: "pages#invoice"
   get 'ingreso-productos/new', to: "pages#purchase_invoice"
   get 'ingreso-productos', to: "income_products#index"
-  get 'reportes', to: "pages#reports"
+  get 'reportes-estadisticos', to: "pages#statistical_reports"
+  get 'reportes-ventas', to: "pages#sales_reports"
   get 'cuenta', to: "pages#account"
 
   # get 'agenda', to: 'agenda#index'

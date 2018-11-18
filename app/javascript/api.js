@@ -153,7 +153,6 @@ export function getServices(searchTerm, ok, error) {
 
   axios.get(`/services?${querystring}`).then(
     ({ data }) => {
-      console.log(data)
       // const services = data.data.map(service => ({ ...service.attributes }))
       ok(data)
     },
@@ -239,6 +238,18 @@ export function getServiceReport(ok, error) {
       ({ data }) => ok(data),
       err => error(err)
     )
+}
+
+export function getInvoices(searchTerm, page, ok, error) {
+  const obj = {
+    search: searchTerm,
+    page,
+  }
+  const querystring = objectToQueryString(obj)
+  axios.get(`/invoices?${querystring}`).then(
+    ({ data }) => ok(data),
+    err => error(err),
+  )
 }
 
 

@@ -81,8 +81,6 @@ class PurchaseInvoiceApp extends React.Component {
         return
       }
 
-      console.log(values)
-
       const { quantity, priceUnit } = values
       const priceTotal = quantity * priceUnit
       const newItem = {
@@ -166,7 +164,6 @@ class PurchaseInvoiceApp extends React.Component {
           clientId: values.client.resourceId,
           details_attributes: items,
         }
-        console.log(fields)
         invoiceCheckIn(
           fields,
           ok => {
@@ -225,77 +222,78 @@ class PurchaseInvoiceApp extends React.Component {
 
     return (
       <Layout {...rest} currentUser={currentUser} activeNav="registro-venta">
-        <Card title="Facturar">
-          <Form onSubmit={this.handleSubmit}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <FormItem label="Cliente" {...formItemLayout}>
-                  {getFieldDecorator('client', {
-                    initialValue: { resourceId: null, inputText: '' },
-                    rules: [{ validator: this.checkResourceId }],
-                  })(
-                    <SearchableInput
-                      onSearch={this.showModalClient}
-                      onBlur={this.handleClientBlur}
-                      layout="vertical"
-                    />
-                  )}
-                </FormItem>
+        <div style={{ padding: '20px 120px', height: '700px' }}>
+          <Card title="Facturar">
+            <Form onSubmit={this.handleSubmit}>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <FormItem label="Cliente" {...formItemLayout}>
+                    {getFieldDecorator('client', {
+                      initialValue: { resourceId: null, inputText: '' },
+                      rules: [{ validator: this.checkResourceId }],
+                    })(
+                      <SearchableInput
+                        onSearch={this.showModalClient}
+                        onBlur={this.handleClientBlur}
+                        layout="vertical"
+                      />
+                    )}
+                  </FormItem>
 
-                <FormItem label="Nombre" {...formItemLayout}>
-                  {getFieldDecorator('clientName')(
-                    <Input type="text" disabled />
-                  )}
-                </FormItem>
-              </Col>
+                  <FormItem label="Nombre" {...formItemLayout}>
+                    {getFieldDecorator('clientName')(
+                      <Input type="text" disabled />
+                    )}
+                  </FormItem>
+                </Col>
 
-              <Col span={12}>
-                <FormItem label="Personal" {...formItemLayout}>
-                  {getFieldDecorator('specialistId', {
-                    initialValue: currentUser,
-                    // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
-                  })(<Input placeholder={currentUser} disabled />)}
-                </FormItem>
-              </Col>
-            </Row>
+                <Col span={12}>
+                  <FormItem label="Personal" {...formItemLayout}>
+                    {getFieldDecorator('specialistId', {
+                      initialValue: currentUser,
+                      // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                    })(<Input placeholder={currentUser} disabled />)}
+                  </FormItem>
+                </Col>
+              </Row>
 
-            <Divider />
+              <Divider />
 
-            <Row>
-              <Col span={24}>
-                <h3>
-                  Items
-                  <span style={{ float: 'right', paddingBottom: '8px' }}>
-                    <Button onClick={this.showModalItem}>Agregar Item</Button>
-                  </span>
-                </h3>
-              </Col>
-              <Col span={24}>
-                <InvoiceListItem
-                  rowKey="itemId"
-                  items={items}
-                  onItemDelete={this.handleItemDelete}
-                />
-              </Col>
-            </Row>
+              <Row>
+                <Col span={24}>
+                  <h3>
+                    Items
+                    <span style={{ float: 'right', paddingBottom: '8px' }}>
+                      <Button onClick={this.showModalItem}>Agregar Item</Button>
+                    </span>
+                  </h3>
+                </Col>
+                <Col span={24}>
+                  <InvoiceListItem
+                    rowKey="itemId"
+                    items={items}
+                    onItemDelete={this.handleItemDelete}
+                  />
+                </Col>
+              </Row>
 
-            <Row>
-              <Col offset={18}>
-                <InvoiceFooter
-                  subtotal={subTotal.toFixed(2)}
-                  total={total.toFixed(2)}
-                  iva={iva.toFixed(2)}
-                />
-              </Col>
-            </Row>
-            <div style={{ float: 'right', paddingTop: '30px' }}>
-              <Button type="primary" htmlType="submit">
-                Grabar
-              </Button>
-            </div>
-          </Form>
-        </Card>
-
+              <Row>
+                <Col offset={18}>
+                  <InvoiceFooter
+                    subtotal={subTotal.toFixed(2)}
+                    total={total.toFixed(2)}
+                    iva={iva.toFixed(2)}
+                  />
+                </Col>
+              </Row>
+              <div style={{ float: 'right', paddingTop: '30px' }}>
+                <Button type="primary" htmlType="submit">
+                  Grabar
+                </Button>
+              </div>
+            </Form>
+          </Card>
+        </div>
         <Modal
           title="Buscar Clientes"
           visible={showClients}

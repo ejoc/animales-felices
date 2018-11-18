@@ -17,7 +17,7 @@ class CreateProducts < ActiveRecord::Migration[5.2]
       # t.decimal :price, precision: 5, scale: 2
       # t.timestamps
       t.references :unit_type, foreign_key: true
-
+      # t.string :marca
       t.references :product_category, foreign_key: true
     end
   end

@@ -4,6 +4,25 @@ class InvoicesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
+    if search_params
+      search_term = search_params.to_s.strip
+      @invoices = Invoice.joins(specialist: :person, client: :person)
+        .select('people_clients.name AS client', 'people.name as specialist', 'invoices.*')
+        .where('people.name ILIKE ? OR people_clients.name ILIKE ?', "%#{search_term}%", "%#{search_term}%")
+        .page(params[:page]).per(records_per_page)
+    else
+      @invoices = Invoice.joins(specialist: :person, client: :person)
+        .select('people_clients.name AS client', 'people.name as specialist', 'invoices.*')
+        .page(params[:page]).per(records_per_page)
+    end
+    render json: {
+      meta: {
+        totalCount: @invoices.total_count,
+        perPage: records_per_page,
+        currentPage: @invoices.current_page,
+      },
+      invoices: @invoices
+    }
   end
 
   def create
