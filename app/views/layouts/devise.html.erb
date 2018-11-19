@@ -10,9 +10,8 @@
   <%= csrf_meta_tags %>
 
   <!-- Include style per-controller - vendor plugins -->
-  <%= stylesheet_link_tag params[:controller] if ::Rails.application.assets.find_asset("#{params[:controller]}.css") %>
-
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'devise/sessions' %>
   <%# render "layouts/stylesheet" %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 </head>

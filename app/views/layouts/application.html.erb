@@ -9,8 +9,8 @@
   </title>
   <%= csrf_meta_tags %>
 
-  <%= stylesheet_link_tag "#{params[:controller]}/#{params[:action]}" if ::Rails.application.assets.find_asset("#{params[:controller]}/#{params[:action]}.css") %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag "pages/agenda" if ('pages/agenda' == "#{params[:controller]}/#{params[:action]}") %>
   <%# render "layouts/stylesheet" %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   <%= javascript_pack_tag "#{controller_name}-bundle" %>
