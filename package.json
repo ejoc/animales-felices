@@ -11,6 +11,8 @@
     "babel-plugin-import": "^1.11.0",
     "babel-preset-react": "^6.24.1",
     "humps": "^2.0.1",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "normalizr": "^3.2.4",
@@ -40,8 +42,6 @@
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.10.0",
-    "less": "2.7.3",
-    "less-loader": "4.0.5",
     "webpack-dev-server": "2.11.2"
   }
 }
