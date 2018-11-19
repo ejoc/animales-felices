@@ -85,5 +85,3 @@ test:
 production:
   <<: *default
   database: animales-felices_production
-  username: animales-felices
-  password: <%= ENV['ANIMALES-FELICES_DATABASE_PASSWORD'] %>
