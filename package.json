@@ -8,6 +8,7 @@
     "@rails/webpacker": "3.5",
     "antd": "^3.6.6",
     "axios": "^0.18.0",
+    "babel-plugin-import": "^1.11.0",
     "babel-preset-react": "^6.24.1",
     "humps": "^2.0.1",
     "lodash": "^4.17.10",
@@ -32,7 +33,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
-    "babel-plugin-import": "^1.8.0",
     "babel-plugin-lodash": "^3.3.4",
     "eslint": "^5.2.0",
     "eslint-config-airbnb": "^17.0.0",
