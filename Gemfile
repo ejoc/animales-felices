@@ -77,3 +77,6 @@ gem 'active_link_to'
 gem 'fast_jsonapi'
 
 gem 'kaminari'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+

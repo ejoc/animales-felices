@@ -28,7 +28,7 @@ function withSubscription(selectList) {
                 loading: false,
               })
             },
-            err => console.log(err),
+            err => console.warn(err),
           )
         })
       }

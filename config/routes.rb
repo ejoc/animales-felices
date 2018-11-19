@@ -54,7 +54,7 @@ Rails.application.routes.draw do
 
   get 'appointments/:day/:month/:year', to: 'appointments#index'
 
-  resources :invoices, only: [:index, :create] do
+  resources :invoices, only: [:index, :show, :create] do
     member { delete 'cancel' }
   end
 

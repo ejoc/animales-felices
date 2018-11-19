@@ -1,0 +1,123 @@
+<div class="invoice-box">
+  <table cellpadding="0" cellspacing="0">
+    <tr class="top">
+      <td colspan="4">
+        <table>
+          <tr>
+            <td class="title">
+              <%= wicked_pdf_image_tag('animalesfelices', :class => 'logo') %>
+            </td>
+            <td></td><td></td>
+            <td>
+              Factura #: <%= @invoice.no %><br>
+              Fecha: <%= @invoice.created_at.to_formatted_s(:long) %><br>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    
+    <tr class="information">
+      <td colspan="4">
+        <table>
+          <tr>
+            <td>
+              <strong>RUC: 11002023003</strong><br>
+              <strong>Animales felices</strong><br>
+              Guayas, Guayaquil<br>
+              Mapasingue calle 12A
+            </td>
+            <td></td><td></td>
+            <td>
+              <strong>Datos del cliente</strong><br>
+              <strong>Nombre:</strong>    <%= @invoice.client.name %><br>
+              <strong>Dirección:</strong> <%= @invoice.client.address %><br>
+              <strong>Ruc/C.I:</strong>   <%= @invoice.client.cedula %><br>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    
+    <%# <tr class="heading">
+      <td>
+        Payment Method
+      </td>
+      
+      <td>
+        Check #
+      </td>
+    </tr>
+    
+    <tr class="details">
+      <td>
+        Check
+      </td>
+      
+      <td>
+        1000
+      </td>
+    </tr> %>
+    
+    <tr class="heading">
+      <td>
+        Item
+      </td>
+
+      <td>
+        Cantidad
+      </td>
+      
+      <td>
+        Precio unit
+      </td>
+
+      <td>
+        Precio total
+      </td>
+    </tr>
+
+    <% @invoice.details.each do |detail| %>
+      <tr class="item">
+        <td>
+          <%= detail.item.name %>
+        </td>
+        
+        <td>
+          <%= detail.quantity %>
+        </td>
+
+        <td>
+          <%= detail.price_unit %>
+        </td>
+
+        <td>
+          <%= detail.price_total %>
+        </td>
+      </tr>
+      <%= %>
+    <% end %>
+    
+    <tr class="total">
+      <td></td><td></td><td></td>
+      
+      <td colspan="4">
+          Subtotal: $<%= @invoice.sub_total %>
+      </td>
+    </tr>
+    <tr class="total">
+      <td></td><td></td><td></td>
+      
+      <td colspan="4">
+          Iva: $<%= @invoice.iva %>
+      </td>
+    </tr>
+    <tr class="total">
+      <td></td><td></td><td></td>
+      
+      <td colspan="4">
+          Total: $<%= @invoice.total %>
+      </td>
+    </tr>
+  </table>
+</div>

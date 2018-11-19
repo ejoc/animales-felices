@@ -191,14 +191,17 @@ export function getStockProducts(searchTerm, ok, error) {
   )
 }
 
-export function getClients(searchTerm) {
+export function getClients(searchTerm, ok, error) {
   const obj = {
     search: searchTerm,
     // page,
   }
   const querystring = objectToQueryString(obj)
 
-  return axios.get(`/clients?${querystring}`)
+  axios.get(`/clients?${querystring}`).then(
+    ({ data }) => ok(data),
+    err => error(err)
+  )
 }
 
 export function getSuppliers(searchTerm, ok, error) {

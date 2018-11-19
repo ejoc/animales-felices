@@ -1,11 +1,12 @@
 class InvoicesController < ApplicationController
-
+  before_action :set_invoice, only: [:show]
   # desabled on production
   skip_before_action :verify_authenticity_token
-
+  layout 'basic'
   def index
     if search_params
       search_term = search_params.to_s.strip
+      # .order('created_at DESC')
       @invoices = Invoice.joins(specialist: :person, client: :person)
         .select('people_clients.name AS client', 'people.name as specialist', 'invoices.*')
         .where('people.name ILIKE ? OR people_clients.name ILIKE ?', "%#{search_term}%", "%#{search_term}%")
@@ -25,6 +26,15 @@ class InvoicesController < ApplicationController
     }
   end
 
+  def show
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: "Your_filename" #, disposition: 'attachment'
+      end
+    end
+  end
+
   def create
     @invoice = Invoice.new(invoice_params)
     @invoice.specialist_id = Specialist.first.id
@@ -40,12 +50,16 @@ class InvoicesController < ApplicationController
 
     def invoice_params
       params.require(:invoice).permit(
+        :no,
         :client_id,
         # :specialist_id,
         details_attributes: [:item_id, :quantity, :price_unit, :price_total],
       )
     end
 
+    def set_invoice
+      @invoice = Invoice.find(params[:id])
+    end
 
     def check_in
       ActiveRecord::Base.transaction do

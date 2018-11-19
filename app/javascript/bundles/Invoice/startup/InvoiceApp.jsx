@@ -35,7 +35,7 @@ const columns = [
     key: 'name',
   },
   {
-    title: 'Address',
+    title: 'Dirección',
     dataIndex: 'address',
     key: 'address',
   },
@@ -161,9 +161,12 @@ class PurchaseInvoiceApp extends React.Component {
     form.validateFields((err, values) => {
       if (!err) {
         const fields = {
+          no: values.no,
           clientId: values.client.resourceId,
           details_attributes: items,
         }
+
+        console.log(fields)
         invoiceCheckIn(
           fields,
           ok => {
@@ -227,6 +230,20 @@ class PurchaseInvoiceApp extends React.Component {
             <Form onSubmit={this.handleSubmit}>
               <Row gutter={16}>
                 <Col span={12}>
+                  <FormItem label="Factura #" {...formItemLayout}>
+                    {getFieldDecorator('no', {
+                      initialValue: '',
+                      // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                    })(<Input placeholder="Numero de factura" />)}
+                  </FormItem>
+                  <FormItem label="Personal" {...formItemLayout}>
+                    {getFieldDecorator('specialistId', {
+                      initialValue: currentUser,
+                      // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                    })(<Input placeholder={currentUser} disabled />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
                   <FormItem label="Cliente" {...formItemLayout}>
                     {getFieldDecorator('client', {
                       initialValue: { resourceId: null, inputText: '' },
@@ -244,15 +261,6 @@ class PurchaseInvoiceApp extends React.Component {
                     {getFieldDecorator('clientName')(
                       <Input type="text" disabled />
                     )}
-                  </FormItem>
-                </Col>
-
-                <Col span={12}>
-                  <FormItem label="Personal" {...formItemLayout}>
-                    {getFieldDecorator('specialistId', {
-                      initialValue: currentUser,
-                      // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
-                    })(<Input placeholder={currentUser} disabled />)}
                   </FormItem>
                 </Col>
               </Row>

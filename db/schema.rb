@@ -78,19 +78,25 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   end
 
   create_table "invoices", force: :cascade do |t|
+    t.string "no"
     t.bigint "client_id"
     t.bigint "specialist_id"
+    t.bigint "payment_method_id"
     t.float "sub_total"
     t.float "total"
     t.float "iva"
+    t.boolean "canceled", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_invoices_on_client_id"
+    t.index ["no"], name: "index_invoices_on_no", unique: true
+    t.index ["payment_method_id"], name: "index_invoices_on_payment_method_id"
     t.index ["specialist_id"], name: "index_invoices_on_specialist_id"
   end
 
   create_table "items", force: :cascade do |t|
     t.string "name"
+    t.string "brand"
     t.string "description"
     t.float "price"
     t.string "actable_type"
@@ -98,6 +104,12 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["actable_type", "actable_id"], name: "index_items_on_actable_type_and_actable_id"
+  end
+
+  create_table "payment_methods", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "people", force: :cascade do |t|
@@ -193,6 +205,7 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   add_foreign_key "invoice_details", "invoices"
   add_foreign_key "invoice_details", "items"
   add_foreign_key "invoices", "clients"
+  add_foreign_key "invoices", "payment_methods"
   add_foreign_key "invoices", "specialists"
   add_foreign_key "products", "product_categories"
   add_foreign_key "products", "unit_types"

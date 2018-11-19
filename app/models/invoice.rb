@@ -11,7 +11,7 @@ class Invoice < ApplicationRecord
   private
     def calculate_total
       self.sub_total = self.details.map{|i| i.price_total }.sum()
-      self.iva = Rails.configuration.iva
-      self.total = self.sub_total + (self.sub_total * self.iva)
+      self.iva = self.sub_total * Rails.configuration.iva
+      self.total = self.sub_total + self.iva
     end
 end

@@ -1,7 +1,7 @@
 import React from 'react'
-import { Table, Pagination } from 'antd'
-import { getInvoices } from '../../../api'
+import { Table, Pagination, Divider } from 'antd'
 import moment from 'moment'
+import { getInvoices } from '../../../api'
 
 const columns = [
   {
@@ -26,6 +26,17 @@ const columns = [
     title: 'Total',
     dataIndex: 'total',
     key: 'total',
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (text, record) => (
+      <span>
+        <a href={`/invoices/${record.id}.pdf`}>PDF</a>
+        <Divider type="vertical" />
+        <a href={`/invoices/${record.id}.pdf`}>XML</a>
+      </span>
+    ),
   },
 ]
 
@@ -74,6 +85,7 @@ class ResultSearch extends React.PureComponent {
           dataSource={data}
           pagination={false}
         />
+        <br />
         <Pagination
           pageSize={meta.perPage || 0}
           total={meta.totalCount || 0}

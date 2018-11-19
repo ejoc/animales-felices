@@ -11,10 +11,12 @@ class ClientDashboard < Administrate::BaseDashboard
     # actable: Field::Polymorphic,
     # person: Field::HasOne,
     id: Field::Number,
+    cedula: Field::String, 
     name: Field::String,
+    email: Field::String,
     address: Field::String,
     phone: Field::String,
-    gender: GenderField,
+    # gender: GenderField,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -26,10 +28,12 @@ class ClientDashboard < Administrate::BaseDashboard
     # :actable,
     # :person,
     :id,
+    :cedula,
     :name,
+    :email,
     :address,
     :phone,
-    :gender,
+    # :gender,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -38,10 +42,12 @@ class ClientDashboard < Administrate::BaseDashboard
     # :actable,
     # :person,
     :id,
+    :cedula,
     :name,
+    :email,
     :address,
     :phone,
-    :gender,
+    # :gender,
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -50,10 +56,12 @@ class ClientDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = [
     # :actable,
     # :person,
+    :cedula,
     :name,
+    :email,
     :address,
     :phone,
-    :gender,
+    # :gender,
   ].freeze
 
   # Overwrite this method to customize how clients are displayed

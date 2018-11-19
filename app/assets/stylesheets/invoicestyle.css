@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>
-    <%= content_for(:title) %> - <%= Rails.application.class.parent_name.titlecase %>
-  </title>
-  <%= csrf_meta_tags %>
-
-  <%= stylesheet_link_tag "#{params[:controller]}/#{params[:action]}" if ::Rails.application.assets.find_asset("#{params[:controller]}/#{params[:action]}.css") %>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%# render "layouts/stylesheet" %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  <style>
-    body {
+body {
   font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
   text-align: center;
   color: #777;
@@ -61,7 +46,7 @@ body a {
   vertical-align: top;
 }
 
-.invoice-box table tr td:nth-child(2) {
+.invoice-box table tr td:nth-child(4) {
   text-align: right;
 }
 
@@ -97,9 +82,10 @@ body a {
   border-bottom: none;
 }
 
-.invoice-box table tr.total td:nth-child(2) {
+.invoice-box table tr.total td:nth-child(4) {
   border-top: 2px solid #eee;
   font-weight: bold;
+  text-align: right;
 }
 
 .logo {
@@ -108,7 +94,7 @@ body a {
   max-height: 40px;
 }
 
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
   .invoice-box table tr.top table td {
     width: 100%;
     display: block;
@@ -120,18 +106,4 @@ body a {
     display: block;
     text-align: center;
   }
-}
-
-  </style>
-</head>
-<body>
-  <%= render "layouts/topnavbar" %>
-  <div class="app-container">
-    <main class="main-content" role="main">
-      <%= render "layouts/flashes" -%>
-      <%= yield %>
-    </main>
-  </div>
-
-</body>
-</html>
+} */
