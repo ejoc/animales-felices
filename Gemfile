@@ -81,3 +81,4 @@ gem 'kaminari'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
+# gem 'devise_invitable'

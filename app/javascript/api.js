@@ -137,7 +137,7 @@ export function getProducts(searchTerm, ok, error) {
 
   axios.get(`/products?${querystring}`).then(
     ({ data }) => {
-      const products = data.data.map(product => ({ ...product.attributes }))
+      const products = data.data.map(product => ({ ...product.attributes, type: product.type }))
       ok(products)
     },
     err => error(err),
@@ -151,10 +151,18 @@ export function getServices(searchTerm, ok, error) {
   }
   const querystring = objectToQueryString(obj)
 
+  // axios.get(`/services?${querystring}`).then(
+  //   ({ data }) => {
+  //     // const services = data.data.map(service => ({ ...service.attributes }))
+  //     ok(data)
+  //   },
+  //   err => error(err),
+  // )
+
   axios.get(`/services?${querystring}`).then(
     ({ data }) => {
-      // const services = data.data.map(service => ({ ...service.attributes }))
-      ok(data)
+      const services = data.data.map(service => ({ ...service.attributes, type: service.type }))
+      ok(services)
     },
     err => error(err),
   )

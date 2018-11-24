@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  Table,
-  Input,
-  Divider,
-} from 'antd'
+import { Table, Input, Divider } from 'antd'
 import PropTypes from 'prop-types'
 
 const { Search } = Input
@@ -31,6 +27,7 @@ const TableList = ({
   data,
   loading,
   columns,
+  rowKey,
 }) => (
   <React.Fragment>
     <Search
@@ -45,13 +42,12 @@ const TableList = ({
       columns={columns}
       loading={loading}
       size="small"
-      rowKey="id"
+      rowKey={rowKey}
       rowClassName={() => 'rowClickable'}
       onRow={row => ({
         onClick: () => onRowClick(row),
       })}
     />
-
   </React.Fragment>
 )
 
@@ -61,10 +57,12 @@ TableList.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   loading: PropTypes.bool,
   columns: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  rowKey: PropTypes.string.isRequired,
 }
 
 TableList.defaultProps = {
   loading: false,
+  rowKey: 'id',
 }
 
 export default TableList

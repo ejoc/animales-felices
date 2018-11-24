@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_24_024922) do
+ActiveRecord::Schema.define(version: 2018_11_20_035350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,7 +96,6 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
-    t.string "brand"
     t.string "description"
     t.float "price"
     t.string "actable_type"
@@ -131,6 +130,7 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
   end
 
   create_table "products", force: :cascade do |t|
+    t.string "brand"
     t.bigint "unit_type_id"
     t.bigint "product_category_id"
     t.index ["product_category_id"], name: "index_products_on_product_category_id"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2018_09_24_024922) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "admin", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

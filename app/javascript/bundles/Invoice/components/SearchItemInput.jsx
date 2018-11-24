@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Input, Button, Select } from 'antd'
+import { Input, InputNumber, Button, Select } from 'antd'
 
 const { Option } = Select
 
-class SearchableInput extends Component {
+class SearchableItemInput extends Component {
   constructor(props) {
     super(props)
 
@@ -13,6 +13,8 @@ class SearchableInput extends Component {
       resourceId: value.resourceId || '',
       resourceType: value.resourceType || '',
       inputText: value.inputText || '',
+      stock: value.stock || '',
+      price: value.price || '',
     }
   }
 
@@ -27,9 +29,14 @@ class SearchableInput extends Component {
 
   handleSelectChange = resourceType => {
     if (!('value' in this.props)) {
-      this.setState({ resourceType, resourceId: '', inputText: '' })
+      this.setState({ resourceType, resourceId: '', inputText: '', price: '' })
     }
-    this.triggerChange({ resourceType, resourceId: '', inputText: '' })
+    this.triggerChange({
+      resourceType,
+      resourceId: '',
+      inputText: '',
+      price: '',
+    })
   }
 
   triggerChange = changedValue => {
@@ -43,10 +50,11 @@ class SearchableInput extends Component {
   render() {
     // const { layout } = this.props
     const { size, onSearch, disabled, onBlur } = this.props
-    const { resourceId, resourceType, inputText } = this.state
+    const { resourceId, resourceType, inputText, stock, price } = this.state
     return (
       <span>
         <Input hidden size={size} value={resourceId} />
+        <Input hidden size={size} value={stock} />
         <Select value={resourceType} onChange={this.handleSelectChange}>
           <Option value="service">Servicio</Option>
           <Option value="product">Producto</Option>
@@ -61,12 +69,22 @@ class SearchableInput extends Component {
           style={{ width: '86%', marginRight: '3%' }}
         />
         <Button shape="circle" icon="search" onClick={onSearch} />
+        <InputNumber
+          placeholder="Precio"
+          size={size}
+          value={price}
+          disabled
+          formatter={value =>
+            `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          }
+          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+        />
       </span>
     )
   }
 }
 
-SearchableInput.propTypes = {
+SearchableItemInput.propTypes = {
   disabled: PropTypes.bool,
   onSearch: PropTypes.func.isRequired,
   onChange: PropTypes.func,
@@ -75,11 +93,11 @@ SearchableInput.propTypes = {
   value: PropTypes.shape().isRequired,
 }
 
-SearchableInput.defaultProps = {
+SearchableItemInput.defaultProps = {
   disabled: false,
   size: null,
   onChange: () => {},
   onBlur: () => {},
 }
 
-export default SearchableInput
+export default SearchableItemInput

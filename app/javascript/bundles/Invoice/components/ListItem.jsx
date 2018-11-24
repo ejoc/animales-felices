@@ -6,8 +6,8 @@ import TableList from '../../../shared/components/SearchableTable'
 const productsColumns = [
   {
     title: 'Codigo',
-    dataIndex: 'id',
-    key: 'id',
+    dataIndex: 'itemId',
+    key: 'itemId',
   },
   {
     title: 'Nombre',
@@ -34,8 +34,8 @@ const productsColumns = [
 const servicesColumns = [
   {
     title: 'Codigo',
-    dataIndex: 'id',
-    key: 'id',
+    dataIndex: 'itemId',
+    key: 'itemId',
   },
   {
     title: 'Nombre',
@@ -49,8 +49,8 @@ const servicesColumns = [
   },
   {
     title: 'Duracion (min)',
-    dataIndex: 'duration_min',
-    key: 'duration_min',
+    dataIndex: 'durationMin',
+    key: 'durationMin',
   },
 ]
 
@@ -64,10 +64,22 @@ const ServiceList = withSubscription((api, input, ok, error) =>
 
 const ListItem = ({ type, onRowClick }) => {
   if (type === 'product') {
-    return <ProductList columns={productsColumns} onRowClick={onRowClick} />
+    return (
+      <ProductList
+        columns={productsColumns}
+        onRowClick={onRowClick}
+        rowKey="itemId"
+      />
+    )
   }
 
-  return <ServiceList columns={servicesColumns} onRowClick={onRowClick} />
+  return (
+    <ServiceList
+      columns={servicesColumns}
+      onRowClick={onRowClick}
+      rowKey="itemId"
+    />
+  )
 }
 
 ListItem.propTypes = {

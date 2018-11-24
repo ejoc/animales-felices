@@ -13,12 +13,14 @@ service2 = Service.create({
 
 specialist1 = Specialist.create({
   name: FFaker::Name.name,
+  email: FFaker::Internet.email,
   address: FFaker::Address.street_address,
   phone: FFaker::PhoneNumber.short_phone_number,
   # gender: 'male'
 })
 specialist2 = Specialist.create({
   name: FFaker::Name.name,
+  email: FFaker::Internet.email,
   address: FFaker::Address.street_address,
   phone: FFaker::PhoneNumber.short_phone_number,
   # gender: 'female'

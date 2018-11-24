@@ -38,13 +38,16 @@ class SelectItem extends Component {
   }
 
   handleRowClick = item => {
+    console.log(item)
     const { form, onShow } = this.props
     form.setFieldsValue({
       item: {
-        resourceId: item.id,
+        resourceId: item.itemId,
+        resourceType: item.type,
         inputText: item.name,
+        stock: item.stock,
+        price: item.price,
       },
-      priceUnit: item.price,
     })
 
     this.setState({ listItemVisible: false }, () => onShow())
@@ -53,6 +56,22 @@ class SelectItem extends Component {
   checkItemId = (rule, value, callback) => {
     if (!value.resourceId) {
       callback('Por favor ingrese item')
+      return
+    }
+    callback()
+  }
+
+  checkQuantity = (rule, value, callback) => {
+    const {
+      form: { getFieldValue },
+    } = this.props
+    const item = getFieldValue('item')
+    if (!value) {
+      callback('Por favor ingrese la cantidad!')
+      return
+    }
+    if (item.resourceType && item.stock < value) {
+      callback('No hay productos suficientes en stock.')
       return
     }
     callback()
@@ -78,22 +97,11 @@ class SelectItem extends Component {
             })(<SearchItemInput disabled onSearch={this.handleListItemShow} />)}
           </FormItem>
 
-          <FormItem label="PVP" {...formItemLayout}>
-            {getFieldDecorator('priceUnit')(
-              <InputNumber
-                disabled
-                formatter={value =>
-                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                }
-                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-              />
-            )}
-          </FormItem>
-
           <FormItem label="Cantidad" {...formItemLayout}>
             {getFieldDecorator('quantity', {
               rules: [
-                { required: true, message: 'Por favor ingrese la cantidad!' },
+                // { required: true, message: 'Por favor ingrese la cantidad!' },
+                { validator: this.checkQuantity },
               ],
               // rules: [{ validator: this.checkQuantity }],
             })(<InputNumber />)}

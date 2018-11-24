@@ -13,5 +13,9 @@ class ProductsSerializer
     object.unit_type.name
   end
 
+  attribute :item_id do |object|
+    object.item.id
+  end
+
   set_type :product
 end
