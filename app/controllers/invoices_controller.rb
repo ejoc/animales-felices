@@ -9,8 +9,12 @@ class InvoicesController < ApplicationController
       # .order('created_at DESC')
       @invoices = Invoice.joins(specialist: :person, client: :person)
         .select('people_clients.name AS client', 'people.name as specialist', 'invoices.*')
-        .where('people.name ILIKE ? OR people_clients.name ILIKE ?', "%#{search_term}%", "%#{search_term}%")
-        .page(params[:page]).per(records_per_page)
+        .where(
+          'invoices.no = ? OR people.name ILIKE ? OR people_clients.name ILIKE ?',
+          search_term,
+          "%#{search_term}%",
+          "%#{search_term}%"
+        ).page(params[:page]).per(records_per_page)
     else
       @invoices = Invoice.joins(specialist: :person, client: :person)
         .select('people_clients.name AS client', 'people.name as specialist', 'invoices.*')
@@ -30,7 +34,7 @@ class InvoicesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "Your_filename" #, disposition: 'attachment'
+        render pdf: "factura_no_#{@invoice.no}", disposition: 'attachment'
       end
     end
   end
@@ -40,7 +44,7 @@ class InvoicesController < ApplicationController
     @invoice.specialist_id = Specialist.first.id
     
     if check_in
-      render json: 'ok'
+      render json: @invoice.id
     else
       render json: @invoice.errors, status: :unprocessable_entity
     end

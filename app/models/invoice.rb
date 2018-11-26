@@ -7,6 +7,7 @@ class Invoice < ApplicationRecord
   accepts_nested_attributes_for :details
 
   before_validation :calculate_total
+  validates :no, uniqueness: { message: 'Numero de factura ya ha sido registrado' }
  
   private
     def calculate_total

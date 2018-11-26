@@ -92,6 +92,7 @@ class SelectItem extends Component {
                 resourceId: null,
                 inputText: '',
                 resourceType: initalResourceType,
+                price: '',
               },
               rules: [{ validator: this.checkItemId }],
             })(<SearchItemInput disabled onSearch={this.handleListItemShow} />)}

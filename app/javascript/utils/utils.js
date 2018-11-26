@@ -48,6 +48,30 @@ export const objectToQueryString = (obj) => {
   // return str.join('&')
 }
 
+export const getFieldErrors = (errorsData, fieldValues) => {
+  let fieldErrors
+  if (errorsData instanceof Array) {
+    fieldErrors = errorsData.map(error => {
+      const fieldError = Object.keys(error)[0]
+      return {
+        [fieldError]: {
+          value: fieldValues[fieldError],
+          errors: error[fieldError].map(er => new Error(er)),
+        },
+      }
+    })
+  } else {
+    const fieldError = Object.keys(errorsData)[0]
+    fieldErrors = {
+      [fieldError]: {
+        value: fieldValues[fieldError],
+        errors: errorsData[fieldError].map(er => new Error(er)),
+      },
+    }
+  }
+  return fieldErrors
+}
+
 export default {
   getFetchInit,
   objectToQueryString,

@@ -10,6 +10,7 @@ import {
   Button,
   Modal,
   message,
+  Popconfirm,
 } from 'antd'
 
 import Layout from '../../../shared/components/Layout'
@@ -21,7 +22,7 @@ import SearchableInput from '../../../shared/components/SearchableInput'
 import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 import SelectItemForm from '../components/SelectItemForm'
 
-import { IVA } from '../../../utils/utils'
+import { IVA, getFieldErrors } from '../../../utils/utils'
 
 const columns = [
   {
@@ -58,9 +59,10 @@ const formItemLayout = {
 
 const FormItem = Form.Item
 
-class PurchaseInvoiceApp extends React.Component {
+class InvoiceApp extends React.Component {
   state = {
     items: [],
+    loading: false,
     modals: {
       showClients: false,
       selectItemForm: false,
@@ -80,14 +82,14 @@ class PurchaseInvoiceApp extends React.Component {
       if (err) {
         return
       }
-
-      const { quantity, priceUnit } = values
-      const priceTotal = quantity * priceUnit
+      const { resourceId, price, inputText } = values.item
+      const { quantity } = values
+      const priceTotal = quantity * price
       const newItem = {
-        itemId: values.item.resourceId,
-        name: values.item.inputText,
+        itemId: resourceId,
+        name: inputText,
         quantity,
-        priceUnit,
+        priceUnit: price,
         priceTotal,
       }
       this.setState(
@@ -165,23 +167,34 @@ class PurchaseInvoiceApp extends React.Component {
           clientId: values.client.resourceId,
           details_attributes: items,
         }
-
-        console.log(fields)
+        this.setState({ loading: true })
         invoiceCheckIn(
           fields,
-          ok => {
+          invoiceId => {
             form.resetFields()
             this.setState(
               {
                 items: [],
+                loading: false,
               },
               () =>
-                message.success(
-                  'Se ha registrado el ingresado de productos correctamente!'
-                )
+                Modal.success({
+                  title: 'Se ha registrado la factura correctamente!',
+                  content: (
+                    <p>
+                      Para descargar la factura en PDF haga click{' '}
+                      <a href={`/invoices/${invoiceId}.pdf`}>aqui</a>
+                    </p>
+                  ),
+                })
             )
           },
-          error => console.error(error)
+          error => {
+            const errorsData = error.response.data
+            const fieldErrors = getFieldErrors(errorsData, values)
+            form.setFields(fieldErrors)
+            this.setState({ loading: false })
+          }
         )
       }
     })
@@ -215,7 +228,7 @@ class PurchaseInvoiceApp extends React.Component {
   render() {
     const { form, currentUser, ...rest } = this.props
     const { getFieldDecorator } = form
-    const { items, modals } = this.state
+    const { items, modals, loading } = this.state
 
     const { showClients, selectItemForm } = modals
 
@@ -227,13 +240,18 @@ class PurchaseInvoiceApp extends React.Component {
       <Layout {...rest} currentUser={currentUser} activeNav="registro-venta">
         <div style={{ padding: '20px 120px', height: '700px' }}>
           <Card title="Facturar">
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Row gutter={16}>
                 <Col span={12}>
                   <FormItem label="Factura #" {...formItemLayout}>
                     {getFieldDecorator('no', {
-                      initialValue: '',
-                      // rules: [{ required: true, message: 'Por favor ingrese la cedula!' }],
+                      // initialValue: '',
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Por favor ingrese en numero de factura!',
+                        },
+                      ],
                     })(<Input placeholder="Numero de factura" />)}
                   </FormItem>
                   <FormItem label="Personal" {...formItemLayout}>
@@ -295,9 +313,17 @@ class PurchaseInvoiceApp extends React.Component {
                 </Col>
               </Row>
               <div style={{ float: 'right', paddingTop: '30px' }}>
-                <Button type="primary" htmlType="submit">
-                  Grabar
-                </Button>
+                <Popconfirm
+                  title="Desea grabar factura?"
+                  onConfirm={this.handleSubmit}
+                  onCancel={() => console.log('cancel')}
+                  okText="Si"
+                  cancelText="No"
+                >
+                  <Button type="primary" htmlType="submit" loading={loading}>
+                    Grabar
+                  </Button>
+                </Popconfirm>
               </div>
             </Form>
           </Card>
@@ -331,9 +357,9 @@ class PurchaseInvoiceApp extends React.Component {
   }
 }
 
-PurchaseInvoiceApp.propTypes = {
+InvoiceApp.propTypes = {
   form: PropType.shape().isRequired,
   currentUser: PropType.string.isRequired,
 }
 
-export default Form.create()(PurchaseInvoiceApp)
+export default Form.create()(InvoiceApp)

@@ -10,8 +10,13 @@ function withSubscription(selectList) {
         this.onSearch = this.onSearch.bind(this)
         this.state = {
           data: [],
+          searchText: '',
           loading: false,
         }
+      }
+
+      handleSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
       }
 
       onSearch(input) {
@@ -33,39 +38,27 @@ function withSubscription(selectList) {
         })
       }
 
-      // onBlur = (e) => {
-      //   const { target } = e
-      //   const { value } = target
-      //   // const value = e.target.value
-
-      //   if (value) {
-      //     selectOne(api, value).then(
-      //       ({ data }) => {
-      //         const item = data || {}
-      //         // const { form } = this.props
-      //         // form.setFieldsValue({
-      //         //   supplierId: supplier.id,
-      //         // })
-
-      //         // this.setState({
-      //         //   currentSupplier: supplier,
-      //         // })
-      //       },
-      //       err => console.error(err),
-      //     )
-      //   }
-      // }
+      handleRowClick = (row) => {
+        const { onRowClick } = this.props
+        if (typeof onRowClick === "function") {
+          onRowClick(row)
+          this.setState({ data: [], searchText: '', })
+        }
+      }
 
       render() {
-        const { data, loading } = this.state
+        const { data, loading, searchText } = this.state
         // ... and renders the wrapped component with the fresh data!
         // Notice that we pass through any additional props
         return (
           <WrappedComponent
+            searchText={searchText}
+            onSearchTextChange={this.handleSearchText}
             data={data}
             loading={loading}
             onSearch={this.onSearch}
             {...this.props}
+            onRowClick={this.handleRowClick}
           />
         )
       }

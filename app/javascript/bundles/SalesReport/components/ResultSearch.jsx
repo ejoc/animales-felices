@@ -5,6 +5,12 @@ import { getInvoices } from '../../../api'
 
 const columns = [
   {
+    title: 'NO.',
+    dataIndex: 'no',
+    key: 'no',
+    render: record => <span>{record}</span>,
+  },
+  {
     title: 'Cliente',
     dataIndex: 'client',
     key: 'client',
@@ -47,22 +53,22 @@ class ResultSearch extends React.PureComponent {
     loading: false,
   }
   componentDidMount() {
-    const { searchTerm } = this.props
-    this.fetchInvoices(searchTerm)
+    this.fetchInvoices()
   }
 
   componentDidUpdate(prevProps) {
     const { searchTerm, page } = this.props
     if (searchTerm !== prevProps.searchTerm) {
-      this.fetchInvoices(searchTerm)
+      this.fetchInvoices(page)
     }
   }
 
   handlePageChange = page => {
-    console.log(page)
+    this.fetchInvoices(page)
   }
 
-  fetchInvoices = (searchTerm, page) => {
+  fetchInvoices = page => {
+    const { searchTerm } = this.props
     this.setState({ loading: true })
     getInvoices(
       searchTerm,

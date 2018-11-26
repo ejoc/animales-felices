@@ -10,6 +10,7 @@ import {
   Button,
   Modal,
   message,
+  Popconfirm,
 } from 'antd'
 
 import Layout from '../../../shared/components/Layout'
@@ -61,6 +62,7 @@ const FormItem = Form.Item
 class PurchaseInvoiceApp extends React.Component {
   state = {
     products: [],
+    loading: false,
     modals: {
       showSuppliers: false,
       selectProductForm: false,
@@ -165,7 +167,7 @@ class PurchaseInvoiceApp extends React.Component {
           supplierId: values.supplier.resourceId,
           details_attributes: products,
         }
-        console.log(fields)
+        this.setState({ loading: true })
         registerIncomeProducts(
           fields,
           ok => {
@@ -173,14 +175,17 @@ class PurchaseInvoiceApp extends React.Component {
             this.setState(
               {
                 products: [],
+                loading: false,
               },
               () =>
-                message.success(
-                  'Se ha registrado el ingresado de productos correctamente!'
-                )
+                Modal.success({
+                  title:
+                    'Se ha registrado el ingresado de productos correctamente!',
+                  content: <p>El inventario ha sido actualizado</p>,
+                })
             )
           },
-          error => console.error(error)
+          error => console.error(error) || this.setState({ loading: false })
         )
       }
     })
@@ -216,7 +221,7 @@ class PurchaseInvoiceApp extends React.Component {
   render() {
     const { form, currentUser, ...rest } = this.props
     const { getFieldDecorator } = form
-    const { products, modals } = this.state
+    const { products, modals, loading } = this.state
 
     const { showSuppliers, selectProductForm } = modals
 
@@ -228,7 +233,7 @@ class PurchaseInvoiceApp extends React.Component {
       <Layout {...rest} currentUser={currentUser} activeNav="ingreso-productos">
         <div style={{ padding: '20px 120px', height: '700px' }}>
           <Card title="Ingreso de productos">
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Row gutter={16}>
                 <Col span={12}>
                   <FormItem label="Proveedor" {...formItemLayout}>
@@ -290,9 +295,17 @@ class PurchaseInvoiceApp extends React.Component {
                 </Col>
               </Row>
               <div style={{ float: 'right', paddingTop: '30px' }}>
-                <Button type="primary" htmlType="submit">
-                  Grabar
-                </Button>
+                <Popconfirm
+                  title="Desea ingresar productos?"
+                  onConfirm={this.handleSubmit}
+                  onCancel={() => console.log('cancel')}
+                  okText="Si"
+                  cancelText="No"
+                >
+                  <Button type="primary" htmlType="submit" loading={loading}>
+                    Grabar
+                  </Button>
+                </Popconfirm>
               </div>
             </Form>
           </Card>

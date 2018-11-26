@@ -29,7 +29,7 @@ class SalesReportApp extends React.Component {
           <div style={{ paddingBottom: '15px' }}>
             <Search
               onSearch={this.handleSearch}
-              placeholder="Buscar por cliente o por proveedor"
+              placeholder="Buscar por número de factura, cliente o por proveedor"
             />
           </div>
           <ResultSearch searchTerm={searchTerm} />

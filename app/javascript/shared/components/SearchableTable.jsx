@@ -28,9 +28,13 @@ const TableList = ({
   loading,
   columns,
   rowKey,
+  searchText,
+  onSearchTextChange,
 }) => (
   <React.Fragment>
     <Search
+      value={searchText}
+      onChange={onSearchTextChange}
       placeholder="Ingrese busqueda"
       disabled={loading}
       onSearch={onSearch}
