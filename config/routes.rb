@@ -49,7 +49,7 @@ Rails.application.routes.draw do
   end
 
   resources :suppliers, only: [:index, :show]
-  resources :clients, only: [:index, :show]
+  resources :clients, only: [:index, :show, :create]
   resources :services, only: [:index]
 
   get 'appointments/:day/:month/:year', to: 'appointments#index'

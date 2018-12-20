@@ -65,7 +65,7 @@ class AppointmentsController < ApplicationController
     if @appointment.update(appointment_params)
       render json: AppointmentsSerializer.new(@appointment), status: :ok
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: @appointment.errors, status: :unprocessable_entity
     end
   end
 

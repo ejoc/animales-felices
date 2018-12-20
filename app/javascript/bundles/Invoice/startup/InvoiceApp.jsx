@@ -14,11 +14,13 @@ import {
 } from 'antd'
 
 import Layout from '../../../shared/components/Layout'
-import { getClientByCode, invoiceCheckIn } from '../../../api'
+import { getClientByCode, invoiceCheckIn, createClient } from '../../../api'
 import withSubscription from '../../../shared/lib/withSubscription'
 import TableList from '../../../shared/components/SearchableTable'
 import InvoiceListItem from '../../../shared/components/InvoiceListItem'
-import SearchableInput from '../../../shared/components/SearchableInput'
+// import SearchableInput from '../../../shared/components/SearchableInput'
+import ClientInput from '../components/ClientInput'
+import NewClientForm from '../components/NewClientForm'
 import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 import SelectItemForm from '../components/SelectItemForm'
 
@@ -65,16 +67,12 @@ class InvoiceApp extends React.Component {
     loading: false,
     modals: {
       showClients: false,
+      newClient: false,
       selectItemForm: false,
     },
   }
 
-  handleClientModalCancel = () => {
-    this.setState(prevState => ({
-      modals: { ...prevState.modals, showClients: false },
-    }))
-  }
-
+  // item handlers
   handleItemSelected = () => {
     const { props } = this.formRef
     const { form } = props
@@ -112,6 +110,68 @@ class InvoiceApp extends React.Component {
     this.setState(prevState => ({
       modals: { ...prevState.modals, selectItemForm: false },
     }))
+  }
+
+  // Client handlers
+  handleClientModalCancel = () => {
+    this.setState(prevState => ({
+      modals: { ...prevState.modals, showClients: false },
+    }))
+  }
+
+  showModalClient = () => {
+    this.setState(prevState => ({
+      modals: { ...prevState.modals, showClients: true },
+    }))
+  }
+
+  handleNewClient = () => {
+    this.setState(prevState => ({
+      modals: { ...prevState.modals, newClient: true },
+    }))
+  }
+
+  handleCancelNewClient = () => {
+    this.setState(prevState => ({
+      modals: { ...prevState.modals, newClient: false },
+    }))
+  }
+
+  handleCreateNewClient = () => {
+    const newClientForm = this.newClientFormRef.props.form
+    newClientForm.validateFields((err, values) => {
+      if (err) {
+        return
+      }
+      // console.log('Received values of form: ', values)
+      createClient(
+        values,
+        data => {
+          // console.log(data)
+          const { form } = this.props
+          form.setFieldsValue({
+            client: {
+              resourceId: data.id,
+              inputText: data.cedula,
+            },
+            clientName: data.name,
+          })
+          newClientForm.resetFields()
+          this.setState(prevState => ({
+            modals: { ...prevState.modals, newClient: false },
+          }))
+        },
+        error => {
+          const errorsData = error.response.data
+          const fieldErrors = getFieldErrors(errorsData, values)
+          newClientForm.setFields(fieldErrors)
+        }
+      )
+    })
+  }
+
+  saveNewClientFormRef = formRef => {
+    this.newClientFormRef = formRef
   }
 
   handleClientBlur = e => {
@@ -152,6 +212,7 @@ class InvoiceApp extends React.Component {
     }))
   }
 
+  // handle submit
   handleSubmit = e => {
     e.preventDefault()
     const { form } = this.props
@@ -200,12 +261,6 @@ class InvoiceApp extends React.Component {
     })
   }
 
-  showModalClient = () => {
-    this.setState(prevState => ({
-      modals: { ...prevState.modals, showClients: true },
-    }))
-  }
-
   showModalItem = () => {
     this.setState(prevState => ({
       modals: { ...prevState.modals, selectItemForm: true },
@@ -230,7 +285,7 @@ class InvoiceApp extends React.Component {
     const { getFieldDecorator } = form
     const { items, modals, loading } = this.state
 
-    const { showClients, selectItemForm } = modals
+    const { showClients, selectItemForm, newClient } = modals
 
     const subTotal = items.reduce((acc, curr) => acc + curr.priceTotal, 0)
     const iva = subTotal * IVA
@@ -267,8 +322,9 @@ class InvoiceApp extends React.Component {
                       initialValue: { resourceId: null, inputText: '' },
                       rules: [{ validator: this.checkResourceId }],
                     })(
-                      <SearchableInput
+                      <ClientInput
                         onSearch={this.showModalClient}
+                        onNewClient={this.handleNewClient}
                         onBlur={this.handleClientBlur}
                         layout="vertical"
                       />
@@ -351,6 +407,16 @@ class InvoiceApp extends React.Component {
             onHide={this.handleItemModalCancel}
             onShow={this.showModalItem}
           />
+        </Modal>
+
+        <Modal
+          title="Nuevo cliente"
+          okText="Crear cliente"
+          visible={newClient}
+          onCancel={this.handleCancelNewClient}
+          onOk={this.handleCreateNewClient}
+        >
+          <NewClientForm wrappedComponentRef={this.saveNewClientFormRef} />
         </Modal>
       </Layout>
     )

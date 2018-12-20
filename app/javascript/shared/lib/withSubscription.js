@@ -15,12 +15,26 @@ function withSubscription(selectList) {
         }
       }
 
+      // componentDidMount() {
+      //   console.log('mount')
+      //   selectList(
+      //     api,
+      //     undefined,
+      //     (data) => {
+      //       this.setState({
+      //         data,
+      //         loading: false,
+      //       })
+      //     },
+      //     err => console.warn(err),
+      //   )
+      // }
+
       handleSearchText = (e) => {
         this.setState({ searchText: e.target.value })
       }
 
       onSearch(input) {
-        // console.log('adsasd', input)
         this.setState({
           loading: true,
         }, () => {
@@ -43,6 +57,7 @@ function withSubscription(selectList) {
         if (typeof onRowClick === "function") {
           onRowClick(row)
           this.setState({ data: [], searchText: '', })
+          // this.setState({ searchText: '', })
         }
       }
 

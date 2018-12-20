@@ -36,7 +36,6 @@ class FormModal extends React.Component {
   }
 
   checkClient = (rule, value, cb) => {
-    console.log(value)
     if (!value.name.length) {
       cb('Por favor digite el nombre del cliente')
       return

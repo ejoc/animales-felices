@@ -212,6 +212,15 @@ export function getClients(searchTerm, ok, error) {
   )
 }
 
+export function createClient(params, ok, error) {
+  // axios.post('/clients', { client: params }, ok, error)
+  axios(getFetchInit('/clients', 'post', { client: params }))
+    .then(
+      ({ data }) => ok(data),
+      err => error(err),
+    )
+}
+
 export function getSuppliers(searchTerm, ok, error) {
   const obj = {
     search: searchTerm,

@@ -19,8 +19,23 @@ class ClientsController < ApplicationController
     render json: @client
   end
 
-  private
-    def set_client
-      @client = Client.find_by(cedula: params[:id])
+  def create
+    @client = Client.new(client_params)
+    if @client.save
+      render json: @client, status: :created
+    else
+      render json: @client.errors, status: :unprocessable_entity
     end
+  end
+
+  private
+
+  def set_client
+    @client = Client.find_by(cedula: params[:id])
+  end
+
+  def client_params
+    # params.fetch(:client, {})
+    params.require(:client).permit(:cedula, :name, :email, :address, :phone)
+  end
 end

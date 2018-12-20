@@ -6,5 +6,6 @@ class Supplier < ApplicationRecord
     ["male", "female"]
   end
 
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP } 
+  # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :cedula, uniqueness: true
 end

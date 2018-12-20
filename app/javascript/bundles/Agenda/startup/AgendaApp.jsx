@@ -19,6 +19,7 @@ import {
 
 import EditAppointment from '../components/EditAppointment'
 import ShowAppointment from '../components/ShowAppointment'
+import { getFieldErrors } from '../../../utils/utils'
 
 moment.locale('es')
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
@@ -96,27 +97,7 @@ class AgendaApp extends Component {
           },
           errors => {
             const errorsData = errors.response.data
-            let fieldErrors
-            if (errorsData instanceof Array) {
-              fieldErrors = errorsData.map(error => {
-                const fieldError = Object.keys(error)[0]
-                return {
-                  [fieldError]: {
-                    value: values[fieldError],
-                    errors: error[fieldError].map(er => new Error(er)),
-                  },
-                }
-              })
-            } else {
-              const fieldError = Object.keys(errorsData)[0]
-              fieldErrors = {
-                [fieldError]: {
-                  value: values[fieldError],
-                  errors: errorsData[fieldError].map(er => new Error(er)),
-                },
-              }
-            }
-            // form.resetFields()
+            const fieldErrors = getFieldErrors(errorsData, values)
             form.setFields(fieldErrors)
             this.setState({ submitting: false })
           }
@@ -300,27 +281,7 @@ class AgendaApp extends Component {
           },
           errors => {
             const errorsData = errors.response.data
-            let fieldErrors
-            if (errorsData instanceof Array) {
-              fieldErrors = errorsData.map(error => {
-                const fieldError = Object.keys(error)[0]
-                return {
-                  [fieldError]: {
-                    value: values[fieldError],
-                    errors: error[fieldError].map(er => new Error(er)),
-                  },
-                }
-              })
-            } else {
-              const fieldError = Object.keys(errorsData)[0]
-              fieldErrors = {
-                [fieldError]: {
-                  value: values[fieldError],
-                  errors: errorsData[fieldError].map(er => new Error(er)),
-                },
-              }
-            }
-            // form.resetFields()
+            const fieldErrors = getFieldErrors(errorsData, values)
             form.setFields(fieldErrors)
             this.setState({ submitting: false })
           }
