@@ -3,6 +3,7 @@ module ApplicationHelper
     @default_props ||= {
       userSignedIn: user_signed_in?,
       currentUser: current_user && current_user.email,
+      isUserAdmin: current_user.admin?,
       flashMessages: flash_messages,
     }
   end

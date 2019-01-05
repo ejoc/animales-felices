@@ -3,7 +3,7 @@ class Specialist < ApplicationRecord
   belongs_to :user, optional: true
   has_many :appointments
 
-  validates :name, :email, :presence => true
+  # validates :name, :email, :presence => true
   # validates :email, :presence => true
 
   # horario de entrada y salida

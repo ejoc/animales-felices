@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :clients
+    resources :users # personal
     resources :specialists
     resources :suppliers
     resources :companies
@@ -9,7 +10,6 @@ Rails.application.routes.draw do
     resources :specialist_services
     resources :unit_types
     resources :product_categories
-    # resources :users
 
     # resources :appointments
     # resources :people

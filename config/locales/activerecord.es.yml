@@ -15,8 +15,8 @@ es:
         one: Cliente
         other: Clientes
       specialist:
-        one: Especialista
-        other: Especialistas
+        one: Personal
+        other: Personal
       supplier:
         one: Proveedor
         other: Proveedores
@@ -38,24 +38,27 @@ es:
       product_category:
         one: Producto categoria
         other: Productos categorias
+      user:
+        one: Usuario
+        other: Usuarios
     attributes:
       specialist:
         <<: *person_attributes
       specialist/genders:
-        female: "Hombre"
-        male: "Mujer"
+        female: 'Hombre'
+        male: 'Mujer'
       client:
         <<: *person_attributes
       client/genders:
-        female: "Hombre"
-        male: "Mujer"
+        female: 'Hombre'
+        male: 'Mujer'
       supplier:
         <<: *person_attributes
         company: Empresa
         company_role: Rol
       supplier/genders:
-        female: "Hombre"
-        male: "Mujer"
+        female: 'Hombre'
+        male: 'Mujer'
       product:
         <<: *item_attributes
         unit_type: Tipo de Unidad
@@ -72,4 +75,7 @@ es:
         service_id: Servicio
         specialist_id: Especialista
         active: Activo
-      
+      user:
+        email: Email
+        encrypted_password: Contraseña
+        specialist: Personal

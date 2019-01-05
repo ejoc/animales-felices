@@ -5,6 +5,7 @@ class Person < ApplicationRecord
     ["male", "female"]
   end
 
+  validates :name, :email, :presence => true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   # def self.genders

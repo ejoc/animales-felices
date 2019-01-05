@@ -43,8 +43,10 @@ class Header extends React.Component {
       // currentUser,
       userSignedIn,
       activeNav,
+      isUserAdmin,
       // navigation: Navigation,
     } = this.props
+    console.log(this.props)
 
     const menuMode = isMobile ? 'inline' : 'horizontal'
 
@@ -52,7 +54,7 @@ class Header extends React.Component {
       ? [
           isMobile ? null : (
             <span key="avatar" className="header-avatar">
-              <AccountNavigation />
+              <AccountNavigation isUserAdmin={isUserAdmin} />
             </span>
           ),
         ]

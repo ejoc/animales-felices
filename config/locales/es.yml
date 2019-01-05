@@ -13,63 +13,63 @@ es:
   activerecord:
     errors:
       messages:
-        record_invalid: "La validación falló: %{errors}"
+        record_invalid: 'La validación falló: %{errors}'
         restrict_dependent_destroy:
           has_one: No se puede eliminar el registro porque existe un %{record} dependiente
           has_many: No se puede eliminar el registro porque existen %{record} dependientes
   date:
     abbr_day_names:
-    - dom
-    - lun
-    - mar
-    - mié
-    - jue
-    - vie
-    - sáb
+      - dom
+      - lun
+      - mar
+      - mié
+      - jue
+      - vie
+      - sáb
     abbr_month_names:
-    -
-    - ene
-    - feb
-    - mar
-    - abr
-    - may
-    - jun
-    - jul
-    - ago
-    - sep
-    - oct
-    - nov
-    - dic
+      -
+      - ene
+      - feb
+      - mar
+      - abr
+      - may
+      - jun
+      - jul
+      - ago
+      - sep
+      - oct
+      - nov
+      - dic
     day_names:
-    - domingo
-    - lunes
-    - martes
-    - miércoles
-    - jueves
-    - viernes
-    - sábado
+      - domingo
+      - lunes
+      - martes
+      - miércoles
+      - jueves
+      - viernes
+      - sábado
     formats:
-      default: "%-d/%-m/%Y"
-      long: "%-d de %B de %Y"
-      short: "%-d de %b"
+      default: '%-d/%-m/%Y'
+      long: '%-d de %B de %Y'
+      short: '%-d de %b'
     month_names:
-    -
-    - enero
-    - febrero
-    - marzo
-    - abril
-    - mayo
-    - junio
-    - julio
-    - agosto
-    - septiembre
-    - octubre
-    - noviembre
-    - diciembre
+      -
+      - enero
+      - febrero
+      - marzo
+      - abril
+      - mayo
+      - junio
+      - julio
+      - agosto
+      - septiembre
+      - octubre
+      - noviembre
+      - diciembre
     order:
-    - :day
-    - :month
-    - :year
+      - :day
+      - :month
+      - :year
   datetime:
     distance_in_words:
       about_x_hours:
@@ -96,19 +96,19 @@ es:
         other: más de %{count} años
       x_days:
         one: 1 día
-        other: "%{count} días"
+        other: '%{count} días'
       x_minutes:
         one: 1 minuto
-        other: "%{count} minutos"
+        other: '%{count} minutos'
       x_months:
         one: 1 mes
-        other: "%{count} meses"
+        other: '%{count} meses'
       x_years:
         one: 1 año
-        other: "%{count} años"
+        other: '%{count} años'
       x_seconds:
         one: 1 segundo
-        other: "%{count} segundos"
+        other: '%{count} segundos'
     prompts:
       day: Día
       hour: Hora
@@ -117,7 +117,7 @@ es:
       second: Segundos
       year: Año
   errors:
-    format: "%{attribute} %{message}"
+    format: '%{attribute} %{message}'
     messages:
       accepted: debe ser aceptado
       blank: no puede estar en blanco
@@ -133,21 +133,21 @@ es:
       invalid: no es válido
       less_than: debe ser menor que %{count}
       less_than_or_equal_to: debe ser menor que o igual a %{count}
-      model_invalid: "La validación falló: %{errors}"
+      model_invalid: 'La validación falló: %{errors}'
       not_a_number: no es un número
       not_an_integer: debe ser un entero
       odd: debe ser impar
       required: debe existir
       taken: ya está en uso
       too_long:
-        one: "es demasiado largo (1 carácter máximo)"
-        other: "es demasiado largo (%{count} caracteres máximo)"
+        one: 'es demasiado largo (1 carácter máximo)'
+        other: 'es demasiado largo (%{count} caracteres máximo)'
       too_short:
-        one: "es demasiado corto (1 carácter mínimo)"
-        other: "es demasiado corto (%{count} caracteres mínimo)"
+        one: 'es demasiado corto (1 carácter mínimo)'
+        other: 'es demasiado corto (%{count} caracteres mínimo)'
       wrong_length:
-        one: "no tiene la longitud correcta (1 carácter exactos)"
-        other: "no tiene la longitud correcta (%{count} caracteres exactos)"
+        one: 'no tiene la longitud correcta (1 carácter exactos)'
+        other: 'no tiene la longitud correcta (%{count} caracteres exactos)'
       other_than: debe ser distinto de %{count}
     template:
       body: 'Se encontraron problemas con los siguientes campos:'
@@ -159,24 +159,24 @@ es:
       client:
         <<: *person_attributes
         client/gender:
-          female: "Hombre"
-          male: "Mujer"
+          female: 'Hombre'
+          male: 'Mujer'
       specialist:
         <<: *person_attributes
         specialist/gender:
-          female: "Hombre"
-          male: "Mujer"
+          female: 'Hombre'
+          male: 'Mujer'
       specialist_service:
         service: Servicio
-        specialist: Especialista
+        specialist: Personal
         active: Activo
       supplier:
         <<: *person_attributes
         company: Empresa
         company_role: Rol
         supplier/gender:
-          female: "Hombre"
-          male: "Mujer"
+          female: 'Hombre'
+          male: 'Mujer'
       product:
         <<: *item_attributes
         unit_type: Tipo de Unidad
@@ -193,6 +193,10 @@ es:
         name: Nombre
       product_category:
         name: Nombre
+      user:
+        email: Email
+        encrypted_password: Contraseña
+        specialist: Personal
     select:
       prompt: Por favor seleccione
     submit:
@@ -202,22 +206,22 @@ es:
   number:
     currency:
       format:
-        delimiter: "."
-        format: "%n %u"
+        delimiter: '.'
+        format: '%n %u'
         precision: 2
-        separator: ","
+        separator: ','
         significant: false
         strip_insignificant_zeros: false
-        unit: "€"
+        unit: '€'
     format:
-      delimiter: "."
+      delimiter: '.'
       precision: 3
-      separator: ","
+      separator: ','
       significant: false
       strip_insignificant_zeros: false
     human:
       decimal_units:
-        format: "%n %u"
+        format: '%n %u'
         units:
           billion: mil millones
           million:
@@ -235,7 +239,7 @@ es:
         significant: true
         strip_insignificant_zeros: true
       storage_units:
-        format: "%n %u"
+        format: '%n %u'
         units:
           byte:
             one: Byte
@@ -247,19 +251,19 @@ es:
     percentage:
       format:
         delimiter: ''
-        format: "%n %"
+        format: '%n %'
     precision:
       format:
         delimiter: ''
   support:
     array:
-      last_word_connector: " y "
-      two_words_connector: " y "
-      words_connector: ", "
+      last_word_connector: ' y '
+      two_words_connector: ' y '
+      words_connector: ', '
   time:
     am: am
     formats:
-      default: "%A, %-d de %B de %Y %H:%M:%S %z"
-      long: "%-d de %B de %Y %H:%M"
-      short: "%-d de %b %H:%M"
+      default: '%A, %-d de %B de %Y %H:%M:%S %z'
+      long: '%-d de %B de %Y %H:%M'
+      short: '%-d de %b %H:%M'
     pm: pm

@@ -32,15 +32,17 @@ class AccountNavigation extends Component {
 
   render() {
     const { menuVisible } = this.state
-    const { roles } = this.props
+    const { isUserAdmin } = this.props
 
     const menu = (
       <Menu>
-        <Menu.Item key="admin">
-          <a href="/admin" target="_blank">
-            <span>Mantenimiento</span>
-          </a>
-        </Menu.Item>
+        {isUserAdmin && (
+          <Menu.Item key="admin">
+            <a href="/admin" target="_blank">
+              <span>Mantenimiento</span>
+            </a>
+          </Menu.Item>
+        )}
         <Menu.Item key="account">
           <a href="/cuenta">
             <span>Mi cuenta</span>

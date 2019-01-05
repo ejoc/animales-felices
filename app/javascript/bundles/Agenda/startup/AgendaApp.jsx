@@ -354,7 +354,7 @@ class AgendaApp extends Component {
     } = this.state
 
     const { newAppointment, showAppointment, editAppointment } = modals
-    const { specialistsByService, ...rest } = this.props
+    const { specialistsByService, isUserAdmin, ...rest } = this.props
 
     const filterKeys = Object.keys(filters)
     const currentTime = new Date()
@@ -374,7 +374,7 @@ class AgendaApp extends Component {
     )
 
     return (
-      <Layout {...rest} activeNav="agenda">
+      <Layout {...rest} isUserAdmin={isUserAdmin} activeNav="agenda">
         <div style={{ padding: '10px', height: '700px' }}>
           <Row gutter={8}>
             <Col span={5}>
@@ -389,6 +389,7 @@ class AgendaApp extends Component {
                 handleServiceClick={this.handleServiceClick}
                 services={services}
                 viewAllServices={this.viewAllServices}
+                isUserAdmin={isUserAdmin}
               />
             </Col>
             <Col span={19} style={{ height: '600px' }}>

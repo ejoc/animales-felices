@@ -18,6 +18,7 @@ const FilterPanel = ({
 
   onConcludedClick,
   onCanceledClick,
+  isUserAdmin,
 }) => (
   <React.Fragment>
     <div style={{ width: 270, border: '1px solid #d9d9d9', borderRadius: 4 }}>
@@ -34,12 +35,14 @@ const FilterPanel = ({
       onConcludedClick={onConcludedClick}
     />
 
-    <SpecialistFilter
-      handleSpecialistClick={handleSpecialistClick}
-      filtersBySpecialist={filters.specialistId}
-      specialists={specialists}
-      viewAllSpecialists={viewAllSpecialists}
-    />
+    {isUserAdmin && (
+      <SpecialistFilter
+        handleSpecialistClick={handleSpecialistClick}
+        filtersBySpecialist={filters.specialistId}
+        specialists={specialists}
+        viewAllSpecialists={viewAllSpecialists}
+      />
+    )}
 
     <ServiceFilter
       handleServiceClick={handleServiceClick}
