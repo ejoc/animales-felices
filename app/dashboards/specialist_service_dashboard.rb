@@ -9,8 +9,8 @@ class SpecialistServiceDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    specialist: Field::BelongsTo,
-    service: Field::BelongsTo,
+    specialist: Field::BelongsTo.with_options(scope: -> { Specialist.kept }),
+    service: Field::BelongsTo.with_options(scope: -> { Service.kept }),
     active: Field::Boolean,
     # user: Field::BelongsTo,
   }.freeze

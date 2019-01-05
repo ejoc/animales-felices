@@ -1,7 +1,10 @@
 class Specialist < ApplicationRecord
+  include Discard::Model
   acts_as :person
   belongs_to :user, optional: true
   has_many :appointments
+
+  scope :kept, -> { undiscarded.joins(:user).merge(User.kept) }
 
   # validates :name, :email, :presence => true
   # validates :email, :presence => true
@@ -51,9 +54,4 @@ class Specialist < ApplicationRecord
       .where(canceled: true)
       .pluck(:start_time)
   end
-
-  private
-    def with_time(date)
-
-    end
 end

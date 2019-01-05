@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_20_035350) do
+ActiveRecord::Schema.define(version: 2019_01_05_064214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(version: 2018_11_20_035350) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_companies_on_discarded_at"
   end
 
   create_table "income_product_details", force: :cascade do |t|
@@ -127,18 +129,24 @@ ActiveRecord::Schema.define(version: 2018_11_20_035350) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_product_categories_on_discarded_at"
   end
 
   create_table "products", force: :cascade do |t|
     t.string "brand"
     t.bigint "unit_type_id"
     t.bigint "product_category_id"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_products_on_discarded_at"
     t.index ["product_category_id"], name: "index_products_on_product_category_id"
     t.index ["unit_type_id"], name: "index_products_on_unit_type_id"
   end
 
   create_table "services", force: :cascade do |t|
     t.integer "duration_min"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_services_on_discarded_at"
   end
 
   create_table "specialist_services", force: :cascade do |t|
@@ -154,6 +162,8 @@ ActiveRecord::Schema.define(version: 2018_11_20_035350) do
 
   create_table "specialists", force: :cascade do |t|
     t.bigint "user_id"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_specialists_on_discarded_at"
     t.index ["user_id"], name: "index_specialists_on_user_id"
   end
 
@@ -169,14 +179,18 @@ ActiveRecord::Schema.define(version: 2018_11_20_035350) do
     t.string "cedula"
     t.bigint "company_id"
     t.string "company_role"
+    t.datetime "discarded_at"
     t.index ["cedula"], name: "index_suppliers_on_cedula", unique: true
     t.index ["company_id"], name: "index_suppliers_on_company_id"
+    t.index ["discarded_at"], name: "index_suppliers_on_discarded_at"
   end
 
   create_table "unit_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_unit_types_on_discarded_at"
   end
 
   create_table "users", force: :cascade do |t|
@@ -193,7 +207,8 @@ ActiveRecord::Schema.define(version: 2018_11_20_035350) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "admin", default: false
-    t.boolean "account_active", default: true
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

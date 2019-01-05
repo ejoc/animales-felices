@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  include Discard::Model
   acts_as :item
 
   belongs_to :unit_type

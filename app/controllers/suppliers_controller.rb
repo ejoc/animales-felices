@@ -5,12 +5,12 @@ class SuppliersController < ApplicationController
   def index
     if search_params
       # @clients = Person.where('name ILIKE ?', "%#{search_params}%").where(actable_type: 'Client')
-      @suppliers = Supplier.joins(:person)
+      @suppliers = Supplier.kept.joins(:person)
         .where('people.name ILIKE ? OR suppliers.cedula ILIKE ?', "%#{search_params}%", "#{search_params}%")
         .page(params[:page])
         .per(records_per_page)
     else
-      @suppliers = Supplier.page(params[:page]).per(records_per_page)
+      @suppliers = Supplier.kept.page(params[:page]).per(records_per_page)
     end
 
     render json: @suppliers

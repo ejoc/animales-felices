@@ -4,6 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  include Discard::Model
   has_one :specialist
 
   accepts_nested_attributes_for :specialist
@@ -11,10 +12,18 @@ class User < ApplicationRecord
   def active_for_authentication?
     # Uncomment the below debug statement to view the properties of the returned self model values.
     # logger.debug self.to_yaml
-    super && account_active?
+    super && !discarded?
   end
 
   def inactive_message
-    account_active? ? super : :account_inactive
+    !discarded? ? super : :account_inactive
+  end
+
+  after_discard do
+    specialist.discard
+  end
+
+  after_undiscard do
+    specialist.undiscard
   end
 end

@@ -17,6 +17,23 @@ module Admin
       (current_user && access_whitelist) || not_found
     end
 
+    def destroy
+      if requested_resource.respond_to?(:discard)
+        if requested_resource.discard
+          flash[:notice] = translate_with_resource("destroy.success")
+        else
+          flash[:error] = requested_resource.errors.full_messages.join("<br/>")
+        end
+        redirect_to action: :index
+      else
+        super
+      end
+    end
+
+    def scoped_resource
+      resource_class.default_scoped.respond_to?(:kept) ? resource_class.default_scoped.kept : super
+    end
+
     # Override this value to specify the number of elements to display at a time
     # on index pages. Defaults to 20.
     # def records_per_page
@@ -24,9 +41,9 @@ module Admin
     # end
 
     private
-      def access_whitelist
-        # current_user.has_role?(:admin) || current_user.has_role?(:super_admin)
-        current_user.admin?
-      end
+
+    def access_whitelist
+      current_user.admin?
+    end
   end
 end

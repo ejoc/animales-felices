@@ -1,4 +1,5 @@
 class Supplier < ApplicationRecord
+  include Discard::Model
   acts_as :person
   belongs_to :company
 
