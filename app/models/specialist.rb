@@ -1,5 +1,7 @@
 class Specialist < ApplicationRecord
   include Discard::Model
+  default_scope -> { kept }
+
   acts_as :person
   belongs_to :user, optional: true
   has_many :appointments

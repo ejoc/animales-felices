@@ -180,6 +180,8 @@ es:
       product:
         <<: *item_attributes
         unit_type: Tipo de Unidad
+        product_category: Categoria
+        brand: Marca
       service:
         <<: *item_attributes
         duration_min: Duracion (min)

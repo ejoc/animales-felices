@@ -54,14 +54,16 @@ es:
         male: 'Mujer'
       supplier:
         <<: *person_attributes
-        company: Empresa
+        company_id: Empresa
         company_role: Rol
       supplier/genders:
         female: 'Hombre'
         male: 'Mujer'
       product:
         <<: *item_attributes
-        unit_type: Tipo de Unidad
+        unit_type_id: Tipo de Unidad
+        product_category_id: Categoria
+        brand: Marca
       service:
         <<: *item_attributes
         duration_min: Duracion (min)

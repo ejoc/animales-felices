@@ -30,9 +30,9 @@ module Admin
       end
     end
 
-    def scoped_resource
-      resource_class.default_scoped.respond_to?(:kept) ? resource_class.default_scoped.kept : super
-    end
+    # def scoped_resource
+    #   resource_class.default_scoped.respond_to?(:kept) ? resource_class.default_scoped.kept : super
+    # end
 
     # Override this value to specify the number of elements to display at a time
     # on index pages. Defaults to 20.

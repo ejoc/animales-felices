@@ -1,5 +1,7 @@
 class Product < ApplicationRecord
   include Discard::Model
+  default_scope -> { kept }
+  
   acts_as :item
 
   belongs_to :unit_type

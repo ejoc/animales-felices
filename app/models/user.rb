@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   include Discard::Model
+  default_scope -> { kept }
   has_one :specialist
 
   accepts_nested_attributes_for :specialist

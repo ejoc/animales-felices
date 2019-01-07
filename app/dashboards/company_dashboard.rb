@@ -14,8 +14,6 @@ class CompanyDashboard < Administrate::BaseDashboard
     address: Field::String,
     phone: Field::String,
     website: Field::String,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -28,6 +26,7 @@ class CompanyDashboard < Administrate::BaseDashboard
     :bin,
     :name,
     :address,
+    :phone,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -39,8 +38,6 @@ class CompanyDashboard < Administrate::BaseDashboard
     :address,
     :phone,
     :website,
-    :created_at,
-    :updated_at,
   ].freeze
 
   # FORM_ATTRIBUTES

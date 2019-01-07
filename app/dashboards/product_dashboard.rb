@@ -14,6 +14,7 @@ class ProductDashboard < Administrate::BaseDashboard
     name: Field::String,
     description: Field::String,
     price: Field::Number.with_options(prefix: "USD", decimals: 2),
+    brand: Field::String,
     unit_type: Field::BelongsTo,
     product_category: Field::BelongsTo,
   }.freeze
@@ -28,8 +29,9 @@ class ProductDashboard < Administrate::BaseDashboard
     # :item,
     :id,
     :name,
-    :description,
+    # :description,
     :price,
+    :brand,
     :unit_type,
   ].freeze
 
@@ -42,6 +44,7 @@ class ProductDashboard < Administrate::BaseDashboard
     :name,
     :description,
     :price,
+    :brand,
     :unit_type,
     :product_category,
   ].freeze
@@ -55,6 +58,7 @@ class ProductDashboard < Administrate::BaseDashboard
     :name,
     :description,
     :price,
+    :brand,
     :unit_type,
     :product_category,
   ].freeze

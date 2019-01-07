@@ -15,5 +15,9 @@ module Admin
     #   %w[destroy].exclude?(name.to_s) && super
     #   # false
     # end
+
+    def scoped_resource
+      resource_class.where.not(email: current_user.email)
+    end
   end
 end
