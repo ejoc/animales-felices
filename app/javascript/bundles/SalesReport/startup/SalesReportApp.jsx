@@ -18,7 +18,6 @@ class SalesReportApp extends React.Component {
 
   handleExport = e => {
     e.preventDefault()
-    console.log('sfsdf', pdf)
   }
 
   render() {

@@ -54,7 +54,6 @@ class ShowEvent extends Component {
         if (!this._mounted) {
           return
         }
-        console.log('asdasd', data)
         this.setState({
           event: data.data.attributes,
           loading: false,

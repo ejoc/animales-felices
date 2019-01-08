@@ -24,7 +24,7 @@ import NewClientForm from '../components/NewClientForm'
 import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 import SelectItemForm from '../components/SelectItemForm'
 
-import { IVA, getFieldErrors } from '../../../utils/utils'
+import { IVA, getFieldErrors, reject } from '../../../utils/utils'
 
 const columns = [
   {
@@ -226,7 +226,7 @@ class InvoiceApp extends React.Component {
         const fields = {
           no: values.no,
           clientId: values.client.resourceId,
-          details_attributes: items,
+          details_attributes: items.map(i => reject(i, ['name'])),
         }
         this.setState({ loading: true })
         invoiceCheckIn(
@@ -251,6 +251,7 @@ class InvoiceApp extends React.Component {
             )
           },
           error => {
+            console.log(error)
             const errorsData = error.response.data
             const fieldErrors = getFieldErrors(errorsData, values)
             form.setFields(fieldErrors)

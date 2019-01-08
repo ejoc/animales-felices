@@ -22,7 +22,7 @@ import SelectProductForm from '../components/SelectProductForm'
 import SearchableInput from '../../../shared/components/SearchableInput'
 import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 
-import { IVA } from '../../../utils/utils'
+import { IVA, reject } from '../../../utils/utils'
 
 const columns = [
   {
@@ -165,7 +165,7 @@ class PurchaseInvoiceApp extends React.Component {
       if (!err) {
         const fields = {
           supplierId: values.supplier.resourceId,
-          details_attributes: products,
+          details_attributes: products.map(p => reject(p, ['name'])),
         }
         this.setState({ loading: true })
         registerIncomeProducts(

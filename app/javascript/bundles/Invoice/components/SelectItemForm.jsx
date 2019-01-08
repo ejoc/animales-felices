@@ -38,7 +38,6 @@ class SelectItem extends Component {
   }
 
   handleRowClick = item => {
-    console.log(item)
     const { form, onShow } = this.props
     form.setFieldsValue({
       item: {

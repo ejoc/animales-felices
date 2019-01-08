@@ -1,0 +1,19 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  title_cell = wb.styles.add_style :bg_color => "e8e8e8", :sz => 14, :alignment => { :horizontal=> :center }, :border => Axlsx::STYLE_THIN_BORDER
+  blue_cell = wb.styles.add_style :bg_color => "bae7ff", :sz => 12, :alignment => { :horizontal=> :center }, :border => Axlsx::STYLE_THIN_BORDER
+  item_cell = wb.styles.add_style :bg_color => "FFFFFF", :border => { :style => :thin, :color => "e8e8e8" }
+  item_center = wb.styles.add_style :bg_color => "FFFFFF", :border => { :style => :thin, :color => "e8e8e8" }, :alignment => { :horizontal=> :center }
+
+
+  wb.add_worksheet(name: "Buttons") do |sheet|
+    sheet.add_row ["Invetario de productos"], style: [title_cell]
+    sheet.add_row ["Producto", "Entradas", "Salidas", "Stock"], style: Array.new(4, blue_cell)
+    @inventario.each do |row|
+      sheet.add_row row.values, style: [item_cell, item_center, item_center, item_center]
+    end
+
+    sheet.column_widths 20, 20, 20, 20
+    sheet.merge_cells("A1:D1")
+  end
+end

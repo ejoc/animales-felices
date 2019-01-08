@@ -28,7 +28,6 @@ class CreateInvoices < ActiveRecord::Migration[5.2]
       t.float :quantity
       t.float :price_unit, precision: 5, scale: 2
       t.float :price_total, precision: 5, scale: 2
-
     end
 
     create_table :income_products do |t|

@@ -46,7 +46,6 @@ class Header extends React.Component {
       isUserAdmin,
       // navigation: Navigation,
     } = this.props
-    console.log(this.props)
 
     const menuMode = isMobile ? 'inline' : 'horizontal'
 

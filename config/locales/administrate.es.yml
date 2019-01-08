@@ -9,6 +9,7 @@ es:
       show_resource: Mostrar %{name}
       new_resource: Nuevo %{name}
       back: Volver
+      export: Exportar
     controller:
       create:
         success: '%{resource} fue creado exitosamente.'

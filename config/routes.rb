@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     resources :specialists
     resources :suppliers
     resources :companies
-    resources :products
+    resources :products do get 'export', on: :collection end
     resources :services
     resources :specialist_services
     resources :unit_types
