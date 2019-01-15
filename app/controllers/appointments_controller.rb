@@ -103,7 +103,7 @@ class AppointmentsController < ApplicationController
         :client_phone,
         # :date,
         :start_time,
-        # :end_time,
+        :end_time,
       )
     end
 

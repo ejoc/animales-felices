@@ -20,7 +20,7 @@ class ReportApp extends React.Component {
     const { periodicity } = this.state
     return (
       <Layout {...restProps} activeNav="statistical-reports">
-        <div style={{ padding: '15px' }}>
+        <div style={{ padding: '15px', minHeight: '700px' }}>
           <Row>
             <Col span={24}>
               <LineChart />

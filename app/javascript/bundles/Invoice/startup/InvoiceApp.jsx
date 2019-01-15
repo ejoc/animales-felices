@@ -294,7 +294,7 @@ class InvoiceApp extends React.Component {
 
     return (
       <Layout {...rest} currentUser={currentUser} activeNav="registro-venta">
-        <div style={{ padding: '20px 120px', height: '700px' }}>
+        <div style={{ padding: '20px 120px', minHeight: '700px' }}>
           <Card title="Facturar">
             <Form>
               <Row gutter={16}>

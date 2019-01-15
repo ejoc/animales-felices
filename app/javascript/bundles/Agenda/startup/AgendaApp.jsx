@@ -65,6 +65,10 @@ class AgendaApp extends Component {
     this.formRef = formRef
   }
 
+  saveEditFormRef = formRef => {
+    this.editFormRef = formRef
+  }
+
   handleOk = e => {
     e.preventDefault()
     const { form } = this.formRef.props
@@ -241,7 +245,7 @@ class AgendaApp extends Component {
 
   handleUpdateAppointment = e => {
     e.preventDefault()
-    const { form } = this.formRef.props
+    const { form } = this.editFormRef.props
     const { appointmentSelected } = this.state
     form.validateFields((err, values) => {
       if (!err) {
@@ -375,7 +379,14 @@ class AgendaApp extends Component {
 
     return (
       <Layout {...rest} isUserAdmin={isUserAdmin} activeNav="agenda">
-        <div style={{ padding: '10px', height: '700px' }}>
+        <div
+          style={{
+            // paddingTop: '10px',
+            // paddingBottom: '20px',
+            padding: '10px 10px 20px 10px',
+            minHeight: '700px',
+          }}
+        >
           <Row gutter={8}>
             <Col span={5}>
               <FilterPanel
@@ -392,7 +403,10 @@ class AgendaApp extends Component {
                 isUserAdmin={isUserAdmin}
               />
             </Col>
-            <Col span={19} style={{ height: '600px' }}>
+            <Col
+              span={19}
+              // style={{ height: '600px' }}
+            >
               <Card className={fetching ? 'fetching' : ''}>
                 <Agenda
                   events={showEvents}
@@ -424,7 +438,7 @@ class AgendaApp extends Component {
 
           {editAppointment && (
             <EditAppointment
-              wrappedComponentRef={this.saveFormRef}
+              wrappedComponentRef={this.saveEditFormRef}
               visible={editAppointment}
               appointment={appointmentSelected}
               onOk={this.handleUpdateAppointment}

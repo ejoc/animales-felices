@@ -126,13 +126,13 @@ class Header extends React.Component {
           </Popover>
         )}
         <Row>
-          <Col xxl={5} xl={5} lg={4} md={6} sm={24} xs={24}>
+          <Col lg={4} md={5} sm={24} xs={24}>
             <a id="logo" href="/">
               {/* <img src={FooImage} alt="logo" /> */}
               image
             </a>
           </Col>
-          <Col xxl={20} xl={19} lg={19} md={18} sm={0} xs={0}>
+          <Col lg={20} md={19} sm={0} xs={0}>
             {!isMobile && menu}
           </Col>
         </Row>
