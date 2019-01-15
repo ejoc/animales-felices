@@ -1,7 +1,10 @@
 <%#
 # Flash Partial
+
 This partial renders flash messages on every page.
+
 ## Relevant Helpers:
+
 - `flash`:
   Returns a hash,
   where the keys are the type of flash (alert, error, notice, etc)
@@ -11,10 +14,7 @@ This partial renders flash messages on every page.
 <% if flash.any? %>
   <div class="flashes">
     <% flash.each do |key, value| -%>
-      <div class="flash flash-<%= key %>">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <%= value.html_safe %>
-      </div>
+      <div class="flash flash-<%= key %>"><%= value.html_safe %></div>
     <% end -%>
   </div>
 <% end %>

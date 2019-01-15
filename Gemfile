@@ -87,4 +87,7 @@ gem 'discard', '~> 1.0'
 gem 'axlsx', '~> 2.0', '>= 2.0.1'
 gem 'axlsx_rails'
 
+gem 'rails-assets-sweetalert2', source: 'https://rails-assets.org'
+# gem 'active_record_upsert' # soft delete recovery
+
 # gem 'devise_invitable'
