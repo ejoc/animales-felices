@@ -10,17 +10,18 @@ const SpecialistFilter = ({
   specialists,
   viewAllSpecialists,
 }) => (
-  <div style={{ border: '1px solid #d9d9d9', marginTop: '20px' }}>
+  <div
+    style={{
+      border: '1px solid #d9d9d9',
+      marginTop: '20px',
+      backgroundColor: '#FFF',
+    }}
+  >
     <div style={{ margin: '4px 0px', borderBottom: '1px solid #d9d9d9' }}>
-      <h3
-        style={{ padding: '2px 12px' }}
-      >
+      <h3 style={{ padding: '2px 12px' }}>
         Filtro Personal
         <span style={{ float: 'right' }}>
-          <Button
-            size="small"
-            onClick={viewAllSpecialists}
-          >
+          <Button size="small" onClick={viewAllSpecialists}>
             Quitar filtros
           </Button>
         </span>

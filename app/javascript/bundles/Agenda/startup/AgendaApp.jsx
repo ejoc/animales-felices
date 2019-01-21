@@ -381,10 +381,9 @@ class AgendaApp extends Component {
       <Layout {...rest} isUserAdmin={isUserAdmin} activeNav="agenda">
         <div
           style={{
-            // paddingTop: '10px',
-            // paddingBottom: '20px',
             padding: '10px 10px 20px 10px',
             minHeight: '700px',
+            backgroundColor: '#F4F4F4',
           }}
         >
           <Row gutter={8}>

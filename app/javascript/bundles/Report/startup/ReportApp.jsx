@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col, Row } from 'antd'
+import { Col, Row, Card, Divider } from 'antd'
 import Layout from '../../../shared/components/Layout'
 import Bar from '../components/Bar'
 import LineChart from '../components/LineChart'
@@ -20,19 +20,30 @@ class ReportApp extends React.Component {
     const { periodicity } = this.state
     return (
       <Layout {...restProps} activeNav="statistical-reports">
-        <div style={{ padding: '15px', minHeight: '700px' }}>
+        <div
+          style={{
+            padding: '15px',
+            minHeight: '700px',
+            backgroundColor: '#F4F4F4',
+          }}
+        >
           <Row>
             <Col span={24}>
-              <LineChart />
+              <Card title="Cantidad de citas agendadas por servicios">
+                <LineChart />
+              </Card>
             </Col>
+            <Divider />
             <Col span={24}>
-              <div style={{ width: 600 }}>
-                <MenuChart
-                  periodicity={periodicity}
-                  onPeriodicityChange={this.handlePeriodicityChange}
-                />
-                <Bar periodicity={periodicity} />
-              </div>
+              <Card title="Participacion del personal">
+                <div style={{ width: 600 }}>
+                  <MenuChart
+                    periodicity={periodicity}
+                    onPeriodicityChange={this.handlePeriodicityChange}
+                  />
+                  <Bar periodicity={periodicity} />
+                </div>
+              </Card>
             </Col>
           </Row>
         </div>

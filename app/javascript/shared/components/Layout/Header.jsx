@@ -79,22 +79,24 @@ class Header extends React.Component {
             <span>AGENDA</span>
           </a>
         </Menu.Item>
-        <SubMenu key="transacciones" title={<span>TRANSACCIONES</span>}>
-          <Menu.Item key="registro-venta">
-            <a href="/facturacion">REGISTRO DE VENTA</a>
-          </Menu.Item>
+        <Menu.Item key="registro-venta">
+          <a href="/facturacion">REGISTRO DE VENTA</a>
+        </Menu.Item>
+        {isUserAdmin && (
           <Menu.Item key="ingreso-productos">
             <a href="/ingreso-productos/new">INGRESO DE PRODUCTOS</a>
           </Menu.Item>
-        </SubMenu>
-        <SubMenu key="reportes" title={<span>REPORTES</span>}>
-          <Menu.Item key="statistical-reports">
-            <a href="/reportes-estadisticos">REPORTES ESTADISTICOS</a>
-          </Menu.Item>
-          <Menu.Item key="sales-reports">
-            <a href="/reportes-ventas">REPORTES DE VENTAS</a>
-          </Menu.Item>
-        </SubMenu>
+        )}
+        {isUserAdmin && (
+          <SubMenu key="reportes" title={<span>REPORTES</span>}>
+            <Menu.Item key="statistical-reports">
+              <a href="/reportes-estadisticos">REPORTES ESTADISTICOS</a>
+            </Menu.Item>
+            <Menu.Item key="sales-reports">
+              <a href="/reportes-ventas">REPORTES DE VENTAS</a>
+            </Menu.Item>
+          </SubMenu>
+        )}
         {isMobile && userSignedIn && (
           <Menu.Item key="logout">
             <a href="/users/sign_out" data-method="delete" rel="nofollow">

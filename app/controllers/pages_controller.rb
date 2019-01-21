@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   before_action :authenticate_user!
+  before_action :authenticate_admin, only: [:purchase_invoice, :statistical_reports, :sales_reports]
 
   def agenda
     if current_user.admin?

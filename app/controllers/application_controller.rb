@@ -23,4 +23,12 @@ class ApplicationController < ActionController::Base
         props
       end
     end
+
+    def not_found
+      raise ActionController::RoutingError.new('Not Found')
+    end
+
+    def authenticate_admin
+      (current_user && current_user.admin?) || not_found
+    end
 end

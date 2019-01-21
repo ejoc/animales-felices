@@ -8,17 +8,18 @@ const ServiceFilter = ({
   services,
   viewAllServices,
 }) => (
-  <div style={{ border: '1px solid #d9d9d9', marginTop: '42px' }}>
+  <div
+    style={{
+      border: '1px solid #d9d9d9',
+      marginTop: '20px',
+      backgroundColor: '#FFF',
+    }}
+  >
     <div style={{ margin: '4px 0px', borderBottom: '1px solid #d9d9d9' }}>
-      <h3
-        style={{ padding: '2px 12px' }}
-      >
+      <h3 style={{ padding: '2px 12px' }}>
         Filtro Servicios
         <span style={{ float: 'right' }}>
-          <Button
-            size="small"
-            onClick={viewAllServices}
-          >
+          <Button size="small" onClick={viewAllServices}>
             Quitar filtros
           </Button>
         </span>
@@ -33,9 +34,7 @@ const ServiceFilter = ({
         mode="inline"
       >
         {services.map(service => (
-          <Menu.Item key={service.id}>
-            {service.attributes.name}
-          </Menu.Item>
+          <Menu.Item key={service.id}>{service.attributes.name}</Menu.Item>
         ))}
       </Menu>
     </div>
