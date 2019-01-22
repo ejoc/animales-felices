@@ -14,10 +14,14 @@ class InvoicesController < ApplicationController
           search_term,
           "%#{search_term}%",
           "%#{search_term}%"
-        ).page(params[:page]).per(records_per_page)
+        )
+        .order("created_at DESC")
+        .page(params[:page])
+        .per(records_per_page)
     else
       @invoices = Invoice.joins(specialist: :person, client: :person)
         .select('people_clients.name AS client', 'people.name as specialist', 'invoices.*')
+        .order("created_at DESC")
         .page(params[:page]).per(records_per_page)
     end
     render json: {
@@ -36,13 +40,14 @@ class InvoicesController < ApplicationController
       format.pdf do
         render pdf: "factura_no_#{@invoice.no}", disposition: 'attachment'
       end
+      format.xml { send_data render_to_string(:show), filename: 'factura.xml', type: 'application/xml', disposition: 'attachment' }
     end
   end
 
   def create
     @invoice = Invoice.new(invoice_params)
     @invoice.specialist_id = Specialist.first.id
-    
+
     if check_in
       render json: @invoice.id
     else

@@ -76,7 +76,6 @@ export default Agenda
 
 // export default DragDropContext(HTML5Backend)(Agenda)
 
-
 // const Agenda = props => (
 //   <DragAndDropCalendar
 //     selectable

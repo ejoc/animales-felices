@@ -10,7 +10,7 @@
             <td></td><td></td>
             <td>
               Factura #: <%= @invoice.no %><br>
-              Fecha: <%= @invoice.created_at.to_formatted_s(:long) %><br>
+              Fecha: <%= l(@invoice.created_at, format: :long) %><br>
             </td>
           </tr>
         </table>
@@ -22,10 +22,10 @@
         <table>
           <tr>
             <td>
-              <strong>RUC: 11002023003</strong><br>
-              <strong>Animales felices</strong><br>
+              <strong>RUC: 0913275566001</strong><br>
+              <strong>PABLO GREGORIO TRIVIÑO ULLOA</strong><br>
               Guayas, Guayaquil<br>
-              Mapasingue calle 12A
+              Coop. Jaime Polit Alcivar Mapasingue Este Mz. B SL. 1
             </td>
             <td></td><td></td>
             <td>
@@ -88,11 +88,11 @@
         </td>
 
         <td>
-          <%= detail.price_unit %>
+          <%= number_to_currency detail.price_unit, unit: "$" %>
         </td>
 
         <td>
-          <%= detail.price_total %>
+          <%= number_to_currency detail.price_total, unit: "$" %>
         </td>
       </tr>
       <%= %>
@@ -102,21 +102,21 @@
       <td></td><td></td><td></td>
       
       <td colspan="4">
-          Subtotal: $<%= @invoice.sub_total %>
+          Subtotal: <%= number_to_currency @invoice.sub_total, unit: "$" %>
       </td>
     </tr>
     <tr class="total">
       <td></td><td></td><td></td>
       
       <td colspan="4">
-          Iva: $<%= @invoice.iva %>
+          Iva: <%= number_to_currency @invoice.iva, unit: "$" %>
       </td>
     </tr>
     <tr class="total">
       <td></td><td></td><td></td>
       
       <td colspan="4">
-          Total: $<%= @invoice.total %>
+          Total: <%= number_to_currency(@invoice.total, :unit => "$") %>
       </td>
     </tr>
   </table>

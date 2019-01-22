@@ -5,8 +5,9 @@ import TimeGrid from 'react-big-calendar/lib/TimeGrid'
 import localizer from 'react-big-calendar/lib/localizer'
 
 function workWeekRange(date, options) {
-  return Week.range(date, options)
-    .filter(d => [7, 0].indexOf(d.getDay()) === -1)
+  return Week.range(date, options).filter(
+    d => [7, 0].indexOf(d.getDay()) === -1
+  )
 }
 
 class WorkWeek extends React.Component {
@@ -24,9 +25,8 @@ class WorkWeek extends React.Component {
   }
 }
 
-WorkWeek.range = (date, options) => (
+WorkWeek.range = (date, options) =>
   Week.range(date, options).filter(d => [7, 0].indexOf(d.getDay()) === -1)
-)
 
 WorkWeek.navigate = Week.navigate
 
@@ -35,7 +35,7 @@ WorkWeek.title = (date, { formats, culture }) => {
   return localizer.format(
     { start, end: rest.pop() },
     formats.dayRangeHeaderFormat,
-    culture,
+    culture
   )
 }
 

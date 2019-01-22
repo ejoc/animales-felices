@@ -1,4 +1,8 @@
 <div class="login-page">
+  <div class="login-logo" >
+    <%= image_tag("animalesfelices") %>
+  </div>
+  
   <div class="form">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => { class: 'login-form' }) do |f| %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email" %>

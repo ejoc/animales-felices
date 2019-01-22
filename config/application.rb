@@ -15,6 +15,9 @@ module AnimalesFelices
 
     config.i18n.default_locale = :es
 
+    config.time_zone = 'Eastern Time (US & Canada)'
+    config.active_record.default_timezone = :utc
+
     config.action_controller.action_on_unpermitted_parameters = :raise
 
     # Settings in config/environments/* take precedence over those specified here.

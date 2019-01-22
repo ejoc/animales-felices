@@ -40,7 +40,7 @@ const columns = [
       <span>
         <a href={`/invoices/${record.id}.pdf`}>PDF</a>
         <Divider type="vertical" />
-        <a href={`/invoices/${record.id}.pdf`}>XML</a>
+        <a href={`/invoices/${record.id}.xml`}>XML</a>
       </span>
     ),
   },

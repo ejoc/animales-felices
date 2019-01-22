@@ -1,14 +1,21 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 .login-page {
-  width: 360px;
+  width: 900px;
   padding: 8% 0 0;
   margin: auto;
+  display: flex;
+  flex-wrap: nowrap;
 }
+
+.login-page > div {
+  margin: 10px;
+}
+
 .form {
   position: relative;
   z-index: 1;
-  background: #FFFFFF;
+  background: #ffffff;
   max-width: 360px;
   margin: 0 auto 100px;
   padding: 45px;
@@ -16,7 +23,7 @@
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .form input {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   outline: 0;
   background: #f2f2f2;
   width: 100%;
@@ -26,21 +33,23 @@
   box-sizing: border-box;
   font-size: 14px;
 }
-.form input[type=submit] {
-  font-family: "Roboto", sans-serif;
+.form input[type='submit'] {
+  font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
   outline: 0;
   background: #40a9ff; /* #4CAF50 */
   width: 100%;
   border: 0;
   padding: 15px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
 }
-.form input[type=submit]:hover,.form input[type=submit]:active,.form input[type=submit]:focus {
+.form input[type='submit']:hover,
+.form input[type='submit']:active,
+.form input[type='submit']:focus {
   background: #1890ff; /* #43A047 */
 }
 .form .message {
@@ -61,8 +70,9 @@
   max-width: 300px;
   margin: 0 auto;
 }
-.container:before, .container:after {
-  content: "";
+.container:before,
+.container:after {
+  content: '';
   display: block;
   clear: both;
 }
@@ -86,15 +96,15 @@
   text-decoration: none;
 }
 .container .info span .fa {
-  color: #EF3B3A;
+  color: #ef3b3a;
 }
 body {
-  background: #69c0ff; /* #76b852 fallback for old browsers */
-  background: -webkit-linear-gradient(right, #69c0ff, #40a9ff); /* #8DC26F */
-  background: -moz-linear-gradient(right, #69c0ff, #40a9ff);
-  background: -o-linear-gradient(right, #69c0ff, #40a9ff);
-  background: linear-gradient(to left, #69c0ff, #40a9ff);
-  font-family: "Roboto", sans-serif;
+  background: #f4f4f4; /* #76b852 fallback for old browsers */
+  background: -webkit-linear-gradient(right, #d9d9d9, #e8e8e8); /* #8DC26F */
+  background: -moz-linear-gradient(right, #d9d9d9, #e8e8e8);
+  background: -o-linear-gradient(right, #d9d9d9, #e8e8e8);
+  background: linear-gradient(to left, #d9d9d9, #e8e8e8);
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;      
+  -moz-osx-font-smoothing: grayscale;
 }

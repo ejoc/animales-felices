@@ -7,7 +7,7 @@ import AccountNavigation from './AccountNavigation'
 
 // import Navigation from './Navigation'
 // import withScreen from '../../hocs/withScreen'
-// import FooImage from '../../images/logo-256.png'
+import Logo from '../../../images/logo.jpeg'
 
 const { SubMenu } = Menu
 
@@ -130,8 +130,7 @@ class Header extends React.Component {
         <Row>
           <Col lg={4} md={5} sm={24} xs={24}>
             <a id="logo" href="/">
-              {/* <img src={FooImage} alt="logo" /> */}
-              image
+              <img src={Logo} alt="logo" />
             </a>
           </Col>
           <Col lg={20} md={19} sm={0} xs={0}>

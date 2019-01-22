@@ -22,7 +22,8 @@ import ShowAppointment from '../components/ShowAppointment'
 import { getFieldErrors } from '../../../utils/utils'
 
 moment.locale('es')
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
+const localizer = BigCalendar.momentLocalizer(moment)
+// BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
 class AgendaApp extends Component {
   constructor(props) {
@@ -408,6 +409,7 @@ class AgendaApp extends Component {
             >
               <Card className={fetching ? 'fetching' : ''}>
                 <Agenda
+                  localizer={localizer}
                   events={showEvents}
                   date={day || new Date()}
                   // onEventDrop={this.moveEvent}
