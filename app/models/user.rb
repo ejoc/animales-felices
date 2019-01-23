@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   include Discard::Model
-  default_scope -> { kept }
+  # default_scope -> { kept }
   has_one :specialist
 
   accepts_nested_attributes_for :specialist
@@ -20,11 +20,15 @@ class User < ApplicationRecord
     !discarded? ? super : :account_inactive
   end
 
-  after_discard do
-    specialist.discard
-  end
+  # after_discard do
+  #   specialist.discard
+  # end
 
-  after_undiscard do
-    specialist.undiscard
+  # after_undiscard do
+  #   specialist.undiscard
+  # end
+
+  def active
+    !discarded?
   end
 end

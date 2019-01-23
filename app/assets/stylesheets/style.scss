@@ -102,23 +102,23 @@ table .rowClickable {
 
 .flash {
   padding: 20px;
-  background-color: blue;
+  background-color: #69c0ff;
   color: white;
 
   &-notice {
-    background-color: blue !important;
+    background-color: #69c0ff !important;
   }
 
   &-success {
-    background-color: green !important;
+    background-color: #95de64 !important;
   }
 
   &-danger {
-    background-color: #f44336 !important;
+    background-color: #ff7875 !important;
   }
 
   &-alert {
-    background-color: #f44336 !important;
+    background-color: #ff7875 !important;
   }
 }
 

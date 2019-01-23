@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :clients
-    resources :users # personal
+    resources :users do
+      member do
+        put 'active'
+        put 'inactive'
+      end
+    end
     resources :specialists
     resources :suppliers
     resources :companies

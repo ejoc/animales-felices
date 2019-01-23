@@ -3,6 +3,7 @@ xml.factura({ "id"=>"comprobante", "version": "2.0.0" }) do
   xml.infoTributaria do
     xml.razonSocial "PABLO GREGORIO TRIVIÑO ULLOA"
     xml.ruc "0913275566001"
+    xml.secuencial @invoice.no
   end
 
   xml.infoFactura do

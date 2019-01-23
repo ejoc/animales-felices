@@ -6,7 +6,7 @@ class Specialist < ApplicationRecord
   belongs_to :user, optional: true
   has_many :appointments
 
-  scope :kept, -> { undiscarded.joins(:user).merge(User.kept) }
+  # scope :kept, -> { undiscarded.joins(:user).merge(User.kept) }
 
   # validates :name, :email, :presence => true
   # validates :email, :presence => true

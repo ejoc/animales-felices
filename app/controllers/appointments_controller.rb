@@ -1,4 +1,5 @@
 class AppointmentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_appointment, only: [:show, :edit, :update, :destroy, :cancel]
   # before_action :set_specialist, only: [:show, :edit, :create, :update, :destroy]
 
@@ -23,8 +24,11 @@ class AppointmentsController < ApplicationController
     #   'appointments.canceled'
     # ).where('start_time > ? AND end_time < ?', date.beginning_of_week, date.end_of_week)
 
-    @events = Appointment.joins(service: :item)
-      .where('start_time > ? AND end_time < ?', date.beginning_of_week, date.end_of_week)
+    @events = Appointment.joins(service: :item).where('start_time > ? AND end_time < ?', date.beginning_of_week, date.end_of_week)
+
+    if !current_user.admin?
+      @events = @events.where(specialist_id: current_user.specialist_id)
+    end
 
     render json: AppointmentsSerializer.new(@events).serializable_hash[:data]
   end

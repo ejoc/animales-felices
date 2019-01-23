@@ -2,18 +2,20 @@ require "administrate/base_dashboard"
 
 class UserDashboard < Administrate::BaseDashboard
   
-  READ_ONLY_ATTRIBUTES = [ :id ]
+  READ_ONLY_ATTRIBUTES = [ :id, :active ]
 
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     email: Field::String,
     password: Field::Password,
-    specialist: Field::HasOne
+    active: Field::Boolean,
+    specialist: Field::HasOne,
   }.freeze
 
   COLLECTION_ATTRIBUTES = [
     :id,
     :email,
+    :active,
     :specialist,
   ]
 
