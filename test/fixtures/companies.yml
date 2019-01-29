@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+conpany_one:
   bin: MyString
   name: MyString
   address: MyString
   phone: MyString
   website: MyString
 
-two:
+conpany_two:
   bin: MyString
   name: MyString
   address: MyString

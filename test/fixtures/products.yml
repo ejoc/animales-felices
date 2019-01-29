@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  unit_type: MyString
-  description: MyString
+product_one:
+  # name: MyString
+  unit_type: unit_type_one
+  # description: MyString
 
-two:
-  name: MyString
-  unit_type: MyString
-  description: MyString
+product_two:
+  # name: MyString
+  unit_type: unit_type_two
+  # description: MyString

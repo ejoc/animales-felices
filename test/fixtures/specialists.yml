@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user: one
+specialist_one:
+  user: user_one
 
-two:
-  user: two
+specialist_two:
+  user: user_two

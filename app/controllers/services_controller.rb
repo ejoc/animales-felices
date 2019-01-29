@@ -10,6 +10,6 @@ class ServicesController < ApplicationController
       @services = Service.kept.joins(:item).page(params[:page]).per(records_per_page)
     end
 
-    render json: ServiceSerializer.new(@services)
+    render json: ServiceSerializer.new(@services, { params: { current_user: current_user } })
   end
 end

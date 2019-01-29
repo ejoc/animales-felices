@@ -2,7 +2,7 @@
   <%= react_component("AgendaApp", props: {
     specialists: SpecialistSerializer.new(@specialists),
     specialistsByService: @specialists_by_service,
-    services: ServiceSerializer.new(@services),
+    services: ServiceSerializer.new(@services, { params: { current_user: current_user } }),
     events: AppointmentsSerializer.new(@events).serializable_hash[:data],
   }.merge(default_props), prerender: false) %>
 </div>

@@ -1,8 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  client: one
-  specialist: one
+invoice_one:
+  client: client_one
+  specialist: specialist_one
   sub_total: 
   sub_total: 
   total: 
@@ -10,9 +10,9 @@ one:
   iva: 
   iva: 
 
-two:
-  client: two
-  specialist: two
+invoice_two:
+  client: client_two
+  specialist: specialist_two
   sub_total: 
   sub_total: 
   total: 

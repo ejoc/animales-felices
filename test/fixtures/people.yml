@@ -1,11 +1,43 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  address: MyString
-  phone: MyString
+person_one:
+  name: Juan
+  address: Miami
+  phone: 85555121
+  email: test@test.com
+  actable: client_one
 
-two:
-  name: MyString
-  address: MyString
-  phone: MyString
+person_two:
+  name: Maria
+  address: New York
+  phone: 51212122
+  email: test2@test.com
+  actable: client_two
+
+person_three:
+  name: Nathalie
+  address: New York
+  phone: 55421
+  email: test3@test.com
+  actable: supplier_two
+
+person_four:
+  name: Fernando
+  address: New York
+  phone: 542122
+  email: test4@test.com
+  actable: supplier_two
+
+person_five:
+  name: Martin
+  address: New York
+  phone: 5421212
+  email: test5@test.com
+  actable: specialist_one
+
+person_six:
+  name: Javier
+  address: New York
+  phone: 584848
+  email: test6@test.com
+  actable: specialist_two

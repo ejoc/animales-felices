@@ -1,13 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Form, Select } from 'antd'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faUsers,
-  faUser,
   faCalendarCheck,
+  faUser,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Form, Select } from 'antd'
+import PropTypes from 'prop-types'
+import React from 'react'
 import ClientInput from './ClientInput'
 
 const FormItem = Form.Item
@@ -51,7 +50,7 @@ class FormModal extends React.Component {
       // specialistsByService,
     } = this.props
     const { getFieldDecorator, getFieldValue } = form
-    const serviceInitial = (services[0] && services[0].id) || ''
+    const serviceInitial = (services && services[0] && services[0].id) || ''
     const serviceField = getFieldValue('service') || serviceInitial
 
     const serviceSelected = services.find(s => s.id === serviceField)

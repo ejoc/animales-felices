@@ -1,17 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  client: one
-  service: one
-  specialist: one
-  date_start: 2018-06-03 01:26:33
-  date_end: 2018-06-03 01:26:33
-  status: MyString
+appointments_one:
+  client_name: MyString
+  client_phone: MyString
+  client_email: MyString
+  service: service_one
+  specialist: specialist_one
+  start_time: 2018-06-03 01:26:33
+  end_time: 2018-06-03 01:26:33
+  canceled: false
 
-two:
-  client: two
-  service: two
-  specialist: two
-  date_start: 2018-06-03 01:26:33
-  date_end: 2018-06-03 01:26:33
-  status: MyString
+appointments_two:
+  client_name: MyString
+  client_phone: MyString
+  client_email: MyString
+  service: service_two
+  specialist: specialist_two
+  start_time: 2018-06-03 01:26:33
+  end_time: 2018-06-03 01:26:33
+  canceled: false

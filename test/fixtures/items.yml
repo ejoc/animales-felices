@@ -1,0 +1,27 @@
+item_one:
+  name: Corte de pelo
+  description: Corte de pelo
+  price: 15.5
+  actable_type: Service
+  actable_id: 1
+
+item_two:
+  name: Cita general
+  description: Cita general
+  price: 30
+  actable_type: Service
+  actable_id: 2
+
+item_three:
+  name: Mata garrapatas
+  description: Mata garrapatas
+  price: 14
+  actable_type: Product
+  actable_id: 1
+
+item_four:
+  name: Mata pulgas
+  description: Mata pulgas
+  price: 12
+  actable_type: Product
+  actable_id: 2

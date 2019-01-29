@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  duration_min: 
-  price: 9.99
+service_one:
+  # name: MyString
+  duration_min: 15
+  # price: 9.99
 
-two:
-  name: MyString
-  duration_min: 
-  price: 9.99
+service_two:
+  # name: MyString
+  duration_min: 30
+  # price: 9.99

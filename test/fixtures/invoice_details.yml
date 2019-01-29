@@ -1,19 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  invoice: one
-  item: one
-  cantidad: 9.99
-  price_unit: 
-  price_unit: 
-  price_total: 
-  price_total: 
+invoice_detail_one:
+  invoice: invoice_one
+  item: item_one
+  quantity: 9.99
+  price_unit:
+  price_total:
 
-two:
-  invoice: two
-  item: two
-  cantidad: 9.99
-  price_unit: 
-  price_unit: 
-  price_total: 
-  price_total: 
+invoice_detail_:
+  invoice: invoice_two
+  item: item_two
+  quantity: 9.99
+  price_unit:
+  price_total:

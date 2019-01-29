@@ -5,14 +5,14 @@ module Admin
         params[:user].delete(:password)
         params[:user].delete(:password_confirmation)
       end
-      if params[:user][:active] == "1"
-        params[:user][:discarded_at] = nil
-        # params[:user].delete(:discarded_at)
-      else
-        # requested_resource
-        params[:user][:discarded_at] = Time.now
-      end
-      params[:user].delete(:active)
+      # if params[:user][:active] == "1"
+      #   params[:user][:discarded_at] = nil
+      #   # params[:user].delete(:discarded_at)
+      # else
+      #   # requested_resource
+      #   params[:user][:discarded_at] = Time.now
+      # end
+      # params[:user].delete(:active)
       super
     end
 

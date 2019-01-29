@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  company: one
-  company_role: MyString
+supplier_one:
+  company: company_one
+  cedula: 02222222
+  company_role: Salesman
 
-two:
-  company: two
-  company_role: MyString
+supplier_two:
+  company: company_two
+  cedula: 322222111
+  company_role: Ventas
