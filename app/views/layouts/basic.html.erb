@@ -7,6 +7,7 @@
     <%= content_for(:title) %> - <%= Rails.application.class.parent_name.titlecase %>
   </title>
   <%= csrf_meta_tags %>
+  <%= favicon_link_tag asset_path('animalesfelices-favicon.png') %>
 
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%# render "layouts/stylesheet" %>

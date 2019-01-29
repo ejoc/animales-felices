@@ -1,30 +1,32 @@
-import React from 'react'
-import PropType from 'prop-types'
 import {
-  Row,
-  Col,
+  Button,
   Card,
+  Col,
   Divider,
   Form,
   Input,
-  Button,
-  Modal,
   message,
+  Modal,
   Popconfirm,
+  Row,
 } from 'antd'
-
-import Layout from '../../../shared/components/Layout'
-import { getClientByCode, invoiceCheckIn, createClient } from '../../../api'
-import withSubscription from '../../../shared/lib/withSubscription'
-import TableList from '../../../shared/components/SearchableTable'
+import PropType from 'prop-types'
+import React from 'react'
+import { createClient, getClientByCode, invoiceCheckIn } from '../../../api'
+import InputMask from '../../../shared/components/InputMask'
+import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 import InvoiceListItem from '../../../shared/components/InvoiceListItem'
+import Layout from '../../../shared/components/Layout'
+import TableList from '../../../shared/components/SearchableTable'
+import withSubscription from '../../../shared/lib/withSubscription'
+import { getFieldErrors, IVA, reject } from '../../../utils/utils'
 // import SearchableInput from '../../../shared/components/SearchableInput'
 import ClientInput from '../components/ClientInput'
 import NewClientForm from '../components/NewClientForm'
-import InvoiceFooter from '../../../shared/components/InvoiceFooter'
 import SelectItemForm from '../components/SelectItemForm'
 
-import { IVA, getFieldErrors, reject } from '../../../utils/utils'
+const INVOICE_NO_PATTERN = /^\d{3}-\d{3}-\d{9}$/
+const INVOICE_NO_CHECKER = new RegExp(INVOICE_NO_PATTERN)
 
 const columns = [
   {
@@ -143,11 +145,9 @@ class InvoiceApp extends React.Component {
       if (err) {
         return
       }
-      // console.log('Received values of form: ', values)
       createClient(
         values,
         data => {
-          // console.log(data)
           const { form } = this.props
           form.setFieldsValue({
             client: {
@@ -281,6 +281,14 @@ class InvoiceApp extends React.Component {
     callback()
   }
 
+  checkInvoiceNumber = (rule, value, cb) => {
+    if (!INVOICE_NO_CHECKER.test(value)) {
+      cb('Por favor ingrese un numero de factura valido')
+      return
+    }
+    cb()
+  }
+
   render() {
     const { form, currentUser, ...rest } = this.props
     const { getFieldDecorator } = form
@@ -307,14 +315,20 @@ class InvoiceApp extends React.Component {
                 <Col span={12}>
                   <FormItem label="Factura #" {...formItemLayout}>
                     {getFieldDecorator('no', {
-                      // initialValue: '',
+                      initialValue: '',
                       rules: [
                         {
-                          required: true,
-                          message: 'Por favor ingrese en numero de factura!',
+                          validator: this.checkInvoiceNumber,
+                          // required: true,
+                          // message: 'Por favor ingrese en numero de factura!',
                         },
                       ],
-                    })(<Input placeholder="Numero de factura" />)}
+                    })(
+                      <InputMask
+                        mask="999-999-999999999"
+                        placeholder="Numero de factura"
+                      />
+                    )}
                   </FormItem>
                   <FormItem label="Personal" {...formItemLayout}>
                     {getFieldDecorator('specialistId', {

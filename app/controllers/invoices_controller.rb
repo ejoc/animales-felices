@@ -1,7 +1,8 @@
 class InvoicesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_invoice, only: [:show]
   # desabled on production
-  skip_before_action :verify_authenticity_token
+  # skip_before_action :verify_authenticity_token
   layout 'basic'
   def index
     if search_params
@@ -46,7 +47,7 @@ class InvoicesController < ApplicationController
 
   def create
     @invoice = Invoice.new(invoice_params)
-    @invoice.specialist_id = Specialist.first.id
+    @invoice.specialist_id = current_user.specialist.id
 
     if check_in
       render json: @invoice.id

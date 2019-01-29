@@ -1,16 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {
-  Form,
-  Select,
-  Modal,
-  DatePicker,
-  TimePicker,
-  Spin,
-} from 'antd'
-import moment from 'moment'
+import { faCalendarCheck, faUsers } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faCalendarCheck } from '@fortawesome/free-solid-svg-icons'
+import { DatePicker, Form, Modal, Select, Spin, TimePicker } from 'antd'
+import moment from 'moment'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { bussySlotsSpecialist } from '../../../api'
 
 const FormItem = Form.Item
@@ -33,9 +26,14 @@ const formatTime = 'hh:mm'
 
 function disabledDate(current) {
   // Can not select days before today and today
-  return current && current < moment().endOf('day').subtract(1, 'days')
+  return (
+    current &&
+    current <
+      moment()
+        .endOf('day')
+        .subtract(1, 'days')
+  )
 }
-
 
 function range(start, end) {
   const result = []
@@ -80,11 +78,15 @@ class FormModal extends React.Component {
     //   specialist: String(appointment.attributes.specialistId),
     //   date: moment(),
     // })
-    const { service, specialist, date } = getFieldsValue(['service', 'specialist', 'date'])
-    this.fetchBussySlotsSpecialist(service, specialist, date.format(dateFormat))
+    const { service, specialist, date } = getFieldsValue([
+      'service',
+      'specialist',
+      'date',
+    ])
+    this.fetchBussySlotsSpecialist(specialist, service, date.format(dateFormat))
   }
 
-  handleServiceChange = (service) => {
+  handleServiceChange = service => {
     // const { form } = this.props
     const { form, services } = this.props
     const { getFieldsValue } = form
@@ -97,7 +99,7 @@ class FormModal extends React.Component {
     this.fetchBussySlotsSpecialist(specialist, service, date.format(dateFormat))
   }
 
-  handleSpecialistChange = (specialist) => {
+  handleSpecialistChange = specialist => {
     const { form } = this.props
     const { getFieldsValue } = form
     const { service, date } = getFieldsValue(['service', 'date'])
@@ -132,7 +134,7 @@ class FormModal extends React.Component {
       .concat(getNonWorkingHours())
   }
 
-  disabledMinutes = (selectedHour) => {
+  disabledMinutes = selectedHour => {
     const { specialistSchedule } = this.state
     const { schedule } = specialistSchedule
     return schedule
@@ -146,7 +148,7 @@ class FormModal extends React.Component {
       specialist,
       service,
       date,
-      (data) => {
+      data => {
         this.setState({
           specialistSchedule: {
             schedule: data,
@@ -154,14 +156,12 @@ class FormModal extends React.Component {
           },
         })
       },
-      error => console.warn(error),
+      error => console.warn(error)
     )
   }
 
   render() {
-    const {
-      specialistSchedule,
-    } = this.state
+    const { specialistSchedule } = this.state
     const { fetching } = specialistSchedule
     const {
       form,
@@ -173,9 +173,14 @@ class FormModal extends React.Component {
       appointment,
     } = this.props
     const { getFieldDecorator, getFieldValue } = form
-    const appointmentDate = moment(appointment.attributes.startTime).format('MMMM DD, h:mm a')
-    const title = `Editar de reservación para ${appointment.attributes.clientName} - ${appointmentDate}`
-    const serviceField = getFieldValue('service') || (services[0] && services[0].id) || ''
+    const appointmentDate = moment(appointment.attributes.startTime).format(
+      'MMMM DD, h:mm a'
+    )
+    const title = `Editar de reservación para ${
+      appointment.attributes.clientName
+    } - ${appointmentDate}`
+    const serviceField =
+      getFieldValue('service') || (services[0] && services[0].id) || ''
 
     const serviceSelected = services.find(s => s.id === serviceField)
     let specialistsIds = []
@@ -186,93 +191,100 @@ class FormModal extends React.Component {
     const specialistsOptions = specialists
       .filter(s => specialistsIds.includes(String(s.id)))
       .map(s => (
-        <Option
-          key={s.id}
-          value={s.id}
-        >
+        <Option key={s.id} value={s.id}>
           {s.attributes.name}
         </Option>
       ))
     return (
-      <Modal
-        title={title}
-        visible={visible}
-        onOk={onOk}
-        onCancel={onCancel}
-      >
+      <Modal title={title} visible={visible} onOk={onOk} onCancel={onCancel}>
         <Form>
           {/* {getFieldDecorator('serviceDurationMin', { hidde: true })} */}
           <FormItem
-            label={(
+            label={
               <span>
                 Servicio &nbsp;
                 <FontAwesomeIcon icon={faCalendarCheck} />
               </span>
-            )}
+            }
             {...formItemLayout}
           >
             {getFieldDecorator('service', {
               initialValue: String(appointment.attributes.serviceId),
-              rules: [{ required: true, message: 'Por favor seleccione el servicio!' }],
+              rules: [
+                {
+                  required: true,
+                  message: 'Por favor seleccione el servicio!',
+                },
+              ],
             })(
               <Select onChange={this.handleServiceChange}>
                 {services.map(service => (
-                  <Option
-                    key={service.id}
-                    value={service.id}
-                  >
+                  <Option key={service.id} value={service.id}>
                     {service.attributes.name}
                   </Option>
                 ))}
-              </Select>,
+              </Select>
             )}
             <span>
-              {`Duración del servicio: ${serviceSelected.attributes.durationMin} minutos`}
+              {`Duración del servicio: ${
+                serviceSelected.attributes.durationMin
+              } minutos`}
             </span>
           </FormItem>
           <FormItem
-            label={(
+            label={
               <span>
                 Especialista &nbsp;
                 <FontAwesomeIcon icon={faUsers} />
               </span>
-            )}
+            }
             {...formItemLayout}
           >
             {getFieldDecorator('specialist', {
               initialValue: String(appointment.attributes.specialistId),
-              rules: [{ required: true, message: 'Por favor seleccione el especialista!' }],
+              rules: [
+                {
+                  required: true,
+                  message: 'Por favor seleccione el especialista!',
+                },
+              ],
             })(
               <Select onChange={this.handleSpecialistChange}>
                 {specialistsOptions}
-              </Select>,
+              </Select>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label="Fecha"
-          >
+          <FormItem {...formItemLayout} label="Fecha">
             {getFieldDecorator('date', {
               initialValue: moment(),
-              rules: [{ type: 'object', required: true, message: 'Please select time!' }],
+              rules: [
+                {
+                  type: 'object',
+                  required: true,
+                  message: 'Please select time!',
+                },
+              ],
             })(
               <DatePicker
                 // showTime
                 onChange={this.handleDateChange}
                 format={dateFormat}
                 disabledDate={disabledDate}
-              />,
+              />
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label="Hora"
-          >
+          <FormItem {...formItemLayout} label="Hora">
             {getFieldDecorator('time', {
               // initialValue: moment(appointment.startTime),
-              rules: [{ type: 'object', required: true, message: 'Please select time!' }],
+              rules: [
+                {
+                  type: 'object',
+                  required: true,
+                  message: 'Please select time!',
+                },
+              ],
             })(
               <TimePicker
                 disabled={fetching}
@@ -282,16 +294,14 @@ class FormModal extends React.Component {
                 hideDisabledOptions
                 disabledHours={this.disabledHours}
                 disabledMinutes={this.disabledMinutes}
-              />,
+              />
             )}
-            { fetching
-            && (
+            {fetching && (
               <span>
                 &nbsp;
                 <Spin />
               </span>
-            )
-            }
+            )}
           </FormItem>
         </Form>
       </Modal>

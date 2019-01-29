@@ -1,5 +1,5 @@
-import React from 'react'
 import { Form, Input } from 'antd'
+import React from 'react'
 
 const FormItem = Form.Item
 
@@ -23,7 +23,6 @@ class NewClientForm extends React.Component {
       <Form>
         <FormItem label="Cedula" {...formItemLayout}>
           {getFieldDecorator('cedula', {
-            initialValue: '0998051155',
             rules: [
               {
                 required: true,
@@ -35,7 +34,6 @@ class NewClientForm extends React.Component {
 
         <FormItem label="Nombre" {...formItemLayout}>
           {getFieldDecorator('name', {
-            initialValue: 'Elias',
             rules: [
               {
                 required: true,
@@ -47,7 +45,6 @@ class NewClientForm extends React.Component {
 
         <FormItem label="Email" {...formItemLayout}>
           {getFieldDecorator('email', {
-            initialValue: 'elias@ups.com',
             rules: [
               { type: 'email', message: 'Ingrese un email valido!' },
               {
@@ -60,7 +57,6 @@ class NewClientForm extends React.Component {
 
         <FormItem label="Dirección" {...formItemLayout}>
           {getFieldDecorator('address', {
-            initialValue: 'mapasingue',
             rules: [
               {
                 required: true,
@@ -72,7 +68,6 @@ class NewClientForm extends React.Component {
 
         <FormItem label="Telefono" {...formItemLayout}>
           {getFieldDecorator('phone', {
-            initialValue: '2105512',
             rules: [
               {
                 required: true,

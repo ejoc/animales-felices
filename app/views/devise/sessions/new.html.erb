@@ -9,9 +9,11 @@
 
       <%= f.password_field :password, autocomplete: "off", placeholder: "Password" %>
 
-      <%= f.submit "Log in" %>
+      <%= f.submit "Iniciar sessión" %>
 
-      <%# <p class="message">Not registered? <a href="#">Create an account</a></p> %>
+      <p class="message">
+        <%= link_to "Olvido su contraseña?", new_user_password_path %>
+      </p>
     <% end %>
   </div>
 </div>

@@ -1,15 +1,11 @@
 /* eslint react/prefer-stateless-function: 0 */
 // es necesatio que el componente sea fullstate porque se usa el HOC DragDropContext
-import React from 'react'
 import PropTypes from 'prop-types'
-// import HTML5Backend from 'react-dnd-html5-backend'
-// import { DragDropContext } from 'react-dnd'
-// import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
+import React from 'react'
 import BigCalendar from 'react-big-calendar'
-
-import WorkWeek from './WorkWeek'
-import CustomEvent from './CustomEvent'
 import getAvatarColor from '../../resourceColors'
+import CustomEvent from './CustomEvent'
+import WorkWeek from './WorkWeek'
 
 const messages = {
   month: 'Mes',

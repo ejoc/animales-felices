@@ -15,6 +15,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   <%= javascript_pack_tag "#{controller_name}-bundle" %>
   <%= stylesheet_pack_tag "#{controller_name}-bundle" %>
+  <%= favicon_link_tag asset_path('animalesfelices-favicon.png') %>
 </head>
 <body>
   <%- render "layouts/topnavbar" %>

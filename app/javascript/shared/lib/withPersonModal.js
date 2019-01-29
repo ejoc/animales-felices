@@ -1,5 +1,5 @@
-import React from 'react'
-import api from '../../api'
+import React from 'react';
+import api from '../../api';
 
 function withPersonModal(WrappedComponent, selectData) {
   // ...and returns another component...
@@ -14,7 +14,6 @@ function withPersonModal(WrappedComponent, selectData) {
     }
 
     onSearch(input) {
-      // console.log('adsasd', input)
       this.setState({
         loading: true,
       }, () => {
@@ -23,7 +22,6 @@ function withPersonModal(WrappedComponent, selectData) {
           input,
         ).then(
           ({ data }) => {
-            // console.log(data)
             this.setState({
               data,
               loading: false,

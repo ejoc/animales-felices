@@ -1,25 +1,23 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Col, Row, Modal, notification, Button, Card } from 'antd'
-import BigCalendar from 'react-big-calendar'
+import { Button, Card, Col, Modal, notification, Row } from 'antd'
 import moment from 'moment'
-
-import Layout from '../../../shared/components/Layout'
-import FilterPanel from '../components/FilterPanel'
-import BookingForm from '../components/BookingForm'
-import Agenda from '../components/Agenda'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import BigCalendar from 'react-big-calendar'
 import {
   bookingAppointment,
-  getAppointments,
   cancelAppointment,
-  updateAppointment,
   getAppointment,
+  getAppointments,
+  updateAppointment,
 } from '../../../api'
-// import 'react-big-calendar/lib/css/react-big-calendar.css'
-
-import EditAppointment from '../components/EditAppointment'
-import ShowAppointment from '../components/ShowAppointment'
+import Layout from '../../../shared/components/Layout'
 import { getFieldErrors } from '../../../utils/utils'
+import Agenda from '../components/Agenda'
+import BookingForm from '../components/BookingForm'
+// import 'react-big-calendar/lib/css/react-big-calendar.css'
+import EditAppointment from '../components/EditAppointment'
+import FilterPanel from '../components/FilterPanel'
+import ShowAppointment from '../components/ShowAppointment'
 
 moment.locale('es')
 const localizer = BigCalendar.momentLocalizer(moment)
@@ -187,7 +185,6 @@ class AgendaApp extends Component {
   }
 
   createBooking = ({ slots }) => {
-    // console.log(slots[0], new Date(), slots[0] < new Date())
     if (slots[0] < new Date()) {
       Modal.error({
         title: 'Ops... Aun no viajamos en el tiempo',
@@ -419,7 +416,6 @@ class AgendaApp extends Component {
                   onSelectSlot={this.createBooking}
                   onSelectEvent={this.handleShowAppointment}
                   onNavigate={this.handleNavigate}
-                  // onView={() => console.log('onView')}
                 />
               </Card>
             </Col>

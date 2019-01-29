@@ -4,6 +4,8 @@ xml.factura({ "id"=>"comprobante", "version": "2.0.0" }) do
     xml.razonSocial "PABLO GREGORIO TRIVIÑO ULLOA"
     xml.ruc "0913275566001"
     xml.secuencial @invoice.no
+    xml.estab "001"
+    xml.ptoEmi "001"
   end
 
   xml.infoFactura do

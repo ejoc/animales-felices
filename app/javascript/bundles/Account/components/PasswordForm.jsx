@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import { Button, Form, Input, notification } from 'antd'
 import PropTypes from 'prop-types'
-import { Form, Input, Button, notification } from 'antd'
-
+import React, { Component } from 'react'
 import { updatePassword } from '../../../api'
 
 const FormItem = Form.Item
@@ -57,7 +56,6 @@ class PasswordForm extends Component {
             this.setState({ submitting: false })
           },
           errors => {
-            // console.log('error al cambiar la contraseña', errors.response.data)
             form.resetFields()
             const errorsData = errors.response.data
             let fieldErrors

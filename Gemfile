@@ -91,3 +91,4 @@ gem 'rails-assets-sweetalert2', source: 'https://rails-assets.org'
 # gem 'active_record_upsert' # soft delete recovery
 
 # gem 'devise_invitable'
+gem "letter_opener", :group => :development

@@ -1,7 +1,6 @@
-import React from 'react'
+import { Button, Col, Form, Input, notification, Row } from 'antd'
 import PropTypes from 'prop-types'
-import { Button, Form, Input, Row, Col, notification } from 'antd'
-
+import React from 'react'
 import { updateEmail } from '../../../api'
 
 const FormItem = Form.Item
@@ -34,7 +33,6 @@ class EmailForm extends React.Component {
             this.setState({ submitting: false, currentEmail: values.email })
           },
           errors => {
-            // console.log('error al cambiar la contraseña', errors.response.data)
             form.resetFields()
             const errorsData = errors.response.data
             let fieldErrors

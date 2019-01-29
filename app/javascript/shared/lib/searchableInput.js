@@ -1,5 +1,5 @@
-import React from 'react'
-import api from '../../api'
+import React from 'react';
+import api from '../../api';
 
 function searchableInput(selectList, selectOne) {
   // ...and returns another component...
@@ -15,7 +15,6 @@ function searchableInput(selectList, selectOne) {
       }
 
       onSearch(input) {
-        // console.log('adsasd', input)
         this.setState({
           loading: true,
         }, () => {
@@ -32,29 +31,6 @@ function searchableInput(selectList, selectOne) {
           )
         })
       }
-
-      // onBlur = (e) => {
-      //   const { target } = e
-      //   const { value } = target
-      //   // const value = e.target.value
-
-      //   if (value) {
-      //     selectOne(api, value).then(
-      //       ({ data }) => {
-      //         const item = data || {}
-      //         // const { form } = this.props
-      //         // form.setFieldsValue({
-      //         //   supplierId: supplier.id,
-      //         // })
-
-      //         // this.setState({
-      //         //   currentSupplier: supplier,
-      //         // })
-      //       },
-      //       err => console.error(err),
-      //     )
-      //   }
-      // }
 
       render() {
         const { data, loading } = this.state

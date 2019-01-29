@@ -1,5 +1,5 @@
-import React from 'react'
-import api from '../../api'
+import React from 'react';
+import api from '../../api';
 
 function withSubscription(selectList) {
   // ...and returns another component...
@@ -16,7 +16,6 @@ function withSubscription(selectList) {
       }
 
       // componentDidMount() {
-      //   console.log('mount')
       //   selectList(
       //     api,
       //     undefined,
