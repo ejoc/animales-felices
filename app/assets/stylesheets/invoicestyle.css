@@ -108,15 +108,31 @@ body a {
   }
 } */
 
-.list-items {
-  height: 500px;
-}
-
-.invoice-customer-detail {
-  margin-left: 50px;
-  margin-bottom: 20px;
+.invoice-template {
+  padding: 55px 15px !important;
+  line-height: 18px !important;
+  /* border: 1px solid #eee; */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); */
 }
 
 .invoice-date {
-  margin-left: 60%;
+  margin-left: 48%;
+  padding: 0;
+}
+
+.invoice-date table td {
+  text-align: right;
+}
+
+.list-items {
+  height: 475px;
+}
+
+.invoice-customer-detail {
+  margin-left: 40px;
+  margin-bottom: 15px;
+}
+
+.invoice-footer td {
+  padding-right: 15px;
 }

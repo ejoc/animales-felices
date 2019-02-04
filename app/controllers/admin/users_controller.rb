@@ -41,7 +41,8 @@ module Admin
     end
 
     def scoped_resource
-      resource_class.where.not(email: current_user.email)
+      resource_class
+        .where.not(email: current_user.email, admin: true)
     end
   end
 end
