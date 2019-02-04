@@ -243,8 +243,10 @@ class InvoiceApp extends React.Component {
                   title: 'Se ha registrado la factura correctamente!',
                   content: (
                     <p>
-                      Para descargar la factura en PDF haga click{' '}
-                      <a href={`/invoices/${invoiceId}.pdf`}>aqui</a>
+                      Para imprimir la factura haga click{' '}
+                      <a href={`/invoices/${invoiceId}/print`} target="_blank">
+                        aqui
+                      </a>
                     </p>
                   ),
                 })

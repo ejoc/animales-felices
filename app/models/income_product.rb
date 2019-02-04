@@ -7,6 +7,8 @@ class IncomeProduct < ApplicationRecord
   accepts_nested_attributes_for :details
 
   before_validation :ensure_calculate_values
+
+  validates_presence_of :supplier, :specialist, :details
  
   private
     def ensure_calculate_values

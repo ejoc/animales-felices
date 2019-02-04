@@ -1,6 +1,6 @@
 class InvoicesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_invoice, only: [:show]
+  before_action :set_invoice, only: [:show, :print]
   # desabled on production
   # skip_before_action :verify_authenticity_token
   layout 'basic'
@@ -43,6 +43,10 @@ class InvoicesController < ApplicationController
       end
       format.xml { send_data render_to_string(:show), filename: 'factura.xml', type: 'application/xml', disposition: 'attachment' }
     end
+  end
+
+  def print
+    render pdf: "factura_no_#{@invoice.no}", page_size: 'A5', template: 'invoices/template'
   end
 
   def create

@@ -27,8 +27,8 @@ body a {
   max-width: 800px;
   margin: auto;
   padding: 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  /* border: 1px solid #eee; */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); */
   font-size: 16px;
   line-height: 24px;
   font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
@@ -66,7 +66,7 @@ body a {
 
 .invoice-box table tr.heading td {
   background: #eee;
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #ddd; */
   font-weight: bold;
 }
 
@@ -75,7 +75,7 @@ body a {
 }
 
 .invoice-box table tr.item td {
-  border-bottom: 1px solid #eee;
+  /* border-bottom: 1px solid #eee; */
 }
 
 .invoice-box table tr.item.last td {
@@ -83,7 +83,7 @@ body a {
 }
 
 .invoice-box table tr.total td:nth-child(4) {
-  border-top: 2px solid #eee;
+  /* border-top: 2px solid #eee; */
   font-weight: bold;
   text-align: right;
 }
@@ -107,3 +107,16 @@ body a {
     text-align: center;
   }
 } */
+
+.list-items {
+  height: 500px;
+}
+
+.invoice-customer-detail {
+  margin-left: 50px;
+  margin-bottom: 20px;
+}
+
+.invoice-date {
+  margin-left: 60%;
+}

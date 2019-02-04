@@ -1,5 +1,5 @@
 require 'ffaker'
-require 'awesome_print'
+# require 'awesome_print'
 
 task :seed_appoinments => :environment do
 
@@ -44,7 +44,7 @@ task :seed_appoinments => :environment do
     if appointment.valid?
       appointment.save
     else
-      ap appointment.errors
+      p appointment.errors
     end
   end
 end

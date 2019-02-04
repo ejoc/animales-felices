@@ -60,7 +60,10 @@ Rails.application.routes.draw do
   get 'appointments/:day/:month/:year', to: 'appointments#index'
 
   resources :invoices, only: [:index, :show, :create] do
-    member { delete 'cancel' }
+    member do 
+      delete 'cancel'
+      get 'print', :defaults => { :format => 'pdf' }
+    end
   end
 
   resources :income_products, only: [:index, :create]

@@ -8,7 +8,8 @@ class Invoice < ApplicationRecord
 
   before_validation :calculate_total
   validates :no, uniqueness: { message: 'Numero de factura ya ha sido registrado' }
- 
+  validates_presence_of :client, :specialist, :details
+
   private
     def calculate_total
       self.sub_total = self.details.map{|i| i.price_total }.sum()

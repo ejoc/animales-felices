@@ -1,0 +1,89 @@
+<div class="invoice-box">
+  <table cellpadding="0" cellspacing="0">
+    <tr class="top">
+      <td></td><td></td><td></td>
+      <td colspan="5">
+        <table>
+          <tr>
+            <td>
+              Guayaquil
+            </td>
+            <td>
+              <%= @invoice.created_at.day %>
+            </td>
+            <td>
+              <%= @invoice.created_at.month %>
+            </td>
+            <td>
+              <%= @invoice.created_at.year %>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        <%= @invoice.client.name %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @invoice.client.cedula %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= @invoice.client.address %> | <%= @invoice.client.phone %>
+      </td>
+    </tr>
+
+    <tr>
+      <td></td>
+    </tr>
+    <tr><td></td></tr>
+    <tr><td></td></tr>
+    <% @invoice.details.each do |detail| %>
+      <tr class="item">
+        <td>
+          <%= detail.quantity %>
+        </td>
+        
+        <td>
+          <%= detail.item.name %>
+        </td>
+
+        <td>
+          <%= number_to_currency detail.price_unit, unit: "$" %>
+        </td>
+
+        <td>
+          <%= number_to_currency detail.price_total, unit: "$" %>
+        </td>
+      </tr>
+      <%= %>
+    <% end %>
+    
+    <tr class="total">
+      <td></td><td></td><td></td>
+      
+      <td colspan="4">
+          Subtotal: <%= number_to_currency @invoice.sub_total, unit: "$" %>
+      </td>
+    </tr>
+    <tr class="total">
+      <td></td><td></td><td></td>
+      
+      <td colspan="4">
+          Iva: <%= number_to_currency @invoice.iva, unit: "$" %>
+      </td>
+    </tr>
+    <tr class="total">
+      <td></td><td></td><td></td>
+      
+      <td colspan="4">
+          Total: <%= number_to_currency(@invoice.total, :unit => "$") %>
+      </td>
+    </tr>
+  </table>
+</div>
