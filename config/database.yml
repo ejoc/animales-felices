@@ -84,4 +84,7 @@ test:
 #
 production:
   <<: *default
-  database: animales-felices_production
+  username: <%= Rails.application.credentials.db_username %>
+  password: <%= Rails.application.credentials.db_password %>
+  database: <%= Rails.application.credentials.db_name %>
+  host: <%= Rails.application.credentials.db_host %>
