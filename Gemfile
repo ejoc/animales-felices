@@ -92,3 +92,4 @@ gem 'rails-assets-sweetalert2', source: 'https://rails-assets.org'
 # gem 'devise_invitable'
 gem "letter_opener", :group => :development
 gem 'mailgun-ruby'
+gem 'rack-cors', '~> 1.0', '>= 1.0.2'
