@@ -5,8 +5,8 @@
         <table>
           <tr>
             <td class="title">
-              <%# image_tag wicked_pdf_asset_base64 %>
-              <%= wicked_pdf_image_tag('animalesfelices-invoice.jpeg', :class => 'logo') %>
+              <%# wicked_pdf_image_tag :class => 'logo' %>
+              <%= image_tag wicked_pdf_asset_base64('animalesfelices-invoice.jpeg') %>
             </td>
             <td></td><td></td>
             <td>
