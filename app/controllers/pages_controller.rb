@@ -2,12 +2,13 @@ class PagesController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_admin, only: [:purchase_invoice, :statistical_reports, :sales_reports]
 
+  # .select('DISTINCT(services.name)')
   def agenda
     if current_user.admin?
       @specialists = Specialist.joins(:person).select('people.name')
-      @services = Service.all
-      @specialists_by_service = SpecialistService.select('specialist_id', 'service_id')
-      .where(active: true)
+      # @services = Service.all
+      @services = Service.joins(:specialist_services).distinct
+      @specialists_by_service = SpecialistService.select('specialist_id', 'service_id').where(active: true)
     else
       @specialists = Specialist.joins(:person).select('people.name')
         .where('specialists.id = ?', current_user.specialist.id)
