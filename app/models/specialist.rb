@@ -15,7 +15,7 @@ class Specialist < ApplicationRecord
   def schedule
     @schedule ||= {
       start: 8,
-      end:  18,
+      end:  20,
     }
   end
 

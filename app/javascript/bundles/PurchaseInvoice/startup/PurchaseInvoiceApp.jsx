@@ -1,28 +1,26 @@
-import React from 'react'
-import PropType from 'prop-types'
 import {
-  Row,
-  Col,
+  Button,
   Card,
+  Col,
   Divider,
   Form,
   Input,
-  Button,
-  Modal,
   message,
+  Modal,
   Popconfirm,
+  Row,
 } from 'antd'
-
-import Layout from '../../../shared/components/Layout'
+import PropType from 'prop-types'
+import React from 'react'
 import { getSupplierByCode, registerIncomeProducts } from '../../../api'
-import withSubscription from '../../../shared/lib/withSubscription'
-import TableList from '../../../shared/components/SearchableTable'
-import InvoiceListItem from '../../../shared/components/InvoiceListItem'
-import SelectProductForm from '../components/SelectProductForm'
-import SearchableInput from '../../../shared/components/SearchableInput'
 import InvoiceFooter from '../../../shared/components/InvoiceFooter'
-
+import InvoiceListItem from '../../../shared/components/InvoiceListItem'
+import Layout from '../../../shared/components/Layout'
+import SearchableInput from '../../../shared/components/SearchableInput'
+import TableList from '../../../shared/components/SearchableTable'
+import withSubscription from '../../../shared/lib/withSubscription'
 import { IVA, reject } from '../../../utils/utils'
+import SelectProductForm from '../components/SelectProductForm'
 
 const columns = [
   {
@@ -234,7 +232,7 @@ class PurchaseInvoiceApp extends React.Component {
         <div
           style={{
             padding: '20px 120px',
-            minHeight: '700px',
+            minHeight: '100vh',
             backgroundColor: '#F4F4F4',
           }}
         >

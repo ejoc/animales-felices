@@ -380,7 +380,7 @@ class AgendaApp extends Component {
         <div
           style={{
             padding: '10px 10px 20px 10px',
-            minHeight: '700px',
+            minHeight: '100vh',
             backgroundColor: '#F4F4F4',
           }}
         >

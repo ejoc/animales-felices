@@ -1,5 +1,5 @@
+import { Card, Col, Divider, Row } from 'antd'
 import React from 'react'
-import { Col, Row, Card, Divider } from 'antd'
 import Layout from '../../../shared/components/Layout'
 import Bar from '../components/Bar'
 import LineChart from '../components/LineChart'
@@ -23,7 +23,7 @@ class ReportApp extends React.Component {
         <div
           style={{
             padding: '15px',
-            minHeight: '700px',
+            minHeight: '100vh',
             backgroundColor: '#F4F4F4',
           }}
         >

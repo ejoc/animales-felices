@@ -307,7 +307,7 @@ class InvoiceApp extends React.Component {
         <div
           style={{
             padding: '20px 120px',
-            minHeight: '700px',
+            minHeight: '100vh',
             backgroundColor: '#F4F4F4',
           }}
         >

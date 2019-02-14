@@ -1,9 +1,8 @@
-import React from 'react'
 import { Calendar } from 'antd'
-
-import SpecialistFilter from './SpecialistFilter'
-import ServiceFilter from './ServiceFilter'
+import React from 'react'
 import AppointmentFilter from './AppointmentFilter'
+import ServiceFilter from './ServiceFilter'
+import SpecialistFilter from './SpecialistFilter'
 
 const FilterPanel = ({
   filters,
@@ -23,7 +22,7 @@ const FilterPanel = ({
   <React.Fragment>
     <div
       style={{
-        width: 270,
+        // width: 270,
         border: '1px solid #d9d9d9',
         borderRadius: 4,
         backgroundColor: '#FFF',
