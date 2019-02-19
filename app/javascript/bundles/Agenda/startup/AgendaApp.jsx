@@ -1,4 +1,4 @@
-import { Button, Card, Col, Modal, notification, Row } from 'antd'
+import { Card, Col, Modal, notification, Row } from 'antd'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
@@ -13,13 +13,14 @@ import {
 import Layout from '../../../shared/components/Layout'
 import { getFieldErrors } from '../../../utils/utils'
 import Agenda from '../components/Agenda'
-import BookingForm from '../components/BookingForm'
+import BookAppointment from '../components/BookAppointment'
 // import 'react-big-calendar/lib/css/react-big-calendar.css'
 import EditAppointment from '../components/EditAppointment'
 import FilterPanel from '../components/FilterPanel'
 import ShowAppointment from '../components/ShowAppointment'
 
 moment.locale('es')
+
 const localizer = BigCalendar.momentLocalizer(moment)
 // BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
@@ -68,7 +69,7 @@ class AgendaApp extends Component {
     this.editFormRef = formRef
   }
 
-  handleOk = e => {
+  handleBookAppointment = e => {
     e.preventDefault()
     const { form } = this.formRef.props
     const { currentSlots } = this.state
@@ -249,13 +250,13 @@ class AgendaApp extends Component {
     form.validateFields((err, values) => {
       if (!err) {
         // this.setState({ submitting: true })
-        const startTime = values.date
-          .set({
-            hour: values.time.get('hour'),
-            minute: values.time.get('minute'),
-            second: 0,
-          })
-          .toDate()
+        const startTime = values.date.set({
+          hour: values.time.get('hour'),
+          minute: values.time.get('minute'),
+          second: 0,
+        })
+        // .toDate()
+        // .format('YYYY-MM-DD HH:mm')
         const fields = {
           serviceId: values.service,
           specialistId: values.specialist,
@@ -426,7 +427,6 @@ class AgendaApp extends Component {
             <ShowAppointment
               visible={showAppointment}
               appointment={appointmentSelected}
-              onOk={this.handleOk}
               onCancel={this.hideAppointment}
               onCancelAppointment={this.handleCancelAppointment}
               onEditAppointment={this.handleEditAppointment}
@@ -450,38 +450,18 @@ class AgendaApp extends Component {
             />
           )}
 
-          <Modal
+          <BookAppointment
             title={`Crear reservación ${currentSlots &&
               moment(currentSlots[0]).format('lll')}`}
             visible={newAppointment}
-            onOk={this.handleOk}
+            onOk={this.handleBookAppointment}
             onCancel={this.handleCancel}
-            footer={[
-              <Button key="back" onClick={this.handleCancel}>
-                Cancelar
-              </Button>,
-              <Button
-                key="submit"
-                type="primary"
-                loading={submitting}
-                onClick={this.handleOk}
-              >
-                {submitting ? 'Creando' : 'Crear'}
-              </Button>,
-            ]}
-          >
-            <BookingForm
-              wrappedComponentRef={this.saveFormRef}
-              services={services}
-              specialists={specialists}
-              specialistsByService={specialistsByService}
-              // {...fields}
-              // onChange={this.handleFormChange}
-              // slots={currentSlots}
-              // onOk={this.handleOk}
-              // onCancel={this.handleCancel}
-            />
-          </Modal>
+            submitting={submitting}
+            wrappedComponentRef={this.saveFormRef}
+            services={services}
+            specialists={specialists}
+            specialistsByService={specialistsByService}
+          />
         </div>
       </Layout>
     )

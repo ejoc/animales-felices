@@ -9,7 +9,7 @@ class Appointment < ApplicationRecord
   validates :specialist_id, presence: true
   validates :service_id, presence: true
   validates :client_name, presence: true
-  validate do |appointment| 
+  validate do |appointment|
     AppointmentTimeValidator.new(appointment).validate
   end
 
@@ -89,16 +89,46 @@ class AppointmentTimeValidator
   def initialize(appointment)
     @appointment = appointment
     @specialist = appointment.specialist
+    @service = appointment.specialist
   end
 
+  # .where.not(
+  #   "start_time <= ? OR end_time <= ?",
+  #   @appointment.end_time,
+  #   @appointment.start_time,
+  # )
+
+  # .where(
+  #   ':start_slot > start_time AND :start_slot < end_time OR :end_slot > start_time AND :end_slot < end_time',
+  #   start_slot: @appointment.start_time, end_slot: @appointment.end_time
+  # )
   def validate
-    # @appointment.errors.add(:start_time, 'La fecha de la reservacion debe ser mayor a la fecha actual') if @appointment.start_time < Time.now
+    @appointment.errors.add(:start_time, 'La fecha de la reservacion debe ser mayor a la fecha actual') if @appointment.start_time < Time.now
     if @appointment.start_time_changed?
       exists = @specialist.appointments
-        .exists?(["canceled = ? AND start_time <= ? AND end_time >= ?", false, @appointment.start_time, @appointment.end_time])
-      # cambiar specialist por specialist_id
+        .where(canceled: false)
+        .where(
+          ':start_slot < end_time AND :end_slot > start_time',
+          start_slot: @appointment.start_time + 1.second,
+          end_slot: @appointment.end_time - 1.second
+        )
+        .exists?
       @appointment.errors.add(:specialist, 'Ya existe una reservación en la fecha seleccionada') if exists
     end
+    # if @appointment.start_time_changed?
+    #   exists = @specialist.appointments
+    #     .exists?([
+    #       "canceled = ? AND start_time <= ? AND end_time >= ?",
+    #       false,
+    #       @appointment.start_time,
+    #       @appointment.end_time
+    #     ])
+    #   # cambiar specialist por specialist_id
+    #   @appointment.errors.add(:specialist, 'Ya existe una reservación en la fecha seleccionada') if exists
+    # end
+
+    # bussy_slots = @specialist.bussy_slots(@appointment.start_time, @service.duration_min)
+    # is_bussy = bussy_slots.any? { |slot| slot.bussy && @appointment.start_time <= slot.slot && @appointment.end_time >= slot.slot }
   end
 end
 

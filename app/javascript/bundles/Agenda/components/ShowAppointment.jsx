@@ -6,7 +6,7 @@ import Markdown from 'react-markdown'
 
 const ShowAppointment = ({
   visible,
-  onOk,
+  // onOk,
   onCancel,
   onCancelAppointment,
   cancelLoading,
@@ -15,9 +15,7 @@ const ShowAppointment = ({
 }) => (
   <Modal
     title="Detalle de reservación"
-    // title="Crear reservacion"
     visible={visible}
-    onOk={onOk}
     onCancel={onCancel}
     // okButtonProps={{ disabled: true }}
     footer={[
