@@ -1,14 +1,8 @@
-import React from 'react'
-import {
-  Modal,
-  Button,
-  Row,
-  Col,
-  Spin,
-  Popconfirm,
-} from 'antd'
-import PropTypes from 'prop-types'
+import { Button, Col, Modal, Popconfirm, Row, Spin } from 'antd'
 import moment from 'moment'
+import PropTypes from 'prop-types'
+import React from 'react'
+import Markdown from 'react-markdown'
 
 const ShowAppointment = ({
   visible,
@@ -17,12 +11,7 @@ const ShowAppointment = ({
   onCancelAppointment,
   cancelLoading,
   onEditAppointment,
-  appointment: {
-    loading,
-    attributes,
-    service,
-    specialist,
-  },
+  appointment: { loading, attributes, service, specialist },
 }) => (
   <Modal
     title="Detalle de reservación"
@@ -64,101 +53,89 @@ const ShowAppointment = ({
         <Row gutter={18}>
           <Col span={8}>
             <p style={{ textAlign: 'right' }}>
-              <strong>
-                Servicio:
-              </strong>
+              <strong>Servicio:</strong>
             </p>
           </Col>
           <Col span={16}>
-            <p>
-              {service.name}
-            </p>
+            <p>{service.name}</p>
           </Col>
         </Row>
         <Row gutter={18}>
           <Col span={8}>
             <p style={{ textAlign: 'right' }}>
-              <strong>
-                Duración servicio:
-              </strong>
+              <strong>Duración servicio:</strong>
             </p>
           </Col>
           <Col span={16}>
-            <p>
-              {service.durationMin} minutos
-            </p>
+            <p>{service.durationMin} minutos</p>
           </Col>
         </Row>
         <Row gutter={18}>
           <Col span={8}>
             <p style={{ textAlign: 'right' }}>
-              <strong>
-                Personal:
-              </strong>
+              <strong>Personal:</strong>
             </p>
           </Col>
           <Col span={16}>
-            <p>
-              {specialist.name}
-            </p>
+            <p>{specialist.name}</p>
           </Col>
         </Row>
         <Row gutter={18}>
           <Col span={8}>
             <p style={{ textAlign: 'right' }}>
-              <strong>
-                Horario:
-              </strong>
+              <strong>Horario:</strong>
             </p>
           </Col>
           <Col span={16}>
-            <p>
-              {moment(attributes.startTime).format('LLLL')}
-            </p>
+            <p>{moment(attributes.startTime).format('LLLL')}</p>
           </Col>
         </Row>
         <Row gutter={18}>
           <Col span={8}>
             <p style={{ textAlign: 'right' }}>
-              <strong>
-                Nombre cliente:
-              </strong>
+              <strong>Nombre cliente:</strong>
             </p>
           </Col>
           <Col span={16}>
-            <p>
-              {attributes.clientName}
-            </p>
+            <p>{attributes.clientName}</p>
           </Col>
         </Row>
         <Row gutter={18}>
           <Col span={8}>
             <p style={{ textAlign: 'right' }}>
-              <strong>
-                Email cliente:
-              </strong>
+              <strong>Email cliente:</strong>
             </p>
           </Col>
           <Col span={16}>
-            <p>
-              {attributes.clientEmail}
-            </p>
+            <p>{attributes.clientEmail}</p>
           </Col>
         </Row>
         <Row gutter={18}>
           <Col span={8}>
             <p style={{ textAlign: 'right' }}>
-              <strong>
-                Email telefono:
-              </strong>
+              <strong>Email telefono:</strong>
             </p>
           </Col>
           <Col span={16}>
-            <p>
-              {attributes.clientPhone}
-            </p>
+            <p>{attributes.clientPhone}</p>
           </Col>
         </Row>
+
+        {attributes.remark && (
+          <Row gutter={18}>
+            <Col span={8}>
+              <p style={{ textAlign: 'right' }}>
+                <strong>Notas:</strong>
+              </p>
+            </Col>
+            <Col
+              span={16}
+              style={{ border: '1px solid #ccc', paddingTop: '10px' }}
+            >
+              <Markdown source={attributes.remark} />
+            </Col>
+          </Row>
+        )}
       </div>
     )}
   </Modal>

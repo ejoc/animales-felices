@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_05_064214) do
+ActiveRecord::Schema.define(version: 2019_02_17_060024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2019_01_05_064214) do
     t.boolean "canceled", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "remark"
     t.index ["service_id"], name: "index_appointments_on_service_id"
     t.index ["specialist_id"], name: "index_appointments_on_specialist_id"
   end

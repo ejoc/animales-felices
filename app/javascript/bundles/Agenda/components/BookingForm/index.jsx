@@ -4,10 +4,14 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Form, Select } from 'antd'
+import { Checkbox, Form, Select } from 'antd'
 import PropTypes from 'prop-types'
 import React from 'react'
+import CodeMirror from 'react-codemirror'
 import ClientInput from './ClientInput'
+
+require('codemirror/mode/markdown/markdown')
+require('codemirror/lib/codemirror.css')
 
 const FormItem = Form.Item
 
@@ -24,7 +28,22 @@ const formItemLayout = {
   },
 }
 
+const formNotasInput = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+  },
+}
+
 class FormModal extends React.Component {
+  state = {
+    showNotes: false,
+  }
+
   handleServiceChange = service => {
     const { form, services } = this.props
     const serviceObject = services.find(s => s.id === service)
@@ -42,7 +61,12 @@ class FormModal extends React.Component {
     cb()
   }
 
+  toggleNotes = () => {
+    this.setState(prevState => ({ showNotes: !prevState.showNotes }))
+  }
+
   render() {
+    const { showNotes } = this.state
     const {
       form,
       specialists,
@@ -140,6 +164,16 @@ class FormModal extends React.Component {
             initialValue: { name: '', phone: '', email: '' },
             rules: [{ validator: this.checkClient }],
           })(<ClientInput placeholder="input search text" />)}
+        </FormItem>
+        <FormItem {...formNotasInput}>
+          <Checkbox checked={showNotes} onChange={this.toggleNotes}>
+            Agregar notas
+          </Checkbox>
+          {showNotes &&
+            getFieldDecorator('remark', {
+              initialValue:
+                '- __Mascota__: \n- __Especie__: \n- __Raza__: \n- __Sexo__: \n- __Color__: ',
+            })(<CodeMirror options={{ mode: 'markdown' }} className="notes" />)}
         </FormItem>
       </Form>
     )

@@ -9,7 +9,8 @@ class AppointmentsSerializer
     :end_time,
     :specialist_id,
     :service_id,
-    :canceled
+    :canceled,
+    :remark
   )
 
   # set_type :appointment

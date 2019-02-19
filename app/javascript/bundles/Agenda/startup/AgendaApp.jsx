@@ -81,6 +81,7 @@ class AgendaApp extends Component {
           clientName: values.clientFields.name,
           clientEmail: values.clientFields.email,
           clientPhone: values.clientFields.phone,
+          remark: values.remark,
           startTime: currentSlots[0],
           endTime: currentSlots[1],
         }
@@ -385,7 +386,7 @@ class AgendaApp extends Component {
           }}
         >
           <Row gutter={8}>
-            <Col span={5}>
+            <Col span={5} style={{ height: '90vh', overflowY: 'scroll' }}>
               <FilterPanel
                 filters={filters}
                 handleCalendarSelect={this.handleCalendarSelect}

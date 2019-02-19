@@ -108,6 +108,7 @@ class AppointmentsController < ApplicationController
         # :date,
         :start_time,
         :end_time,
+        :remark,
       )
     end
 
