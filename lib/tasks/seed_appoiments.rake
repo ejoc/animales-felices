@@ -712,8 +712,8 @@ task :seed_appoinments => :environment do
       service_id: peluqueria_medicado.id,
       client_name: 'Gina Moran',
       client_phone: '0997115647',
-      start_time: DateTime.new(2018, 11, 30, 9),
-      end_time: DateTime.new(2018, 11, 30, 9) + (peluqueria_medicado.duration_min).minutes,
+      start_time: DateTime.new(2018, 11, 30, 10),
+      end_time: DateTime.new(2018, 11, 30, 10) + (peluqueria_medicado.duration_min).minutes,
       remark: "- __Mascota__: Maggy\n- __Especie__: Canina\n- __Raza__: Schnauzer\n- __Sexo__: Hembra\n- __Color__: Gris",
     },
     {
@@ -721,12 +721,12 @@ task :seed_appoinments => :environment do
       service_id: peluqueria_normal.id,
       client_name: 'Dra Ariana',
       # client_phone: '0997115647',
-      start_time: DateTime.new(2018, 11, 30, 10),
-      end_time: DateTime.new(2018, 11, 30, 10) + (peluqueria_normal.duration_min).minutes,
+      start_time: DateTime.new(2018, 11, 30, 11),
+      end_time: DateTime.new(2018, 11, 30, 11) + (peluqueria_normal.duration_min).minutes,
       remark: "__Especie__: Canina\n- __Raza__: Shitzu\n- __Sexo__: Hembra",
     },
   ]
 
-  Appointment.create(appointments)
+  Appointment.create!(appointments)
 
 end

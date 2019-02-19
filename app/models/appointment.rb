@@ -103,7 +103,7 @@ class AppointmentTimeValidator
   #   start_slot: @appointment.start_time, end_slot: @appointment.end_time
   # )
   def validate
-    @appointment.errors.add(:start_time, 'La fecha de la reservacion debe ser mayor a la fecha actual') if @appointment.start_time < Time.now
+    # @appointment.errors.add(:start_time, 'La fecha de la reservacion debe ser mayor a la fecha actual') if @appointment.start_time < Time.now
     if @appointment.start_time_changed?
       exists = @specialist.appointments
         .where(canceled: false)
