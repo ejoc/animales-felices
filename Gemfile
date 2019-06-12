@@ -42,7 +42,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'ffaker'
   gem 'awesome_print'
 end
 
@@ -93,3 +92,4 @@ gem 'rails-assets-sweetalert2', source: 'https://rails-assets.org'
 gem "letter_opener", :group => :development
 gem 'mailgun-ruby'
 # gem 'rack-cors', '~> 1.0', '>= 1.0.2'
+gem 'ffaker'
