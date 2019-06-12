@@ -1,26 +1,39 @@
-import React from 'react'
+import React from "react";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
   CartesianGrid,
-  Tooltip,
   Legend,
-} from 'recharts'
-import { getServiceReport } from '../../../api'
+  Line,
+  LineChart,
+  Tooltip,
+  XAxis,
+  YAxis
+} from "recharts";
+import { getServiceReport } from "../../../api";
+import getAvatarColor from "../../Agenda/resourceColors";
 
 class LineChartService extends React.PureComponent {
   state = {
     data: [],
-  }
+    services: []
+  };
 
   componentDidMount() {
-    getServiceReport(data => this.setState({ data }), err => console.log(err))
+    getServiceReport(
+      data => {
+        // get services
+        const services = data.reduce((prev, curr) => {
+          const { yyyymm, ...rest } = curr;
+          const keys = Object.keys(rest);
+          return [...new Set([...prev, ...keys])];
+        }, []);
+        this.setState({ data, services });
+      },
+      err => console.log(err)
+    );
   }
 
   render() {
-    const { data } = this.state
+    const { data, services } = this.state;
     return (
       <LineChart
         width={1200}
@@ -33,16 +46,18 @@ class LineChartService extends React.PureComponent {
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
         <Legend />
-        <Line
-          type="monotone"
-          dataKey="Cita General"
-          stroke="#8884d8"
-          activeDot={{ r: 8 }}
-        />
-        <Line type="monotone" dataKey="Corte de pelo" stroke="#82ca9d" />
+        {services.map((service, index) => (
+          <Line
+            key={service}
+            type="monotone"
+            dataKey={service}
+            stroke={getAvatarColor(index + 1)}
+            activeDot={{ r: 8 }}
+          />
+        ))}
       </LineChart>
-    )
+    );
   }
 }
 
-export default LineChartService
+export default LineChartService;

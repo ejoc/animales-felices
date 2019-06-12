@@ -1,30 +1,30 @@
-import { Card, Col, Divider, Row } from 'antd'
-import React from 'react'
-import Layout from '../../../shared/components/Layout'
-import Bar from '../components/Bar'
-import LineChart from '../components/LineChart'
-import MenuChart from '../components/MenuChart'
+import { Card, Col, Divider, Row } from "antd";
+import React from "react";
+import Layout from "../../../shared/components/Layout";
+import Bar from "../components/Bar";
+import LineChart from "../components/LineChart";
+import MenuChart from "../components/MenuChart";
 
 class ReportApp extends React.Component {
   state = {
-    periodicity: 'month',
-    reportData: [],
-  }
+    periodicity: "year",
+    reportData: []
+  };
 
   handlePeriodicityChange = e => {
-    this.setState({ periodicity: e.key })
-  }
+    this.setState({ periodicity: e.key });
+  };
 
   render() {
-    const { monthly, ...restProps } = this.props
-    const { periodicity } = this.state
+    const { monthly, ...restProps } = this.props;
+    const { periodicity } = this.state;
     return (
       <Layout {...restProps} activeNav="statistical-reports">
         <div
           style={{
-            padding: '15px',
-            minHeight: '100vh',
-            backgroundColor: '#F4F4F4',
+            padding: "15px",
+            minHeight: "100vh",
+            backgroundColor: "#F4F4F4"
           }}
         >
           <Row>
@@ -48,8 +48,8 @@ class ReportApp extends React.Component {
           </Row>
         </div>
       </Layout>
-    )
+    );
   }
 }
 
-export default ReportApp
+export default ReportApp;

@@ -14,7 +14,8 @@ class Appointment < ApplicationRecord
   end
 
   def self.report(periodicity = 'week')
-    services = Service.all
+    ## services = Service.all
+    services = Service.where(id: SpecialistService.select(:service_id).distinct)
     select_clause = services.map{|s| "SUM(CASE WHEN service_id = #{s.id} THEN 1 ELSE 0 END) as \"#{s.name.underscore}\"" }
     query = <<-END_SQL
     WITH  grouped_tables AS (
