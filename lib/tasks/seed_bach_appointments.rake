@@ -169,6 +169,13 @@ task :seed_bach_appoinments, [:month] => :environment do |t, args|
   start_date = Date.new(2019, month, 1)
   end_date = start_date.end_of_month
 
+  current_clients = client_names.sample(rand(40..54))
+
+  if month >= 6
+    end_date = Date.new(2019, month, 19)
+    current_clients = client_names.sample(rand(25..40))
+  end
+
   # # my_days = [1,2,3,4,5,6]
   # # dates = (start_date..end_date).to_a.select {|k| my_days.include?(k.wday)}
 
@@ -180,8 +187,6 @@ task :seed_bach_appoinments, [:month] => :environment do |t, args|
   end  
 
   # # t.change({ hour: 16 })
-
-  current_clients = client_names.sample(rand(40..54))
 
   current_clients.each do |client|
     service = services[Random.rand(service_size)]
