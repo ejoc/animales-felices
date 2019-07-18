@@ -29,7 +29,7 @@ class ReportApp extends React.Component {
         >
           <Row>
             <Col span={24}>
-              <Card title="Cantidad de citas agendadas por servicios">
+              <Card title="Ingresos por servicios mensual">
                 <LineChart />
               </Card>
             </Col>

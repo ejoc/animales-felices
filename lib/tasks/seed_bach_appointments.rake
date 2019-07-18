@@ -195,7 +195,7 @@ task :seed_bach_appoinments, [:month] => :environment do |t, args|
       hour: hours.sample,
       min: minutes_for_service[service.id].sample
     })
-    start_time = Time.new(start_time.year, start_time.month, start_time.day, start_date.hour, start_date.min)
+    # start_time = Time.new(start_time.year, start_time.month, start_time.day, start_date.hour, start_date.min)
     # puts client
     created_at = start_time - rand(1800..7200)
     appointment = Appointment.new({

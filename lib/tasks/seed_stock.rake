@@ -1,6 +1,14 @@
 
 task :seed_stock => :environment do
   # products = Product.all
+
+  bonavit = Product.find_by(name: 'Bonavit')
+  if bonavit
+    product_stock = StockProduct.find_or_initialize_by(product_id: bonavit.id)
+    product_stock.stock = product_stock.stock + rand(20..35)
+    product_stock.save!
+  end
+
   shampo = Product.find_by(name: 'Shampoo keracleen')
   if shampo
     product_stock = StockProduct.find_or_initialize_by(product_id: shampo.id)
