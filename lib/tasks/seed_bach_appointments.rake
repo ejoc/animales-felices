@@ -157,7 +157,7 @@ task :seed_bach_appoinments, [:month] => :environment do |t, args|
 
   services = [peluqueria_normal, peluqueria_medicado]
 
-  mafer = Specialist.find_by(name: 'Maria Fernanada')
+  mafer = Specialist.find_by(name: 'Maria Fernanda')
 
 
   ######
@@ -172,7 +172,7 @@ task :seed_bach_appoinments, [:month] => :environment do |t, args|
   current_clients = client_names.sample(rand(40..54))
 
   if month >= 6
-    end_date = Date.new(2019, month, 19)
+    end_date = Date.new(2019, month, 23)
     current_clients = client_names.sample(rand(25..40))
   end
 
@@ -187,7 +187,7 @@ task :seed_bach_appoinments, [:month] => :environment do |t, args|
   end  
 
   # # t.change({ hour: 16 })
-
+  n = 0
   current_clients.each do |client|
     service = services[Random.rand(service_size)]
     start_time = FFaker::Time.between(start_date, end_date)
@@ -198,17 +198,31 @@ task :seed_bach_appoinments, [:month] => :environment do |t, args|
     # start_time = Time.new(start_time.year, start_time.month, start_time.day, start_date.hour, start_date.min)
     # puts client
     created_at = start_time - rand(1800..7200)
-    appointment = Appointment.new({
-      service_id: service.id,
-      specialist_id: mafer.id,
-      client_name: client[:name],
-      client_phone: client[:phone],
-      start_time: start_time,
-      end_time: start_time + (service.duration_min).minutes,
-      created_at: created_at,
-      updated_at: created_at,
-      ## remark: "- __Mascota__: Sasha\n- __Especie__: Canina\n- __Raza__: Shitzu\n- __Sexo__: Macho\n- __Color__: Negro"
-    })
+    if n > 0
+      appointment = Appointment.new({
+        service_id: service.id,
+        specialist_id: mafer.id,
+        client_name: client[:name],
+        client_phone: client[:phone],
+        start_time: start_time,
+        end_time: start_time + (service.duration_min).minutes,
+        created_at: created_at,
+        updated_at: created_at,
+        ## remark: "- __Mascota__: Sasha\n- __Especie__: Canina\n- __Raza__: Shitzu\n- __Sexo__: Macho\n- __Color__: Negro"
+      })
+    else
+      appointment = Appointment.new({
+        service_id: service.id,
+        specialist_id: mafer.id,
+        client_name: client[:name],
+        client_phone: client[:phone],
+        start_time: start_time,
+        end_time: start_time + (service.duration_min).minutes,
+        created_at: created_at,
+        updated_at: created_at,
+        remark: "- __Mascota__: Sasha\n- __Especie__: Canina\n- __Raza__: Shitzu\n- __Sexo__: Macho\n- __Color__: Negro"
+      })
+    end
 
     if appointment.valid?
       appointment.save
